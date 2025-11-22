@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<title>رفع درجات الطلاب</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="upload.js"></script>
+</head>
+<body style="font-family: Arial; padding: 20px; direction: rtl; text-align: right">
+
+<h2>رفع درجات الطلاب (Excel → JSON)</h2>
+
+<input type="file" id="excelFile" accept=".xlsx, .xls" />
+<br><br>
+
+<button onclick="convertExcel()">تحويل ورفع</button>
+
+<p id="status" style="color: green; margin-top: 20px;"></p>
+
+</body>
+</html>
