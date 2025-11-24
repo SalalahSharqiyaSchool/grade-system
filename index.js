@@ -5,6 +5,7 @@ function showGrades() {
     const gradesList = document.getElementById("gradesList");
     const encouragement = document.getElementById("encouragement");
 
+    // مسح المحتوى القديم
     status.innerHTML = "";
     studentName.innerHTML = "";
     gradesList.innerHTML = "";
@@ -17,20 +18,24 @@ function showGrades() {
 
     status.innerHTML = "جارٍ تحميل البيانات...";
 
-    // رابط raw لملف grades.json على GitHub
-    const url = "https://raw.githubusercontent.com/SalalahSharqiyaSchool/grade-system/refs/heads/main/grades.json" + Date.now();
+    // ضع رابط raw لملف grades.json على GitHub هنا
+    const url = "https://raw.githubusercontent.com/YOUR_USERNAME/SalalahSharqiyaSchool/main/grades.json?time=" + Date.now();
 
     fetch(url)
-        .then(res => res.json())
+        .then(res => {
+            if (!res.ok) throw new Error("الرابط غير صالح أو الملف غير موجود على GitHub");
+            return res.json();
+        })
         .then(data => {
-            status.innerHTML = "";
+            if (!Array.isArray(data)) throw new Error("ملف JSON غير صالح");
 
             const student = data.find(s => s.رقم_مدني == civil);
             if (!student) {
-                status.innerHTML = "لم يتم العثور على الرقم المدني";
+                status.innerHTML = "لم يتم العثور على الرقم المدني في البيانات";
                 return;
             }
 
+            status.innerHTML = "";
             studentName.innerHTML = `الطالب: ${student.اسم}`;
 
             const adviceMap = [
@@ -67,7 +72,7 @@ function showGrades() {
             encouragement.innerHTML = `<strong>متوسطك العام: ${average.toFixed(2)}</strong><br>${generalAdvice}`;
         })
         .catch(err => {
-            status.innerHTML = "خطأ في تحميل الدرجات";
+            status.innerHTML = `خطأ في تحميل الدرجات: ${err.message}`;
             console.error(err);
         });
 }
