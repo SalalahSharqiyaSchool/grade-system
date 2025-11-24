@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<title>رفع درجات الطلاب</title>
+</head>
+<body>
+<h2>واجهة المعلم – رفع ملف Excel</h2>
+
+<input type="file" id="fileInput" accept=".xlsx" />
+<button onclick="upload()">رفع الملف</button>
+
+<div id="status" style="margin-top:20px;"></div>
+
+<script>
+async function upload() {
+    const fileInput = document.getElementById("fileInput");
+    const file = fileInput.files[0];
+
+    if (!file) {
+        alert("الرجاء اختيار ملف Excel أولاً.");
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+        const res = await fetch("http://127.0.0.1:5000/upload", { // أو رابط السيرفر على الإنترنت
+            method: "POST",
+            body: formData
+        });
+
+        const result = await res.json();
+
+        document.getElementById("status").innerHTML = "<p>تم رفع الملف بنجاح!</p>";
+        console.log(result);
+
+    } catch (err) {
+        console.error(err);
+        document.getElementById("status").innerHTML = "<p>حدث خطأ أثناء رفع الملف.</p>";
+    }
+}
+</script>
+
+</body>
+</html>
