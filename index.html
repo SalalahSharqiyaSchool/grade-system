@@ -51,6 +51,8 @@
         margin: 5px 0;
         border-radius: 6px;
         border: 1px solid #ccc;
+        width: 100%;
+        max-width: 400px;
     }
     button {
         background-color: #00796b;
@@ -63,11 +65,11 @@
     }
     #gradesList {
         margin-top: 15px;
-        overflow-x: auto; /* Scroll أفقي دائم */
+        overflow-x: auto;
     }
     table {
         width: 100%;
-        min-width: 400px; /* يمنع انكماش الجدول على الهاتف */
+        min-width: 400px;
         border-collapse: collapse;
         direction: rtl;
     }
@@ -95,11 +97,10 @@
     }
     @media screen and (max-width: 600px) {
         table, th, td {
-            font-size: 13px; /* تصغير الخط على الهواتف */
+            font-size: 13px;
         }
     }
 </style>
-<script src="index.js"></script>
 </head>
 <body>
 
@@ -116,6 +117,7 @@
     <input type="text" id="civil" placeholder="الرقم المدني">
     <br>
     <button onclick="showGrades()">عرض الدرجات</button>
+    <button onclick="printGrades()">طباعة كشف الدرجات</button>
     <p id="status"></p>
 
     <h3 id="studentName"></h3>
@@ -123,5 +125,6 @@
     <p class="message" id="encouragement"></p>
 </div>
 
+<script src="student.js"></script>
 </body>
 </html>
