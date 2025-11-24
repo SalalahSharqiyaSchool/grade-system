@@ -18,9 +18,8 @@ function showGrades() {
 
     status.innerHTML = "جارٍ تحميل البيانات...";
 
-    // ضع رابط raw لملف grades.json على GitHub هنا
-    const url = "const url = "https://raw.githubusercontent.com/SalalahSharqiyaSchool/grade-system/refs/heads/main/grades.json" + Date.now();
-" + Date.now();
+    // الرابط الصحيح لملف grades.json على GitHub
+    const url = "https://raw.githubusercontent.com/SalalahSharqiyaSchool/grade-system/main/grades.json?time=" + Date.now();
 
     fetch(url)
         .then(res => {
