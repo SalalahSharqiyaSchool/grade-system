@@ -43,7 +43,7 @@ async function showGrades() {
 
     currentStudent = foundStudent;
 
-    // عرض بيانات الطالب قبل الجدول
+    // حساب المتوسط
     let total = 0, count = 0;
     for (const key in foundStudent) {
         if (key !== "رقم_مدني" && key !== "الاسم") {
@@ -52,16 +52,14 @@ async function showGrades() {
         }
     }
     const avg = (total / count).toFixed(2);
+    const advice = avg >= 90 ? "أداء ممتاز جداً 🌟" :
+                   avg >= 75 ? "مستوى جيد جداً 💪" :
+                   avg >= 50 ? "مستوى مقبول 📚" : "المستوى ضعيف 🔔";
 
-    let advice = avg >= 90 ? "أداء ممتاز جداً 🌟" :
-                 avg >= 75 ? "مستوى جيد جداً 💪" :
-                 avg >= 50 ? "مستوى مقبول 📚" : "المستوى ضعيف 🔔";
-
+    // عرض بيانات الطالب في صفوف مزدوجة
     studentInfo.innerHTML = `
-        <p><strong>الطالب:</strong> ${foundStudent["الاسم"]}</p>
-        <p><strong>الرقم المدني:</strong> ${foundStudent["رقم_مدني"]}</p>
-        <p><strong>الصف والشعبة:</strong> ${studentClass}</p>
-        <p><strong>متوسط الدرجات:</strong> ${avg}</p>
+        <p><strong>الطالب:</strong> ${foundStudent["الاسم"]} &nbsp;&nbsp; <strong>الرقم المدني:</strong> ${foundStudent["رقم_مدني"]}</p>
+        <p><strong>الصف والشعبة:</strong> ${studentClass} &nbsp;&nbsp; <strong>متوسط الدرجات:</strong> ${avg}</p>
         <p><strong>ملاحظات:</strong> ${advice}</p>
     `;
 
