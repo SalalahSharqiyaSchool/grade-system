@@ -7,123 +7,173 @@
 <style>
     body {
         font-family: 'Arial', sans-serif;
-        background: linear-gradient(to right, #f9f9f9, #e0f7fa);
+        background: #f5f7fa;
         margin: 0;
         padding: 0;
         direction: rtl;
+        text-align: center;
     }
 
-    /* شريط العنوان */
+    /* ======= العنوان ======= */
     header {
-        background-color: #00796b;
-        color: white;
         padding: 20px;
         display: flex;
-        align-items: center;
         justify-content: center;
-        position: relative;
+        align-items: center;
         gap: 15px;
-        flex-wrap: wrap;
-        text-align: center;
     }
 
     header img {
         width: 85px;
         height: auto;
-        border-radius: 10px;
     }
 
     .title-box h1 {
-        margin: 5px;
-        font-size: 32px;
+        font-size: 30px;
         font-weight: bold;
+        margin: 0;
     }
 
     .title-box h2 {
-        margin: 5px;
+        font-size: 20px;
+        margin: 5px 0 0 0;
+        font-weight: bold;
+    }
+
+    .region {
+        position: absolute;
+        top: 15px;
+        right: 15px;
         font-size: 20px;
         font-weight: bold;
     }
 
-    /* محافظة ظفار يمين */
-    .region {
-        position: absolute;
-        right: 20px;
-        top: 20px;
-        font-size: 18px;
-        font-weight: bold;
-    }
-
-    /* صندوق المحتوى */
+    /* ======= المربع الرئيسي ======= */
     .container {
-        padding: 25px;
-        max-width: 800px;
+        background: white;
+        max-width: 750px;
         margin: auto;
-        background-color: white;
+        margin-top: 15px;
+        padding: 20px;
         border-radius: 12px;
-        box-shadow: 0 0 15px rgba(0,0,0,0.1);
-        margin-top: 20px;
-        text-align: center;
+        box-shadow: 0 0 15px rgba(0,0,0,0.15);
     }
 
     input, button {
         padding: 12px;
-        font-size: 16px;
-        margin: 6px;
+        font-size: 18px;
         border-radius: 6px;
-        border: 1px solid #ccc;
+        border: 1px solid #aaa;
         width: 80%;
-        max-width: 300px;
+        margin-bottom: 10px;
     }
 
     button {
-        background-color: #00796b;
+        width: 50%;
+        background: #00796b;
         color: white;
-        border: none;
         cursor: pointer;
+        border: none;
+        font-size: 19px;
     }
 
     button:hover {
-        background-color: #004d40;
+        background: #005449;
     }
 
-    #gradesList {
-        margin-top: 20px;
-        overflow-x: auto;
-    }
-
-    table {
-        width: 100%;
-        min-width: 400px;
-        border-collapse: collapse;
-        margin-top: 10px;
-    }
-
-    th, td {
-        border: 1px solid #00796b;
-        padding: 10px;
-        text-align: center;
-        font-weight: bold;
-    }
-
-    th {
-        background-color: #004d40;
-        color: white;
-        font-size: 16px;
-    }
-
-    #status {
-        color: red;
-        margin-top: 10px;
-        font-weight: bold;
-    }
-
+    /* ======= معلومات الطالب ======= */
     #studentInfo p {
         font-size: 18px;
         font-weight: bold;
         margin: 5px 0;
         text-align: right;
-        padding-right: 20px;
+    }
+
+    /* ======= جدول الدرجات ======= */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+    }
+
+    table, th, td {
+        border: 1px solid #333;
+    }
+
+    th {
+        background: #00796b;
+        color: white;
+        font-size: 18px;
+        padding: 8px;
+    }
+
+    td {
+        padding: 8px;
+        font-size: 17px;
+        text-align: right;
+        background: #f9f9f9;
+    }
+
+    #encouragement {
+        margin-top: 18px;
+        font-size: 20px;
+        font-weight: bold;
+        color: #003d33;
+    }
+
+    /* ======= طباعة منظمة ======= */
+    @media print {
+
+        body {
+            background: white !important;
+        }
+
+        input, button {
+            display: none !important;
+        }
+
+        .container {
+            box-shadow: none !important;
+        }
+
+        /* العنوان */
+        header {
+            margin-bottom: 5px;
+        }
+
+        header img {
+            width: 90px !important;
+        }
+
+        .title-box h1 {
+            font-size: 28px !important;
+        }
+
+        .title-box h2 {
+            font-size: 20px !important;
+        }
+
+        .region {
+            font-size: 18px !important;
+        }
+
+        #studentInfo p {
+            font-size: 18px !important;
+        }
+
+        table, th, td {
+            border: 1px solid black !important;
+        }
+
+        th {
+            background: #e0e0e0 !important;
+            color: black !important;
+        }
+
+        #encouragement {
+            font-size: 18px !important;
+            margin-top: 10px;
+        }
     }
 
 </style>
@@ -131,41 +181,29 @@
 </head>
 <body>
 
+<div class="region">محافظة ظفار</div>
+
 <header>
-
-    <!-- محافظة ظفار -->
-    <div class="region">محافظة ظفار</div>
-
-    <!-- شعار المدرسة -->
     <img src="https://github.com/faissaltunisia/grade-system/blob/main/logo.png?raw=true">
-
-    <!-- عنوان المدرسة -->
     <div class="title-box">
         <h1>صلالة الشرقية للتعليم الأساسي</h1>
         <h2>الفصل الدراسي الأول 2025-2026</h2>
     </div>
-
 </header>
 
 <div class="container">
 
-    <!-- مربع الإدخال -->
     <input type="text" id="civil" placeholder="أدخل الرقم المدني">
-
-    <br>
-
-    <!-- الأزرار -->
     <button onclick="showGrades()">عرض الدرجات</button>
     <button onclick="printGrades()">طباعة الكشف</button>
 
-    <!-- رسائل -->
-    <p id="status"></p>
+    <p id="status" style="color:red;font-weight:bold;"></p>
 
-    <!-- معلومات الطالب -->
     <div id="studentInfo"></div>
 
-    <!-- جدول الدرجات -->
     <div id="gradesList"></div>
+
+    <p id="encouragement"></p>
 
 </div>
 
