@@ -32,23 +32,23 @@ async function showGrades() {
 
     currentStudent = foundStudent;
 
-    // بيانات الطالب
+    // بيانات الطالب والصف والشعبة
     studentInfo.innerHTML = `
-        الاسم: ${foundStudent["الاسم"]} — الرقم المدني: ${foundStudent["رقم_مدني"]} <br>
-        الصف: ${foundStudent["الصف"]} — الشعبة: ${foundStudent["الشعبة"]}
+        <strong>الطالب:</strong> ${foundStudent["الاسم"]} &nbsp;&nbsp;
+        <strong>الرقم المدني:</strong> ${foundStudent["رقم_مدني"]} <br>
+        <strong>الصف:</strong> ${foundStudent["الصف"]} &nbsp;&nbsp;
+        <strong>الشعبة:</strong> ${foundStudent["الشعبة"]} 
     `;
 
-    // جدول الدرجات مع تحليل ونصائح
-    let total = 0, count = 0, html = "<table><tr><th>المادة</th><th>الدرجة</th><th>تحليل وملاحظات</th></tr>";
+    // جدول المواد والدرجات والملاحظات
+    let total = 0, count = 0;
+    let html = "<table><tr><th>المادة</th><th>الدرجة</th><th>ملاحظات</th></tr>";
     for (const key in foundStudent) {
         if (!["رقم_مدني","الاسم","الصف","الشعبة"].includes(key)) {
             let grade = parseFloat(foundStudent[key]);
-            let advice = "";
-            if (grade >= 90) advice = "أداء ممتاز، حافظ على مستوى المراجعة الحالية واستمر في التحديات الجديدة.";
-            else if (grade >= 75) advice = "أداء جيد، ركز على مراجعة النقاط الصعبة لكل درس.";
-            else if (grade >= 50) advice = "أداء مقبول، يحتاج لمزيد من التدريب والمراجعة اليومية.";
-            else advice = "أداء ضعيف، ننصح بمراجعة الدروس مع المعلم وممارسة التمارين الإضافية.";
-
+            let advice = grade >= 90 ? "ممتاز جدًا" :
+                         grade >= 75 ? "جيد جدًا" :
+                         grade >= 50 ? "مقبول" : "ضعيف";
             html += `<tr><td>${key}</td><td>${grade}</td><td>${advice}</td></tr>`;
             total += grade; count++;
         }
@@ -56,41 +56,42 @@ async function showGrades() {
     html += "</table>";
     gradesList.innerHTML = html;
 
-    // متوسط
+    // متوسط ونصيحة عامة
     let avg = total / count;
-    let avgMessage = "";
-    if (avg >= 90) avgMessage = "متوسط ممتاز، استمر على هذا المستوى.";
-    else if (avg >= 75) avgMessage = "متوسط جيد، حاول تحسين بعض المواد.";
-    else if (avg >= 50) avgMessage = "متوسط مقبول، يحتاج لمزيد من المتابعة.";
-    else avgMessage = "متوسط ضعيف، ينصح بالدعم والمراجعة المكثفة.";
-
-    encouragement.innerHTML = `<strong>متوسطك العام: ${avg.toFixed(2)}</strong><br>${avgMessage}`;
+    encouragement.innerHTML = `متوسطك العام: ${avg.toFixed(2)} - نصيحة: راجع المواد التي تحتاج تحسين`;
 }
 
-// طباعة جزء من الصفحة
+// دالة الطباعة
 function printGrades() {
     if (!currentStudent) { alert("الرجاء عرض درجات الطالب أولاً."); return; }
 
-    const content = `
-        <div style="text-align:center;">
-            <h1>صلالة الشرقية للتعليم الأساسي</h1>
-            <h2>محافظة ظفار — الفصل الدراسي الأول 2025-2026</h2>
-            <p style="font-weight:bold; font-size:16px;">
-                الاسم: ${currentStudent["الاسم"]} — الرقم المدني: ${currentStudent["رقم_مدني"]} <br>
-                الصف: ${currentStudent["الصف"]} — الشعبة: ${currentStudent["الشعبة"]} <br>
-                ${document.getElementById("encouragement").innerHTML}
-            </p>
+    const container = document.createElement("div");
+    container.innerHTML = `
+        <div style="text-align:center; font-weight:bold; font-size:18px; margin-bottom:10px;">
+            صلالة الشرقية للتعليم الأساسي
+        </div>
+        <div style="text-align:right; font-size:12px;">
+            محافظة ظفار<br>
+            الفصل الدراسي الأول 2025-2026
+        </div>
+        <div style="margin-top:10px; font-size:14px;">
+            <strong>الطالب:</strong> ${currentStudent["الاسم"]} &nbsp;&nbsp;
+            <strong>الرقم المدني:</strong> ${currentStudent["رقم_مدني"]} <br>
+            <strong>الصف:</strong> ${currentStudent["الصف"]} &nbsp;&nbsp;
+            <strong>الشعبة:</strong> ${currentStudent["الشعبة"]} <br>
+            متوسطك العام: ${((Object.keys(currentStudent).length - 4) > 0 ? 
+                (Object.values(currentStudent).slice(4).reduce((a,b)=>a+parseFloat(b),0)/(Object.keys(currentStudent).length-4)).toFixed(2) : 0)}
+        </div>
+        <div style="margin-top:10px;">
             ${document.getElementById("gradesList").innerHTML}
         </div>
     `;
-
-    const printWindow = window.open('', '', 'height=700,width=900');
+    const printWindow = window.open('', '', 'width=800,height=600');
     printWindow.document.write('<html><head><title>كشف الدرجات</title>');
-    printWindow.document.write('<style>body{font-family:Arial;text-align:center;}table{width:100%;border-collapse:collapse;}th,td{border:1px solid #000;padding:8px;text-align:center;}th{background-color:#00796b;color:white;}</style>');
+    printWindow.document.write('<style>body{font-family:Arial;direction:rtl;} table{width:100%;border-collapse:collapse;margin-top:10px;} th,td{border:1px solid #000;padding:6px;text-align:center;} th{background-color:#00796b;color:white;}</style>');
     printWindow.document.write('</head><body>');
-    printWindow.document.write(content);
+    printWindow.document.write(container.innerHTML);
     printWindow.document.write('</body></html>');
     printWindow.document.close();
-    printWindow.focus();
     printWindow.print();
 }
