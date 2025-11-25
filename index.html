@@ -27,12 +27,14 @@
         height: auto;
         border-radius: 10px;
     }
-    header img.ministry-logo {
-        width: 60px;
-        height: auto;
+    header .ministry-info {
         position: absolute;
         right: 20px;
         top: 20px;
+        text-align: right;
+        font-size: 14px;
+        line-height: 1.3;
+        font-weight: bold;
     }
     header h1 {
         margin: 5px;
@@ -115,16 +117,23 @@
         header h2 {
             font-size: 16px;
         }
+        header .ministry-info {
+            font-size: 12px;
+        }
     }
 </style>
 </head>
 <body>
 
 <header>
-    <img src="https://github.com/faissaltunisia/grade-system/blob/main/logo.png?raw=true" class="school-logo" alt="لوجو المدرسة">
+    <img src="https://github.com/SalalahSharqiyaSchool/garde-system/blob/main/logo.png?raw=true" class="school-logo" alt="لوجو المدرسة">
     <h1>صلالة الشرقية للتعليم الأساسي</h1>
     <h2>الفصل الدراسي الثاني 2025-2026</h2>
-    <img src="https://raw.githubusercontent.com/SalalahSharqiyaSchool/garde-system/main/logo1.jpg" class="ministry-logo" alt="شعار وزارة التربية والتعليم">
+    <div class="ministry-info">
+        سلطنة عمان<br>
+        وزارة التربية والتعليم<br>
+        المديرية العامة للتربية والتعليم بمحافظة ظفار
+    </div>
 </header>
 
 <div class="container">
