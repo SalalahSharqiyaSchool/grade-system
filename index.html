@@ -11,139 +11,117 @@
         padding: 0;
         text-align: center;
     }
-
-    /* رأس الصفحة */
-    .header {
-        display: flex;
-        justify-content: flex-start;
-        align-items: center;
-        padding: 15px 20px;
+    header {
         background-color: #00796b;
         color: white;
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         gap: 15px;
         flex-wrap: wrap;
     }
-
-    .header img {
-        width: 100px;
+    header img {
+        width: 80px;
         height: auto;
-        border-radius: 8px;
+        border-radius: 10px;
     }
-
-    .school-info {
-        text-align: left;
-        flex-grow: 1;
+    header h1 {
+        margin: 5px;
+        font-size: 28px;
     }
-
-    .school-info h1 {
-        margin: 0;
-        font-size: 32px;
-        font-weight: bold;
-        display: inline-block;
+    header h2 {
+        margin: 5px;
+        font-size: 18px;
+        font-weight: normal;
+        width: 100%;
     }
-
-    .school-info div {
-        font-size: 20px;
-        font-weight: bold;
-        margin-top: 5px;
-    }
-
-    .province {
-        font-size: 20px;
-        font-weight: bold;
-        text-align: right;
-        flex-shrink: 0;
-    }
-
-    .semester {
-        text-align: center;
-        margin: 15px 0;
-        font-size: 22px;
-        font-weight: bold;
-    }
-
     .container {
         padding: 20px;
-        max-width: 750px;
+        max-width: 700px;
         margin: auto;
         background-color: white;
         border-radius: 12px;
         box-shadow: 0 0 15px rgba(0,0,0,0.1);
         margin-top: 20px;
-        text-align: right;
-        direction: rtl;
     }
-
-    #civil {
-        padding: 12px;
-        font-size: 18px;
+    input, button {
+        padding: 10px;
+        font-size: 16px;
+        margin: 5px 0;
         border-radius: 6px;
         border: 1px solid #ccc;
-        width: 65%;
-        text-align: right;
-        margin-bottom: 10px;
-    }
-
-    .buttons {
-        text-align: center;
-        margin: 15px 0;
     }
     button {
-        padding: 12px 25px;
-        font-size: 18px;
-        margin: 5px;
-        border-radius: 6px;
-        border: none;
         background-color: #00796b;
         color: white;
+        border: none;
         cursor: pointer;
+    }
+    button:hover {
+        background-color: #004d40;
+    }
+    #gradesList {
+        margin-top: 15px;
+        overflow-x: auto; /* Scroll أفقي دائم */
+    }
+    table {
+        width: 100%;
+        min-width: 400px; /* يمنع انكماش الجدول على الهاتف */
+        border-collapse: collapse;
+        direction: rtl;
+    }
+    table, th, td {
+        border: 1px solid #00796b;
+    }
+    th, td {
+        padding: 8px;
+        text-align: right;
+        word-wrap: break-word;
+    }
+    th {
+        background-color: #004d40;
+        color: white;
+    }
+    .message {
+        margin-top: 15px;
+        font-size: 16px;
+        color: #00796b;
         font-weight: bold;
     }
-    button:hover { background-color: #004d40; }
-
-    #studentInfo p { margin: 6px 0; font-size: 18px; font-weight: bold; }
-    #gradesList { margin-top: 15px; overflow-x: auto; }
-    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-    th, td { border: 1px solid #00796b; padding: 10px; text-align: center; font-weight: bold; }
-    th { background-color: #004d40; color: white; }
-
-    #status { color: red; margin-top: 10px; text-align: center; font-size: 18px; font-weight: bold; }
-
+    #status {
+        color: red;
+        margin-top: 10px;
+    }
     @media screen and (max-width: 600px) {
-        table, th, td { font-size: 14px; }
-        #civil { width: 85%; font-size: 16px; }
-        .header { flex-direction: column; gap: 10px; }
-        .school-info h1 { font-size: 28px; }
-        .school-info div, .province { font-size: 18px; }
+        table, th, td {
+            font-size: 13px; /* تصغير الخط على الهواتف */
+        }
     }
 </style>
+<script src="index.js"></script>
 </head>
 <body>
 
-<div class="header">
+<header>
     <img src="https://github.com/faissaltunisia/grade-system/blob/main/logo.png?raw=true" alt="لوجو المدرسة">
-    <div class="school-info">
+    <div>
         <h1>صلالة الشرقية للتعليم الأساسي</h1>
-        <div>الفصل الدراسي الأول 2025-2026</div>
+        <h2>الفصل الدراسي الأول 2025-2026</h2>
     </div>
-    <div class="province">محافظة ظفار</div>
-</div>
-
-<div class="semester">كشف درجات الطالب</div>
+</header>
 
 <div class="container">
+    <h2>ادخل رقمك المدني لمعرفة درجاتك</h2>
     <input type="text" id="civil" placeholder="الرقم المدني">
-
-    <div class="buttons">
-        <button onclick="showGrades()">عرض الدرجات</button>
-        <button onclick="printGrades()">طباعة الكشف</button>
-    </div>
-
+    <br>
+    <button onclick="showGrades()">عرض الدرجات</button>
     <p id="status"></p>
-    <div id="studentInfo"></div>
+
+    <h3 id="studentName"></h3>
     <div id="gradesList"></div>
+    <p class="message" id="encouragement"></p>
 </div>
 
-<script src="index.js"></script>
 </body>
 </html>
