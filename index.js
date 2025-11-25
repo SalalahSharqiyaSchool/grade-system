@@ -56,33 +56,18 @@ searchBtn.addEventListener("click", async () => {
     encouragement.innerHTML = `<strong>متوسطك العام: ${avg.toFixed(2)}</strong><br>${msg}`;
 });
 
-// تحميل PDF عربي كامل
-printBtn.addEventListener("click", async () => {
+// تحميل PDF عربي صحيح باستخدام html2pdf
+printBtn.addEventListener("click", () => {
     if (!currentStudent) { alert("الرجاء عرض درجات الطالب أولاً قبل التحميل."); return; }
 
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF({ orientation: "portrait", unit: "pt", format: "a4" });
-
-    // إضافة خط Amiri عربي (Base64)
-    // يمكنك تحميل ملف TTF وتحويله لـ Base64
-    // ثم استبدل "<Base64_هنا>" بالبيانات الفعلية
-    doc.addFileToVFS("Amiri-Regular.ttf", "<Base64_هنا>");
-    doc.addFont("Amiri-Regular.ttf", "Amiri", "normal");
-    doc.setFont("Amiri");
-
-    const container = document.querySelector(".container");
-    const table = container.querySelector("table");
-    if (!table) return alert("لا يوجد درجات للطباعة.");
-
-    doc.setFontSize(16);
-    doc.text("كشف درجات الطالب", 40, 40);
-    doc.setFontSize(14);
-    doc.text(container.querySelector("#studentName").innerText, 40, 60);
-
-    doc.autoTable({ html: table, startY: 80, styles: { font: "Amiri", fontSize: 12 }, theme: 'grid' });
-
-    const avgMsg = container.querySelector("#encouragement").innerText;
-    doc.text(avgMsg, 40, doc.lastAutoTable.finalY + 20);
-
-    doc.save("كشف_الدرجات.pdf");
+    const element = document.querySelector(".container"); // الجزء الذي نريد PDF منه
+    const opt = {
+        margin:       10,
+        filename:     `كشف_الدرجات_${currentStudent["الاسم"]}.pdf`,
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { scale: 2, logging: false },
+        jsPDF:        { unit: 'pt', format: 'a4', orientation: 'portrait' },
+        pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] }
+    };
+    html2pdf().set(opt).from(element).save();
 });
