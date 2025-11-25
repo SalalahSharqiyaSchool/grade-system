@@ -45,30 +45,33 @@ searchBtn.addEventListener("click", async () => {
 
     studentName.innerHTML = `الطالب: ${foundStudent["الاسم"]}`;
     studentClass.innerHTML = `الصف والشعبة: ${foundStudent["الصف"]} - ${foundStudent["الشعبة"]}`;
-    studentClass.style.textAlign = "right";
 
-    // إنشاء الجدول
     let total = 0, count = 0;
-    let html = "<table><tr><th>المادة</th><th>الدرجة</th><th>الملاحظة</th></tr>";
+
+    let html = "<table><tr><th>المادة</th><th>الدرجة</th><th>ملاحظات</th></tr>";
 
     for (const key in foundStudent) {
         if (!["رقم_مدني","الاسم","الصف","الشعبة"].includes(key)) {
+
             let grade = parseFloat(foundStudent[key]);
             let advice = grade >= 90 ? "ممتاز جدًا" :
                          grade >= 75 ? "جيد جدًا" :
                          grade >= 50 ? "مقبول" : "ضعيف";
 
+            // 🎨 ألوان فاتحة ومريحة للعين لكل ملاحظة
             let color =
-                advice === "ممتاز جدًا" ? "#A8E6A3" :
-                advice === "جيد جدًا"   ? "#A3C9E6" :
-                advice === "مقبول"      ? "#FFD9A3" :
-                                          "#F7A8A8";
+                advice === "ممتاز جدًا" ? "#A8E6A3" :   // أخضر فاتح
+                advice === "جيد جدًا"   ? "#A3C9E6" :   // أزرق فاتح
+                advice === "مقبول"      ? "#FFD9A3" :   // برتقالي فاتح
+                                          "#F7A8A8";    // أحمر فاتح
 
-            html += `<tr style="background-color:${color};">
-                        <td>${key}</td>
-                        <td>${grade}</td>
-                        <td>${advice}</td>
-                     </tr>`;
+            html += `
+                <tr style="background-color:${color};">
+                    <td>${key}</td>
+                    <td>${grade}</td>
+                    <td>${advice}</td>
+                </tr>
+            `;
 
             total += grade;
             count++;
@@ -79,23 +82,23 @@ searchBtn.addEventListener("click", async () => {
     gradesList.innerHTML = html;
 
     let avg = total / count;
-    let msg = avg >= 90 ? "ممتاز جدًا" :
-              avg >= 75 ? "جيد جدًا" :
-              avg >= 50 ? "مقبول" : "ضعيف";
+    let msg = avg >= 90 ? "أداء ممتاز جدًا" :
+              avg >= 75 ? "مستوى جيد جدًا" :
+              avg >= 50 ? "مستوى مقبول" : "المستوى ضعيف";
 
-    encouragement.innerHTML = `متوسطك العام: ${avg.toFixed(2)}% - ${msg}`;
-    encouragement.style.textAlign = "center";
+    encouragement.innerHTML = `متوسطك العام: ${avg.toFixed(2)} - ${msg}`;
 });
 
+// الطباعة
 printBtn.addEventListener("click", () => {
     if (!currentStudent) {
         alert("الرجاء عرض الدرجات أولاً");
         return;
     }
 
-    const printWindow = window.open("", "", "width=900,height=700");
+    const printWindow = window.open("", "", "width=800,height=700");
     printWindow.document.write("<html><head><title>كشف الدرجات</title>");
-    printWindow.document.write("<style>body{font-family:Arial; text-align:center;} table{width:100%; border-collapse:collapse;} th, td{border:1px solid #00796b; padding:8px; text-align:center;} th{background-color:#004d40; color:white;}</style>");
+    printWindow.document.write("<style>table{width:100%;border-collapse:collapse;} td,th{border:1px solid #333;padding:8px;text-align:center;} </style>");
     printWindow.document.write("</head><body>");
     printWindow.document.write(document.querySelector(".container").innerHTML);
     printWindow.document.write("</body></html>");
