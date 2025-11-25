@@ -70,7 +70,6 @@ searchBtn.addEventListener("click", async () => {
     encouragement.innerHTML = `<strong>متوسطك العام: ${avg.toFixed(2)}</strong><br>${msg}`;
 });
 
-// طباعة متوافقة مع الهاتف والكمبيوتر
 printBtn.addEventListener("click", () => {
     const container = document.querySelector(".container");
     if (!container) return;
