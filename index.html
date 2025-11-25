@@ -1,55 +1,73 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-<meta charset="UTF-8">
-<title>درجات الطالب - صلالة الشرقية</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<style>
-body { font-family: Arial, sans-serif; background: #f9f9f9; margin: 0; text-align: center; }
-header { background-color: #00796b; color: white; padding: 20px; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 15px; }
-header img { width: 80px; border-radius: 10px; }
-header h1 { margin: 5px; font-size: 28px; }
-header h2 { margin: 5px; font-size: 18px; font-weight: normal; width: 100%; }
-.container { padding: 20px; max-width: 700px; margin: 20px auto; background-color: white; border-radius: 12px; box-shadow: 0 0 15px rgba(0,0,0,0.1); }
-input, button { padding: 10px; font-size: 16px; margin: 5px 0; border-radius: 6px; border: 1px solid #ccc; }
-button { background-color: #00796b; color: white; border: none; cursor: pointer; }
-button:hover { background-color: #004d40; }
-#gradesList { margin-top: 15px; overflow-x: auto; }
-table { width: 100%; min-width: 400px; border-collapse: collapse; direction: rtl; }
-table, th, td { border: 1px solid #00796b; }
-th, td { padding: 8px; text-align: center; word-wrap: break-word; }
-th { background-color: #004d40; color: white; }
-.message { margin-top: 15px; font-size: 16px; color: #00796b; font-weight: bold; }
-#status { color: red; margin-top: 10px; }
-@media screen and (max-width: 600px) { table, th, td { font-size: 13px; } }
-</style>
+    <meta charset="UTF-8">
+    <title>درجات الطالب - صلالة الشرقية</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: Arial, sans-serif; background: #f9f9f9; margin: 0; text-align: center; }
+        header { background-color: #00796b; color: white; padding: 20px; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 15px; }
+        header img { width: 80px; border-radius: 10px; }
+        header h1 { margin: 5px; font-size: 28px; }
+        header h2 { margin: 5px; font-size: 18px; font-weight: normal; width: 100%; }
+        .container { padding: 20px; max-width: 700px; margin: 20px auto; background-color: white; border-radius: 12px; box-shadow: 0 0 15px rgba(0,0,0,0.1); }
+        input, button { padding: 10px; font-size: 16px; margin: 5px 0; border-radius: 6px; border: 1px solid #ccc; }
+        button { background-color: #00796b; color: white; border: none; cursor: pointer; }
+        button:hover { background-color: #004d40; }
+        #gradesList { margin-top: 15px; overflow-x: auto; }
+        table { width: 100%; min-width: 400px; border-collapse: collapse; direction: rtl; }
+        table, th, td { border: 1px solid #00796b; }
+        th, td { padding: 8px; text-align: center; word-wrap: break-word; }
+        th { background-color: #004d40; color: white; }
+        .message { margin-top: 15px; font-size: 16px; color: #00796b; font-weight: bold; }
+        #status { color: red; margin-top: 10px; }
+        @media screen and (max-width: 600px) { table, th, td { font-size: 13px; } }
+    </style>
 
-<!-- مكتبة html2pdf -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-<script src="index.js" defer></script>
+    <!-- مكتبة html2pdf -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="index.js" defer></script>
 </head>
 <body>
 
 <header>
-<img src="logo.png" alt="لوجو المدرسة">
-<div>
-<h1>صلالة الشرقية للتعليم الأساسي</h1>
-<h2>الفصل الدراسي الأول 2025-2026</h2>
-</div>
+    <img src="logo.png" alt="لوجو المدرسة">
+    <div>
+        <h1>صلالة الشرقية للتعليم الأساسي</h1>
+        <h2>الفصل الدراسي الأول 2025-2026</h2>
+    </div>
 </header>
 
 <div class="container">
-<h2>ادخل رقمك المدني لمعرفة درجاتك</h2>
-<input type="text" id="civil" placeholder="الرقم المدني">
-<br>
-<button id="searchBtn">عرض الدرجات</button>
-<button id="printBtn">تحميل PDF</button>
-<p id="status"></p>
+    <h2>ادخل رقمك المدني لمعرفة درجاتك</h2>
+    <input type="text" id="civil" placeholder="الرقم المدني">
+    <br>
+    <button id="searchBtn">عرض الدرجات</button>
+    <button id="printBtn">تحميل PDF</button>
+    <p id="status"></p>
 
-<h3 id="studentName"></h3>
-<div id="gradesList"></div>
-<p class="message" id="encouragement"></p>
+    <h3 id="studentName"></h3>
+    <div id="gradesList"></div>
+    <p class="message" id="encouragement"></p>
 </div>
+
+<script>
+    // تحميل PDF عربي صحيح
+    document.getElementById("printBtn").addEventListener("click", () => {
+        const element = document.querySelector(".container");
+        const opt = {
+            margin: 10,
+            filename: `كشف_الدرجات.pdf`,
+            image: { type: "jpeg", quality: 0.98 },
+            html2canvas: { scale: 2, useCORS: true },
+            jsPDF: { unit: "pt", format: "a4", orientation: "portrait" },
+            pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+        };
+
+        // إضافة دعم الخطوط العربية
+        html2pdf().set(opt).from(element).save();
+    });
+</script>
 
 </body>
 </html>
