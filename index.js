@@ -86,7 +86,8 @@ searchBtn.addEventListener("click", async () => {
               avg >= 75 ? "مستوى جيد جدًا" :
               avg >= 50 ? "مستوى مقبول" : "المستوى ضعيف";
 
-    encouragement.innerHTML = `متوسطك العام: ${avg.toFixed(2)} - ${msg}`;
+    // العرض بالترتيب الجديد
+    encouragement.innerHTML = `متوسطك العام: ${avg.toFixed(2)}<br>المستوى: ${msg}`;
 });
 
 // الطباعة
@@ -98,9 +99,16 @@ printBtn.addEventListener("click", () => {
 
     const printWindow = window.open("", "", "width=800,height=700");
     printWindow.document.write("<html><head><title>كشف الدرجات</title>");
-    printWindow.document.write("<style>table{width:100%;border-collapse:collapse;} td,th{border:1px solid #333;padding:8px;text-align:center;} </style>");
-    printWindow.document.write("</head><body>");
-    printWindow.document.write(document.querySelector(".container").innerHTML);
+    printWindow.document.write("<style>");
+    printWindow.document.write("table{width:100%;border-collapse:collapse;} td,th{border:1px solid #333;padding:8px;text-align:center;}");
+    printWindow.document.write("</style></head><body>");
+    
+    // عرض اسم الطالب، الصف والشعبة، المتوسط والمستوى قبل الجدول
+    printWindow.document.write(`<h3>${document.getElementById("studentName").innerHTML}</h3>`);
+    printWindow.document.write(`<p>${document.getElementById("studentClass").innerHTML}</p>`);
+    printWindow.document.write(`<p>${document.getElementById("encouragement").innerHTML}</p>`);
+    
+    printWindow.document.write(document.getElementById("gradesList").innerHTML);
     printWindow.document.write("</body></html>");
     printWindow.document.close();
     printWindow.print();
