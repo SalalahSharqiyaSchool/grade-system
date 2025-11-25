@@ -12,7 +12,7 @@
         text-align: center;
     }
 
-    /* الهيدر الأخضر كما طلبت */
+    /* هيدر أخضر كما طلبت */
     header {
         background-color: #00796b;
         color: white;
@@ -26,18 +26,18 @@
     header img {
         width: 80px;
         height: auto;
-        border-radius: 10px;
     }
     header h1 {
         margin: 5px;
-        font-size: 28px;
+        font-size: 32px;
         font-weight: bold;
     }
     header h2 {
-        margin: 5px;
-        font-size: 18px;
+        margin: 3px;
+        font-size: 20px;
         font-weight: bold;
         width: 100%;
+        text-align: center;
     }
 
     .container {
@@ -69,11 +69,23 @@
         background-color: #004d40;
     }
 
+    /* صندوق بيانات الطالب */
+    .student-box {
+        border: 2px solid #00796b;
+        padding: 12px;
+        border-radius: 10px;
+        margin-top: 15px;
+        font-size: 18px;
+        font-weight: bold;
+        line-height: 1.8;
+    }
+
     /* جدول الدرجات */
     table {
         width: 100%;
         border-collapse: collapse;
         direction: rtl;
+        margin-top: 15px;
     }
     table, th, td {
         border: 1px solid #00796b;
@@ -81,29 +93,19 @@
     th, td {
         padding: 8px;
         text-align: center;
-        font-size: 15px;
+        font-size: 17px;
     }
     th {
         background-color: #004d40;
         color: white;
     }
 
-    /* بطاقة معلومات الطالب */
-    .student-box {
-        border: 2px solid #00796b;
-        padding: 12px;
-        border-radius: 10px;
-        margin-top: 15px;
-        font-size: 17px;
-        font-weight: bold;
-    }
-
     @media print {
+        input, button {
+            display: none;
+        }
         body {
             background: white;
-        }
-        button, input {
-            display: none;
         }
         .container {
             box-shadow: none;
@@ -126,7 +128,7 @@
 
 <div class="container">
 
-    <h2 style="text-align:center;">أدخل الرقم المدني لعرض الدرجات</h2>
+    <h2 style="text-align:center;font-weight:bold;">أدخل الرقم المدني لعرض الدرجات</h2>
 
     <input type="text" id="civil" placeholder="الرقم المدني" style="width:100%;text-align:center;">
     <br>
@@ -136,18 +138,15 @@
 
     <p id="status" style="color:red;font-weight:bold;"></p>
 
-    <!-- بيانات الطالب -->
     <div id="studentInfo" class="student-box" style="display:none;"></div>
 
-    <!-- التوصيات -->
-    <p id="recommendations" style="font-weight:bold;color:#004d40;"></p>
+    <p id="recommendations" style="font-weight:bold;color:#004d40;font-size:18px;"></p>
 
-    <!-- جدول الدرجات -->
     <div id="gradesList"></div>
 
 </div>
 
-<script src="student.js"></script>
+<script src="index.js"></script>
 
 </body>
 </html>
