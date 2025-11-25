@@ -3,211 +3,151 @@
 <head>
 <meta charset="UTF-8">
 <title>درجات الطالب - صلالة الشرقية</title>
-
 <style>
     body {
         font-family: 'Arial', sans-serif;
-        background: #f5f7fa;
+        background: linear-gradient(to right, #f9f9f9, #e0f7fa);
         margin: 0;
         padding: 0;
-        direction: rtl;
         text-align: center;
     }
 
-    /* ======= العنوان ======= */
+    /* الهيدر الأخضر كما طلبت */
     header {
+        background-color: #00796b;
+        color: white;
         padding: 20px;
         display: flex;
-        justify-content: center;
         align-items: center;
+        justify-content: center;
         gap: 15px;
+        flex-wrap: wrap;
     }
-
     header img {
-        width: 85px;
+        width: 80px;
         height: auto;
+        border-radius: 10px;
     }
-
-    .title-box h1 {
-        font-size: 30px;
-        font-weight: bold;
-        margin: 0;
-    }
-
-    .title-box h2 {
-        font-size: 20px;
-        margin: 5px 0 0 0;
+    header h1 {
+        margin: 5px;
+        font-size: 28px;
         font-weight: bold;
     }
-
-    .region {
-        position: absolute;
-        top: 15px;
-        right: 15px;
-        font-size: 20px;
+    header h2 {
+        margin: 5px;
+        font-size: 18px;
         font-weight: bold;
+        width: 100%;
     }
 
-    /* ======= المربع الرئيسي ======= */
     .container {
-        background: white;
+        padding: 20px;
         max-width: 750px;
         margin: auto;
-        margin-top: 15px;
-        padding: 20px;
+        background-color: white;
         border-radius: 12px;
-        box-shadow: 0 0 15px rgba(0,0,0,0.15);
+        box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        margin-top: 20px;
+        text-align: right;
     }
 
     input, button {
-        padding: 12px;
-        font-size: 18px;
-        border-radius: 6px;
-        border: 1px solid #aaa;
-        width: 80%;
-        margin-bottom: 10px;
-    }
-
-    button {
-        width: 50%;
-        background: #00796b;
-        color: white;
-        cursor: pointer;
-        border: none;
-        font-size: 19px;
-    }
-
-    button:hover {
-        background: #005449;
-    }
-
-    /* ======= معلومات الطالب ======= */
-    #studentInfo p {
-        font-size: 18px;
-        font-weight: bold;
+        padding: 10px;
+        font-size: 16px;
         margin: 5px 0;
-        text-align: right;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+    }
+    button {
+        background-color: #00796b;
+        color: white;
+        border: none;
+        cursor: pointer;
+        font-weight: bold;
+    }
+    button:hover {
+        background-color: #004d40;
     }
 
-    /* ======= جدول الدرجات ======= */
+    /* جدول الدرجات */
     table {
         width: 100%;
         border-collapse: collapse;
-        margin-top: 15px;
+        direction: rtl;
     }
-
     table, th, td {
-        border: 1px solid #333;
+        border: 1px solid #00796b;
     }
-
+    th, td {
+        padding: 8px;
+        text-align: center;
+        font-size: 15px;
+    }
     th {
-        background: #00796b;
+        background-color: #004d40;
         color: white;
-        font-size: 18px;
-        padding: 8px;
     }
 
-    td {
-        padding: 8px;
+    /* بطاقة معلومات الطالب */
+    .student-box {
+        border: 2px solid #00796b;
+        padding: 12px;
+        border-radius: 10px;
+        margin-top: 15px;
         font-size: 17px;
-        text-align: right;
-        background: #f9f9f9;
-    }
-
-    #encouragement {
-        margin-top: 18px;
-        font-size: 20px;
         font-weight: bold;
-        color: #003d33;
     }
 
-    /* ======= طباعة منظمة ======= */
     @media print {
-
         body {
-            background: white !important;
+            background: white;
         }
-
-        input, button {
-            display: none !important;
+        button, input {
+            display: none;
         }
-
         .container {
-            box-shadow: none !important;
-        }
-
-        /* العنوان */
-        header {
-            margin-bottom: 5px;
-        }
-
-        header img {
-            width: 90px !important;
-        }
-
-        .title-box h1 {
-            font-size: 28px !important;
-        }
-
-        .title-box h2 {
-            font-size: 20px !important;
-        }
-
-        .region {
-            font-size: 18px !important;
-        }
-
-        #studentInfo p {
-            font-size: 18px !important;
-        }
-
-        table, th, td {
-            border: 1px solid black !important;
-        }
-
-        th {
-            background: #e0e0e0 !important;
-            color: black !important;
-        }
-
-        #encouragement {
-            font-size: 18px !important;
-            margin-top: 10px;
+            box-shadow: none;
+            border: none;
         }
     }
-
 </style>
-
 </head>
-<body>
 
-<div class="region">محافظة ظفار</div>
+<body>
 
 <header>
     <img src="https://github.com/faissaltunisia/grade-system/blob/main/logo.png?raw=true">
-    <div class="title-box">
+    <div>
         <h1>صلالة الشرقية للتعليم الأساسي</h1>
+        <h2>محافظة ظفار</h2>
         <h2>الفصل الدراسي الأول 2025-2026</h2>
     </div>
 </header>
 
 <div class="container">
 
-    <input type="text" id="civil" placeholder="أدخل الرقم المدني">
-    <button onclick="showGrades()">عرض الدرجات</button>
-    <button onclick="printGrades()">طباعة الكشف</button>
+    <h2 style="text-align:center;">أدخل الرقم المدني لعرض الدرجات</h2>
+
+    <input type="text" id="civil" placeholder="الرقم المدني" style="width:100%;text-align:center;">
+    <br>
+
+    <button onclick="showGrades()" style="width: 48%;">عرض الدرجات</button>
+    <button onclick="printReport()" style="width: 48%;">طباعة</button>
 
     <p id="status" style="color:red;font-weight:bold;"></p>
 
-    <div id="studentInfo"></div>
+    <!-- بيانات الطالب -->
+    <div id="studentInfo" class="student-box" style="display:none;"></div>
 
+    <!-- التوصيات -->
+    <p id="recommendations" style="font-weight:bold;color:#004d40;"></p>
+
+    <!-- جدول الدرجات -->
     <div id="gradesList"></div>
-
-    <p id="encouragement"></p>
 
 </div>
 
-<script src="index.js"></script>
+<script src="student.js"></script>
 
 </body>
 </html>
