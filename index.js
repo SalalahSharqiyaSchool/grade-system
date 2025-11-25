@@ -44,8 +44,8 @@ searchBtn.addEventListener("click", async () => {
     currentStudent = foundStudent;
 
     studentName.innerHTML = `الطالب: ${foundStudent["الاسم"]}`;
-    // تعديل الصف والشعبة من اليمين
-    studentClass.innerHTML = `<span style="float:right;">الصف والشعبة: ${foundStudent["الصف"]} - ${foundStudent["الشعبة"]}</span>`;
+    studentClass.innerHTML = `الصف والشعبة: ${foundStudent["الصف"]} - ${foundStudent["الشعبة"]}`;
+    studentClass.style.textAlign = "right";
 
     // إنشاء الجدول
     let total = 0, count = 0;
@@ -53,18 +53,16 @@ searchBtn.addEventListener("click", async () => {
 
     for (const key in foundStudent) {
         if (!["رقم_مدني","الاسم","الصف","الشعبة"].includes(key)) {
-
             let grade = parseFloat(foundStudent[key]);
             let advice = grade >= 90 ? "ممتاز جدًا" :
                          grade >= 75 ? "جيد جدًا" :
                          grade >= 50 ? "مقبول" : "ضعيف";
 
-            // ألوان فاتحة لكل ملاحظة
             let color =
-                advice === "ممتاز جدًا" ? "#A8E6A3" :   // أخضر فاتح
-                advice === "جيد جدًا"   ? "#A3C9E6" :   // أزرق فاتح
-                advice === "مقبول"      ? "#FFD9A3" :   // برتقالي فاتح
-                                          "#F7A8A8";    // أحمر فاتح
+                advice === "ممتاز جدًا" ? "#A8E6A3" :
+                advice === "جيد جدًا"   ? "#A3C9E6" :
+                advice === "مقبول"      ? "#FFD9A3" :
+                                          "#F7A8A8";
 
             html += `<tr style="background-color:${color};">
                         <td>${key}</td>
@@ -80,16 +78,15 @@ searchBtn.addEventListener("click", async () => {
     html += "</table>";
     gradesList.innerHTML = html;
 
-    // عرض المتوسط مع النسبة ثم الملاحظة
     let avg = total / count;
     let msg = avg >= 90 ? "ممتاز جدًا" :
               avg >= 75 ? "جيد جدًا" :
               avg >= 50 ? "مقبول" : "ضعيف";
 
     encouragement.innerHTML = `متوسطك العام: ${avg.toFixed(2)}% - ${msg}`;
+    encouragement.style.textAlign = "center";
 });
 
-// الطباعة
 printBtn.addEventListener("click", () => {
     if (!currentStudent) {
         alert("الرجاء عرض الدرجات أولاً");
