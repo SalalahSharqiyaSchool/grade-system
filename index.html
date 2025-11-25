@@ -1,86 +1,128 @@
-function showGrades() {
-    const civil = document.getElementById("civil").value.trim();
-    const status = document.getElementById("status");
-    const studentName = document.getElementById("studentName");
-    const gradesList = document.getElementById("gradesList");
-    const encouragement = document.getElementById("encouragement");
-
-    // مسح المحتوى القديم
-    status.innerHTML = "";
-    studentName.innerHTML = "";
-    gradesList.innerHTML = "";
-    encouragement.innerHTML = "";
-
-    if (!civil) {
-        status.innerHTML = "الرجاء إدخال الرقم المدني";
-        return;
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<title>درجات الطالب - صلالة الشرقية</title>
+<style>
+    body {
+        font-family: 'Arial', sans-serif;
+        background: linear-gradient(to right, #f9f9f9, #e0f7fa);
+        margin: 0;
+        padding: 0;
+        text-align: center;
     }
+    header {
+        background-color: #00796b;
+        color: white;
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 15px;
+        flex-wrap: wrap;
+    }
+    header img {
+        width: 80px;
+        height: auto;
+        border-radius: 10px;
+    }
+    header h1 {
+        margin: 5px;
+        font-size: 28px;
+    }
+    header h2 {
+        margin: 5px;
+        font-size: 18px;
+        font-weight: normal;
+        width: 100%;
+    }
+    .container {
+        padding: 20px;
+        max-width: 700px;
+        margin: auto;
+        background-color: white;
+        border-radius: 12px;
+        box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        margin-top: 20px;
+    }
+    input, button {
+        padding: 10px;
+        font-size: 16px;
+        margin: 5px 0;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+    }
+    button {
+        background-color: #00796b;
+        color: white;
+        border: none;
+        cursor: pointer;
+    }
+    button:hover {
+        background-color: #004d40;
+    }
+    #gradesList {
+        margin-top: 15px;
+        overflow-x: auto;
+    }
+    table {
+        width: 100%;
+        min-width: 400px;
+        border-collapse: collapse;
+        direction: rtl;
+    }
+    table, th, td {
+        border: 1px solid #00796b;
+    }
+    th, td {
+        padding: 8px;
+        text-align: center;
+        word-wrap: break-word;
+    }
+    th {
+        background-color: #004d40;
+        color: white;
+    }
+    .message {
+        margin-top: 15px;
+        font-size: 16px;
+        color: #00796b;
+        font-weight: bold;
+    }
+    #status {
+        color: red;
+        margin-top: 10px;
+    }
+    @media screen and (max-width: 600px) {
+        table, th, td {
+            font-size: 13px;
+        }
+    }
+</style>
+</head>
+<body>
 
-    status.innerHTML = "جارٍ تحميل البيانات...";
+<header>
+    <img src="https://github.com/faissaltunisia/grade-system/blob/main/logo.png?raw=true" alt="لوجو المدرسة">
+    <div>
+        <h1>صلالة الشرقية للتعليم الأساسي</h1>
+        <h2>الفصل الدراسي الأول 2025-2026</h2>
+    </div>
+</header>
 
-    // الرابط الصحيح للملف Raw على GitHub
-    const url = "https://raw.githubusercontent.com/SalalahSharqiyaSchool/grade-system/main/grades.json?time=" + Date.now();
+<div class="container">
+    <h2>ادخل الرقم المدني لمعرفة درجاتك</h2>
+    <input type="text" id="civil" placeholder="الرقم المدني">
+    <br>
+    <button onclick="showGrades()">عرض الدرجات</button>
+    <button onclick="printGrades()" style="margin-top:10px;">طباعة الكشف</button>
+    <p id="status"></p>
 
-    fetch(url)
-        .then(res => {
-            if (!res.ok) throw new Error("الرابط غير صالح أو الملف غير موجود على GitHub");
-            return res.json();
-        })
-        .then(data => {
-            if (!Array.isArray(data)) throw new Error("ملف JSON غير صالح");
+    <h3 id="studentName"></h3>
+    <div id="gradesList"></div>
+    <p class="message" id="encouragement"></p>
+</div>
 
-            const student = data.find(s => s.رقم_مدني == civil);
-            if (!student) {
-                status.innerHTML = "لم يتم العثور على الرقم المدني في البيانات";
-                return;
-            }
-
-            status.innerHTML = "";
-            studentName.innerHTML = `الطالب: ${student.اسم}`;
-
-            const adviceMap = [
-                { min: 90, msg: "ممتاز! حافظ على هذا المستوى." },
-                { min: 75, msg: "جيد جدًا، ركز على مراجعة النقاط الصعبة." },
-                { min: 50, msg: "مقبول، يحتاج المزيد من الممارسة." },
-                { min: 0,  msg: "ضعيف، ننصح بمراجعة الدروس مع المعلم." }
-            ];
-
-            let html = "<table><tr><th>المادة</th><th>الدرجة</th><th>تحليل ونصيحة</th></tr>";
-            let total = 0, count = 0;
-
-            for (const key in student) {
-                if (key !== "رقم_مدني" && key !== "اسم") {
-                    const grade = parseFloat(student[key]);
-                    const advice = adviceMap.find(a => grade >= a.min).msg;
-                    let color = grade >= 90 ? "#c8e6c9" : grade >= 75 ? "#fff9c4" : grade >= 50 ? "#ffe0b2" : "#ffcdd2";
-
-                    html += `<tr style="background-color:${color}"><td>${key}</td><td>${grade}</td><td>${advice}</td></tr>`;
-                    total += grade;
-                    count++;
-                }
-            }
-
-            html += "</table>";
-            gradesList.innerHTML = `<div style="overflow-x:auto;">${html}</div>`;
-
-            const average = total / count;
-            let generalAdvice = average >= 90 ? "ممتاز! استمر على هذا المستوى الرائع 🌟"
-                              : average >= 75 ? "جيد جدًا! ركز على المواد التي تحتاج تعزيزًا 💪"
-                              : average >= 50 ? "مقبول، تحتاج لمزيد من الاجتهاد والمراجعة 📚"
-                              : "ينصح بمراجعة شاملة والدعم من المعلم 🔔";
-
-            encouragement.innerHTML = `<strong>متوسطك العام: ${average.toFixed(2)}</strong><br>${generalAdvice}`;
-        })
-        .catch(err => {
-            status.innerHTML = `خطأ في تحميل الدرجات: ${err.message}`;
-            console.error(err);
-        });
-}
-
-function printGrades() {
-    const printContent = document.querySelector(".container").innerHTML;
-    const originalContent = document.body.innerHTML;
-    document.body.innerHTML = printContent;
-    window.print();
-    document.body.innerHTML = originalContent;
-}
+<script src="index.js"></script>
+</body>
+</html>
