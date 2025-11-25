@@ -6,19 +6,15 @@ async function showGrades() {
     const studentInfo = document.getElementById("studentInfo");
     const gradesList = document.getElementById("gradesList");
 
-    status.textContent = "";
+    status.innerHTML = "";
     studentInfo.innerHTML = "";
     gradesList.innerHTML = "";
     currentStudent = null;
 
-    if (!civil) {
-        status.textContent = "الرجاء إدخال الرقم المدني";
-        return;
-    }
+    if (!civil) { status.innerHTML = "الرجاء إدخال الرقم المدني"; return; }
 
     const files = ["grade5.json","grade6.json","grade7.json","grade8.json","grade9.json"];
     let foundStudent = null;
-    let studentClass = "";
 
     for (const file of files) {
         try {
@@ -26,70 +22,59 @@ async function showGrades() {
             if (!res.ok) continue;
             const data = await res.json();
             const student = data.find(s => s["رقم_مدني"].toString().trim() === civil);
-            if (student) {
-                foundStudent = student;
-                studentClass = file.replace(".json","");
-                break;
-            }
-        } catch (err) {
-            console.warn("خطأ في قراءة:", file, err);
-        }
+            if (student) { foundStudent = student; break; }
+        } catch (err) { console.warn("خطأ في قراءة:", file, err); }
     }
 
-    if (!foundStudent) {
-        status.textContent = "لم يتم العثور على الرقم المدني في أي صف.";
-        return;
-    }
+    if (!foundStudent) { status.innerHTML = "لم يتم العثور على الرقم المدني في أي صف."; return; }
 
     currentStudent = foundStudent;
 
-    // حساب المتوسط
-    let total = 0, count = 0;
-    for (const key in foundStudent) {
-        if (key !== "رقم_مدني" && key !== "الاسم") {
-            total += parseFloat(foundStudent[key]);
-            count++;
-        }
-    }
-    const avg = (total / count).toFixed(2);
-    const advice = avg >= 90 ? "أداء ممتاز جداً 🌟" :
-                   avg >= 75 ? "مستوى جيد جداً 💪" :
-                   avg >= 50 ? "مستوى مقبول 📚" : "المستوى ضعيف 🔔";
-
-    // عرض بيانات الطالب في صفوف مزدوجة
+    // عرض بيانات الطالب
     studentInfo.innerHTML = `
-        <p><strong>الطالب:</strong> ${foundStudent["الاسم"]} &nbsp;&nbsp; <strong>الرقم المدني:</strong> ${foundStudent["رقم_مدني"]}</p>
-        <p><strong>الصف والشعبة:</strong> ${studentClass} &nbsp;&nbsp; <strong>متوسط الدرجات:</strong> ${avg}</p>
-        <p><strong>ملاحظات:</strong> ${advice}</p>
+        <p><strong>اسم الطالب:</strong> ${foundStudent["الاسم"]} &nbsp;&nbsp; 
+           <strong>الرقم المدني:</strong> ${foundStudent["رقم_مدني"]}</p>
+        <p><strong>الصف:</strong> ${foundStudent["الصف"] || "-"} &nbsp;&nbsp;
+           <strong>الشعبة:</strong> ${foundStudent["الشعبة"] || "-"}</p>
     `;
 
     // إنشاء جدول الدرجات
-    let tableHtml = "<table><tr><th>المادة</th><th>الدرجة</th><th>ملاحظات</th></tr>";
+    let total = 0, count = 0, html = "<table><tr><th>المادة</th><th>الدرجة</th><th>ملاحظات</th></tr>";
     for (const key in foundStudent) {
-        if (key !== "رقم_مدني" && key !== "الاسم") {
+        if (!["رقم_مدني","الاسم","الصف","الشعبة"].includes(key)) {
             const grade = parseFloat(foundStudent[key]);
-            let remark = grade >= 90 ? "ممتاز 🌟" :
-                         grade >= 75 ? "جيد جدًا 👍" :
-                         grade >= 50 ? "مقبول 📘" : "ضعيف 📌";
-            tableHtml += `<tr><td>${key}</td><td>${grade}</td><td>${remark}</td></tr>`;
+            const advice = grade >= 90 ? "ممتاز جدًا 🌟" :
+                           grade >= 75 ? "جيد جدًا 👍" :
+                           grade >= 50 ? "مقبول 📘" : "ضعيف 📌";
+            html += `<tr><td>${key}</td><td>${grade}</td><td>${advice}</td></tr>`;
+            total += grade; count++;
         }
     }
-    tableHtml += "</table>";
-    gradesList.innerHTML = tableHtml;
+    html += "</table>";
+    gradesList.innerHTML = `<div style="overflow-x:auto;">${html}</div>`;
+
+    // متوسط درجات الطالب
+    const avg = total / count;
+    studentInfo.innerHTML += `<p><strong>متوسط الدرجات:</strong> ${avg.toFixed(2)}</p>`;
 }
 
-// طباعة الجزء الخاص بالطالب
+// طباعة جدول الطالب مع معلوماته
 function printGrades() {
-    if (!currentStudent) {
-        alert("الرجاء عرض درجات الطالب أولاً قبل الطباعة.");
-        return;
-    }
-    const content = document.querySelector(".container").innerHTML;
+    if (!currentStudent) { alert("الرجاء عرض درجات الطالب أولاً."); return; }
+
+    const printContent = `
+        <h2>صلالة الشرقية للتعليم الأساسي</h2>
+        <p>محافظة ظفار</p>
+        <p>الفصل الدراسي الأول 2025-2026</p>
+        ${document.getElementById("studentInfo").innerHTML}
+        ${document.getElementById("gradesList").innerHTML}
+    `;
+
     const printWindow = window.open('', '', 'height=700,width=900');
     printWindow.document.write('<html><head><title>كشف الدرجات</title>');
-    printWindow.document.write('<style>body{font-family:Arial;direction:rtl;text-align:right;} table{width:100%;border-collapse:collapse;margin-top:10px;} th,td{border:1px solid #000;padding:8px;text-align:center;} th{background-color:#00796b;color:white;}</style>');
+    printWindow.document.write('<style>body { font-family: Arial; text-align: center; direction: rtl; } table { width: 100%; border-collapse: collapse; margin-top: 10px; } th, td { border: 1px solid #00796b; padding: 8px; text-align: center; } th { background-color: #004d40; color: white; }</style>');
     printWindow.document.write('</head><body>');
-    printWindow.document.write(content);
+    printWindow.document.write(printContent);
     printWindow.document.write('</body></html>');
     printWindow.document.close();
     printWindow.focus();
