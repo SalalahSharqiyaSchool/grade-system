@@ -32,13 +32,8 @@ searchBtn.addEventListener("click", async () => {
             if (!res.ok) continue;
             const data = await res.json();
             const student = data.find(s => s["رقم_مدني"].toString().trim() === civil);
-            if (student) {
-                foundStudent = student;
-                break;
-            }
-        } catch (err) { 
-            console.warn("خطأ في قراءة:", file, err); 
-        }
+            if (student) { foundStudent = student; break; }
+        } catch {}
     }
 
     if (!foundStudent) { 
@@ -47,10 +42,12 @@ searchBtn.addEventListener("click", async () => {
     }
 
     currentStudent = foundStudent;
+
     studentName.innerHTML = `الطالب: ${foundStudent["الاسم"]}`;
     studentClass.innerHTML = `الصف والشعبة: ${foundStudent["الصف"]} - ${foundStudent["الشعبة"]}`;
 
     let total = 0, count = 0;
+
     let html = "<table><tr><th>المادة</th><th>الدرجة</th><th>ملاحظات</th></tr>";
 
     for (const key in foundStudent) {
@@ -61,10 +58,20 @@ searchBtn.addEventListener("click", async () => {
                          grade >= 75 ? "جيد جدًا" :
                          grade >= 50 ? "مقبول" : "ضعيف";
 
-            // 🔵 جميع الصفوف باللون الأخضر الفاتح
-            let rowColor = "style='background-color:#d4f9d4;'";
+            // 🎨 تحديد لون كل ملاحظة
+            let color =
+                advice === "ممتاز جدًا" ? "#4CAF50" :   // أخضر غامق
+                advice === "جيد جدًا"   ? "#2196F3" :   // أزرق
+                advice === "مقبول"      ? "#FF9800" :   // برتقالي
+                                            "#F44336";    // أحمر
 
-            html += `<tr ${rowColor}><td>${key}</td><td>${grade}</td><td>${advice}</td></tr>`;
+            html += `
+                <tr style="background-color:${color}; color:white;">
+                    <td>${key}</td>
+                    <td>${grade}</td>
+                    <td>${advice}</td>
+                </tr>
+            `;
 
             total += grade;
             count++;
@@ -72,41 +79,29 @@ searchBtn.addEventListener("click", async () => {
     }
 
     html += "</table>";
-    gradesList.innerHTML = `<div style="overflow-x:auto;">${html}</div>`;
+    gradesList.innerHTML = html;
 
     let avg = total / count;
-    let msg = avg >= 90 ? "أداء ممتاز جداً" :
-              avg >= 75 ? "مستوى جيد جداً" :
+    let msg = avg >= 90 ? "أداء ممتاز جدًا" :
+              avg >= 75 ? "مستوى جيد جدًا" :
               avg >= 50 ? "مستوى مقبول" : "المستوى ضعيف";
-    encouragement.innerHTML = `<strong>متوسطك العام: ${avg.toFixed(2)}</strong> - ${msg}`;
+
+    encouragement.innerHTML = `متوسطك العام: ${avg.toFixed(2)} - ${msg}`;
 });
 
-// طباعة الكشف
+// الطباعة
 printBtn.addEventListener("click", () => {
-    if (!currentStudent) { 
-        alert("الرجاء عرض درجات الطالب أولاً قبل الطباعة."); 
-        return; 
+    if (!currentStudent) {
+        alert("الرجاء عرض الدرجات أولاً");
+        return;
     }
 
-    const printContent = `
-        <div style="text-align:center; font-family:Arial;">
-            <h1>صلالة الشرقية للتعليم الأساسي</h1>
-            <h2>الفصل الدراسي الثاني 2025-2026</h2>
-            <p><strong>الطالب:</strong> ${currentStudent["الاسم"]}</p>
-            <p><strong>الرقم المدني:</strong> ${currentStudent["رقم_مدني"]}</p>
-            <p><strong>الصف والشعبة:</strong> ${currentStudent["الصف"]} - ${currentStudent["الشعبة"]}</p>
-            <p><strong>متوسطك العام:</strong> ${document.getElementById("encouragement").innerText}</p>
-            ${document.getElementById("gradesList").innerHTML}
-        </div>
-    `;
-
-    const printWindow = window.open('', '', 'height=700,width=800');
-    printWindow.document.write('<html><head><title>كشف الدرجات</title>');
-    printWindow.document.write('<style>table {width:100%; border-collapse:collapse;} th, td {border:1px solid #00796b; padding:8px; text-align:center;} th {background-color:#004d40; color:white;} body{font-family:Arial;} td{background:#d4f9d4;}</style>');
-    printWindow.document.write('</head><body>');
-    printWindow.document.write(printContent);
-    printWindow.document.write('</body></html>');
+    const printWindow = window.open("", "", "width=800,height=700");
+    printWindow.document.write("<html><head><title>كشف الدرجات</title>");
+    printWindow.document.write("<style>table{width:100%;border-collapse:collapse;} td,th{border:1px solid #333;padding:8px;text-align:center;} </style>");
+    printWindow.document.write("</head><body>");
+    printWindow.document.write(document.querySelector(".container").innerHTML);
+    printWindow.document.write("</body></html>");
     printWindow.document.close();
-    printWindow.focus();
     printWindow.print();
 });
