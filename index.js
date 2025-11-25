@@ -3,6 +3,17 @@ const printBtn = document.getElementById("printBtn");
 
 let currentStudent = null;
 
+// دالة الملاحظات الذكية محليًا
+function getDynamicFeedback(subject, grade) {
+    if (grade >= 90) 
+        return `${subject}: أداء ممتاز! حافظ على هذا المستوى.`;
+    if (grade >= 75) 
+        return `${subject}: جيد جدًا، حاول التركيز على التفاصيل الصغيرة لتحسن أكثر.`;
+    if (grade >= 50) 
+        return `${subject}: مقبول، من الأفضل مراجعة الدروس الأساسية.`;
+    return `${subject}: ضعيف، ينصح بعمل تمارين إضافية ومراجعة النقاط الأساسية.`;
+}
+
 searchBtn.addEventListener("click", async () => {
     const civil = document.getElementById("civil").value.trim();
     const status = document.getElementById("status");
@@ -11,7 +22,6 @@ searchBtn.addEventListener("click", async () => {
     const gradesList = document.getElementById("gradesList");
     const encouragement = document.getElementById("encouragement");
 
-    // إعادة تهيئة العرض
     status.innerHTML = "";
     studentName.innerHTML = "";
     studentClass.innerHTML = "";
@@ -44,34 +54,28 @@ searchBtn.addEventListener("click", async () => {
 
     currentStudent = foundStudent;
 
-    // اسم الطالب
     studentName.innerHTML = `الطالب: ${foundStudent["الاسم"]}`;
+    studentClass.innerHTML = `الصف والشعبة: ${foundStudent["الصف"]} - ${foundStudent["الشعبة"]}`;
 
-    // عرض الصف والشعبة أولاً
-    studentClass.innerHTML = `${foundStudent["الصف"]} - ${foundStudent["الشعبة"]}    : الصف و الشعبة `;
-
-    // حساب المتوسط وإنشاء الجدول
     let total = 0, count = 0;
-    let html = "<table><tr><th>المادة</th><th>الدرجة</th><th>ملاحظات</th></tr>";
+    let html = "<table><tr><th>المادة</th><th>الدرجة</th><th>ملاحظة</th></tr>";
 
     for (const key in foundStudent) {
         if (!["رقم_مدني","الاسم","الصف","الشعبة"].includes(key)) {
             let grade = parseFloat(foundStudent[key]);
-            let advice = grade >= 90 ? "ممتاز جدًا" :
-                         grade >= 75 ? "جيد جدًا" :
-                         grade >= 50 ? "مقبول" : "ضعيف";
+            let feedback = getDynamicFeedback(key, grade);
 
             let color =
-                advice === "ممتاز جدًا" ? "#A8E6A3" :
-                advice === "جيد جدًا"   ? "#A3C9E6" :
-                advice === "مقبول"      ? "#FFD9A3" :
-                                          "#F7A8A8";
+                grade >= 90 ? "#A8E6A3" :
+                grade >= 75 ? "#A3C9E6" :
+                grade >= 50 ? "#FFD9A3" :
+                              "#F7A8A8";
 
             html += `
                 <tr style="background-color:${color};">
                     <td>${key}</td>
                     <td>${grade}</td>
-                    <td>${advice}</td>
+                    <td>${feedback}</td>
                 </tr>
             `;
 
@@ -88,11 +92,10 @@ searchBtn.addEventListener("click", async () => {
               avg >= 75 ? "مستوى جيد جدًا" :
               avg >= 50 ? "مستوى مقبول" : "المستوى ضعيف";
 
-    // عرض متوسطك العام ثم المستوى
-    encouragement.innerHTML = `${msg}   --- ${avg.toFixed(2)}    : متوسطك العام   `;
+    encouragement.innerHTML = `متوسطك العام: ${avg.toFixed(2)}<br>المستوى: ${msg}`;
 });
 
-// الطباعة مع توسيط البيانات
+// الطباعة مع توسيط المحتوى
 printBtn.addEventListener("click", () => {
     if (!currentStudent) {
         alert("الرجاء عرض الدرجات أولاً");
@@ -101,15 +104,12 @@ printBtn.addEventListener("click", () => {
 
     const printWindow = window.open("", "", "width=800,height=700");
     printWindow.document.write("<html><head><title>كشف الدرجات</title>");
-    
-    // CSS لتوسيط المحتوى
     printWindow.document.write("<style>");
     printWindow.document.write("body { text-align: center; font-family: Arial, sans-serif; }");
     printWindow.document.write("table { width: 80%; margin: 0 auto; border-collapse: collapse; }");
     printWindow.document.write("td, th { border: 1px solid #333; padding: 8px; text-align: center; }");
     printWindow.document.write("</style></head><body>");
     
-    // عرض المعلومات بالترتيب الجديد في منتصف الصفحة
     printWindow.document.write(`<h3>${document.getElementById("studentName").innerHTML}</h3>`);
     printWindow.document.write(`<p>${document.getElementById("studentClass").innerHTML}</p>`);
     printWindow.document.write(`<p>${document.getElementById("encouragement").innerHTML}</p>`);
