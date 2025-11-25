@@ -126,7 +126,10 @@ printBtn.addEventListener("click", () => {
     // نسخة جديدة من الجدول مع dir=rtl
     const tableHTML = document.getElementById("gradesList").querySelector("table").outerHTML;
     printWindow.document.write(tableHTML);
-
+// إضافة حقوق الملكية عند الطباعة
+    printWindow.document.write(`<p style="margin-top:20px; font-size:14px; color:#555;">
+        © 2025 - جميع الحقوق محفوظة للأستاذ فيصل العريبي
+    </p>`);
     printWindow.document.write("</body></html>");
     printWindow.document.close();
     printWindow.print();
