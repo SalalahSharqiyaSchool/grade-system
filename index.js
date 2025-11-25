@@ -1,59 +1,73 @@
-<!DOCTYPE html>
-<html lang="ar">
-<head>
-<meta charset="UTF-8">
-<title>درجات الطالب - صلالة الشرقية</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+const searchBtn = document.getElementById("searchBtn");
+const printBtn = document.getElementById("printBtn");
+let currentStudent = null;
 
-<!-- خط عربي Amiri -->
-<link href="https://fonts.googleapis.com/css2?family=Amiri&display=swap" rel="stylesheet">
+searchBtn.addEventListener("click", async () => {
+    const civil = document.getElementById("civil").value.trim();
+    const status = document.getElementById("status");
+    const studentName = document.getElementById("studentName");
+    const gradesList = document.getElementById("gradesList");
+    const encouragement = document.getElementById("encouragement");
 
-<style>
-body { font-family: 'Amiri', serif; background: #f9f9f9; margin: 0; text-align: center; direction: rtl; }
-header { background-color: #00796b; color: white; padding: 20px; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 15px; }
-header img { width: 80px; border-radius: 10px; }
-header h1 { margin: 5px; font-size: 28px; }
-header h2 { margin: 5px; font-size: 18px; font-weight: normal; width: 100%; }
-.container { padding: 20px; max-width: 700px; margin: 20px auto; background-color: white; border-radius: 12px; box-shadow: 0 0 15px rgba(0,0,0,0.1); font-family: 'Amiri', serif; direction: rtl; }
-input, button { padding: 10px; font-size: 16px; margin: 5px 0; border-radius: 6px; border: 1px solid #ccc; }
-button { background-color: #00796b; color: white; border: none; cursor: pointer; }
-button:hover { background-color: #004d40; }
-#gradesList { margin-top: 15px; overflow-x: auto; }
-table { width: 100%; min-width: 400px; border-collapse: collapse; }
-table, th, td { border: 1px solid #00796b; }
-th, td { padding: 8px; text-align: center; word-wrap: break-word; }
-th { background-color: #004d40; color: white; }
-.message { margin-top: 15px; font-size: 16px; color: #00796b; font-weight: bold; }
-#status { color: red; margin-top: 10px; }
-@media screen and (max-width: 600px) { table, th, td { font-size: 13px; } }
-</style>
+    status.innerHTML = "";
+    studentName.innerHTML = "";
+    gradesList.innerHTML = "";
+    encouragement.innerHTML = "";
+    currentStudent = null;
 
-<!-- مكتبة html2pdf -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-<script src="index.js" defer></script>
-</head>
-<body>
+    if (!civil) { status.innerHTML = "الرجاء إدخال الرقم المدني"; return; }
 
-<header>
-<img src="logo.png" alt="لوجو المدرسة">
-<div>
-<h1>صلالة الشرقية للتعليم الأساسي</h1>
-<h2>الفصل الدراسي الأول 2025-2026</h2>
-</div>
-</header>
+    const files = ["grade5.json","grade6.json","grade7.json","grade8.json","grade9.json"];
+    let foundStudent = null;
 
-<div class="container">
-<h2>ادخل رقمك المدني لمعرفة درجاتك</h2>
-<input type="text" id="civil" placeholder="الرقم المدني">
-<br>
-<button id="searchBtn">عرض الدرجات</button>
-<button id="printBtn">تحميل PDF</button>
-<p id="status"></p>
+    for (const file of files) {
+        try {
+            const res = await fetch(file + "?time=" + Date.now());
+            if (!res.ok) continue;
+            const data = await res.json();
+            const student = data.find(s => s["رقم_مدني"].toString().trim() === civil);
+            if (student) { foundStudent = student; break; }
+        } catch (err) { console.warn("خطأ في قراءة:", file, err); }
+    }
 
-<h3 id="studentName"></h3>
-<div id="gradesList"></div>
-<p class="message" id="encouragement"></p>
-</div>
+    if (!foundStudent) { status.innerHTML = "لم يتم العثور على الرقم المدني في أي صف."; return; }
 
-</body>
-</html>
+    currentStudent = foundStudent;
+    studentName.innerHTML = `الطالب: ${foundStudent["الاسم"]}`;
+
+    let total = 0, count = 0, html = "<table><tr><th>المادة</th><th>الدرجة</th><th>ملاحظات</th></tr>";
+    for (const key in foundStudent) {
+        if (key !== "رقم_مدني" && key !== "الاسم") {
+            let grade = parseFloat(foundStudent[key]);
+            let advice = grade >= 90 ? "ممتاز جدًا 🌟" :
+                         grade >= 75 ? "جيد جدًا 👍" :
+                         grade >= 50 ? "مقبول 📘" : "ضعيف 📌";
+            html += `<tr><td>${key}</td><td>${grade}</td><td>${advice}</td></tr>`;
+            total += grade; count++;
+        }
+    }
+    html += "</table>";
+    gradesList.innerHTML = `<div style="overflow-x:auto;">${html}</div>`;
+
+    let avg = total / count;
+    let msg = avg >= 90 ? "أداء ممتاز جداً! 🌟" :
+              avg >= 75 ? "مستوى جيد جداً 💪" :
+              avg >= 50 ? "مستوى مقبول 📚" : "المستوى ضعيف 🔔";
+    encouragement.innerHTML = `<strong>متوسطك العام: ${avg.toFixed(2)}</strong><br>${msg}`;
+});
+
+// تحميل PDF عربي صحيح
+printBtn.addEventListener("click", () => {
+    if (!currentStudent) { alert("الرجاء عرض درجات الطالب أولاً قبل التحميل."); return; }
+
+    const element = document.querySelector(".container");
+    const opt = {
+        margin: 10,
+        filename: `كشف_الدرجات_${currentStudent["الاسم"]}.pdf`,
+        image: { type: "jpeg", quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true },
+        jsPDF: { unit: "pt", format: "a4", orientation: "portrait" },
+        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+    };
+    html2pdf().set(opt).from(element).save();
+});
