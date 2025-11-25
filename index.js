@@ -1,90 +1,67 @@
-function showGrades() {
+async function showGrades() {
     const civil = document.getElementById("civil").value.trim();
     const status = document.getElementById("status");
-    const studentInfo = document.getElementById("studentInfo");
-    const gradesList = document.getElementById("gradesList");
-    const encouragement = document.getElementById("encouragement");
+    const infoBox = document.getElementById("studentInfo");
+    const tableArea = document.getElementById("gradesList");
+    const rec = document.getElementById("recommendations");
 
-    status.innerHTML = "";
-    studentInfo.innerHTML = "";
-    gradesList.innerHTML = "";
-    encouragement.innerHTML = "";
+    status.textContent = "";
+    infoBox.style.display = "none";
+    tableArea.innerHTML = "";
+    rec.textContent = "";
 
-    if (!civil) {
-        status.innerHTML = "الرجاء إدخال الرقم المدني";
+    if (civil === "") {
+        status.textContent = "يرجى إدخال الرقم المدني";
         return;
     }
 
-    // ملفات الصفوف
-    const files = ["grade5.json", "grade6.json", "grade7.json", "grade8.json", "grade9.json"];
-    let found = null;
+    try {
+        const url = "https://raw.githubusercontent.com/faissaltunisia/grade-system/main/data.json";
+        const response = await fetch(url);
+        const data = await response.json();
 
-    Promise.all(
-        files.map(file => fetch(file).then(res => res.json()).catch(() => []))
-    ).then(allData => {
+        const student = data.find(s => s.civil == civil);
 
-        for (const gradeList of allData) {
-            const student = gradeList.find(s => s["رقم_مدني"] == civil);
-            if (student) { found = student; break; }
-        }
-
-        if (!found) {
-            status.innerHTML = "لم يتم العثور على الطالب.";
+        if (!student) {
+            status.textContent = "الطالب غير موجود";
             return;
         }
 
-        // عرض بيانات الطالب
-        studentInfo.innerHTML = `
-            <p><strong>اسم الطالب:</strong> ${found["الاسم"]}</p>
-            <p><strong>الرقم المدني:</strong> ${found["رقم_مدني"]}</p>
-            <p><strong>الصف:</strong> ${found["الصف"] || ""}</p>
-            <p><strong>الشعبة:</strong> ${found["الشعبة"] || ""}</p>
+        infoBox.style.display = "block";
+        infoBox.innerHTML = `
+            <div>اسم الطالب: ${student.name}</div>
+            <div>الرقم المدني: ${student.civil}</div>
+            <div>الصف: ${student.class}</div>
+            <div>الشعبة: ${student.section}</div>
+            <div>المتوسط العام: ${student.average}</div>
         `;
 
-        // بناء جدول الدرجات
-        let total = 0, count = 0;
+        rec.textContent = "توصيات: الاستمرار في الاجتهاد والحفاظ على مستواك الدراسي.";
 
-        let tableHTML = `
+        let table = `
             <table>
                 <tr>
                     <th>المادة</th>
                     <th>الدرجة</th>
-                    <th>التوصيات</th>
                 </tr>
         `;
 
-        for (const key in found) {
-            if (["الاسم", "رقم_مدني", "الصف", "الشعبة"].includes(key)) continue;
-
-            let grade = parseFloat(found[key]);
-
-            let advice =
-                grade >= 90 ? "ممتاز جدًا 🌟" :
-                grade >= 75 ? "جيد جدًا 👍" :
-                grade >= 50 ? "مقبول" :
-                "يحتاج تحسين 🔔";
-
-            tableHTML += `
+        student.grades.forEach(g => {
+            table += `
                 <tr>
-                    <td>${key}</td>
-                    <td>${grade}</td>
-                    <td>${advice}</td>
-                </tr>
-            `;
+                    <td>${g.subject}</td>
+                    <td>${g.score}</td>
+                </tr>`;
+        });
 
-            total += grade;
-            count++;
-        }
+        table += "</table>";
+        tableArea.innerHTML = table;
 
-        tableHTML += "</table>";
-        gradesList.innerHTML = tableHTML;
-
-        // متوسط عام
-        let avg = (total / count).toFixed(2);
-        encouragement.innerHTML = `<strong>المتوسط العام:</strong> ${avg}`;
-    });
+    } catch (error) {
+        status.textContent = "خطأ أثناء تحميل البيانات";
+    }
 }
 
-function printGrades() {
+function printReport() {
     window.print();
 }
