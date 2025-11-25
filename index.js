@@ -1,11 +1,10 @@
-function showGrades() {
+async function showGrades() {
     const civil = document.getElementById("civil").value.trim();
     const status = document.getElementById("status");
     const studentName = document.getElementById("studentName");
     const gradesList = document.getElementById("gradesList");
     const encouragement = document.getElementById("encouragement");
 
-    // مسح المحتوى القديم
     status.innerHTML = "";
     studentName.innerHTML = "";
     gradesList.innerHTML = "";
@@ -16,71 +15,81 @@ function showGrades() {
         return;
     }
 
-    status.innerHTML = "جارٍ تحميل البيانات...";
+    // 🟦 ملفات كل الصفوف
+    const files = [
+        "grade5.json",
+        "grade6.json",
+        "grade7.json",
+        "grade8.json",
+        "grade9.json"
+    ];
 
-    // الرابط الصحيح للملف Raw على GitHub
-    const url = "https://raw.githubusercontent.com/SalalahSharqiyaSchool/grade-system/main/grades.json?time=" + Date.now();
+    let foundStudent = null;
 
-    fetch(url)
-        .then(res => {
-            if (!res.ok) throw new Error("الرابط غير صالح أو الملف غير موجود على GitHub");
-            return res.json();
-        })
-        .then(data => {
-            if (!Array.isArray(data)) throw new Error("ملف JSON غير صالح");
+    // 🔎 البحث في كل الملفات واحدًا واحدًا
+    for (const file of files) {
+        try {
+            const res = await fetch(file + "?time=" + Date.now());
+            if (!res.ok) continue;
 
-            const student = data.find(s => s.رقم_مدني == civil);
-            if (!student) {
-                status.innerHTML = "لم يتم العثور على الرقم المدني في البيانات";
-                return;
+            const data = await res.json();
+            const student = data.find(s => s["رقم_مدني"] == civil);
+
+            if (student) {
+                foundStudent = student;
+                break;
             }
+        } catch (err) {
+            console.warn("خطأ في قراءة:", file, err);
+        }
+    }
 
-            status.innerHTML = "";
-            studentName.innerHTML = `الطالب: ${student.اسم}`;
+    if (!foundStudent) {
+        status.innerHTML = "لم يتم العثور على الرقم المدني في أي صف.";
+        return;
+    }
 
-            const adviceMap = [
-                { min: 90, msg: "ممتاز! حافظ على هذا المستوى." },
-                { min: 75, msg: "جيد جدًا، ركز على مراجعة النقاط الصعبة." },
-                { min: 50, msg: "مقبول، يحتاج المزيد من الممارسة." },
-                { min: 0,  msg: "ضعيف، ننصح بمراجعة الدروس مع المعلم." }
-            ];
+    // 🟢 عرض البيانات
+    studentName.innerHTML = `الطالب: ${foundStudent["الاسم"]}`;
 
-            let html = "<table><tr><th>المادة</th><th>الدرجة</th><th>تحليل ونصيحة</th></tr>";
-            let total = 0, count = 0;
+    let total = 0;
+    let count = 0;
+    let html = "<table>";
+    html += "<tr><th>المادة</th><th>الدرجة</th><th>ملاحظات</th></tr>";
 
-            for (const key in student) {
-                if (key !== "رقم_مدني" && key !== "اسم") {
-                    const grade = parseFloat(student[key]);
-                    const advice = adviceMap.find(a => grade >= a.min).msg;
-                    let color = grade >= 90 ? "#c8e6c9" : grade >= 75 ? "#fff9c4" : grade >= 50 ? "#ffe0b2" : "#ffcdd2";
+    for (const key in foundStudent) {
+        if (key !== "رقم_مدني" && key !== "الاسم") {
 
-                    html += `<tr style="background-color:${color}"><td>${key}</td><td>${grade}</td><td>${advice}</td></tr>`;
-                    total += grade;
-                    count++;
-                }
-            }
+            let grade = parseFloat(foundStudent[key]);
+            let advice = "";
 
-            html += "</table>";
-            gradesList.innerHTML = `<div style="overflow-x:auto;">${html}</div>`;
+            if (grade >= 90) advice = "ممتاز جدًا 🌟";
+            else if (grade >= 75) advice = "جيد جدًا 👍";
+            else if (grade >= 50) advice = "مقبول، يحتاج جهدًا أكثر 📘";
+            else advice = "ضعيف، يرجى المراجعة والدعم 📌";
 
-            const average = total / count;
-            let generalAdvice = average >= 90 ? "ممتاز! استمر على هذا المستوى الرائع 🌟"
-                              : average >= 75 ? "جيد جدًا! ركز على المواد التي تحتاج تعزيزًا 💪"
-                              : average >= 50 ? "مقبول، تحتاج لمزيد من الاجتهاد والمراجعة 📚"
-                              : "ينصح بمراجعة شاملة والدعم من المعلم 🔔";
+            html += `<tr>
+                        <td>${key}</td>
+                        <td>${grade}</td>
+                        <td>${advice}</td>
+                     </tr>`;
 
-            encouragement.innerHTML = `<strong>متوسطك العام: ${average.toFixed(2)}</strong><br>${generalAdvice}`;
-        })
-        .catch(err => {
-            status.innerHTML = `خطأ في تحميل الدرجات: ${err.message}`;
-            console.error(err);
-        });
-}
+            total += grade;
+            count++;
+        }
+    }
 
-function printGrades() {
-    const printContent = document.querySelector(".container").innerHTML;
-    const originalContent = document.body.innerHTML;
-    document.body.innerHTML = printContent;
-    window.print();
-    document.body.innerHTML = originalContent;
+    html += "</table>";
+    gradesList.innerHTML = `<div style="overflow-x:auto;">${html}</div>`;
+
+    // 🟢 حساب المتوسط العام
+    let avg = total / count;
+    let msg = "";
+
+    if (avg >= 90) msg = "أداء ممتاز جداً! استمر على هذا المستوى الرائع 🌟";
+    else if (avg >= 75) msg = "مستوى جيد جداً، حاول تعزيز بعض المواد 💪";
+    else if (avg >= 50) msg = "مستوى مقبول، تحتاج للمزيد من المتابعة 📚";
+    else msg = "المستوى ضعيف، ننصح بالدعم الإضافي والمراجعة 🔔";
+
+    encouragement.innerHTML = `<strong>متوسطك العام: ${avg.toFixed(2)}</strong><br>${msg}`;
 }
