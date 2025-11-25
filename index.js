@@ -1,19 +1,26 @@
-const showBtn = document.getElementById("showBtn");
-const status = document.getElementById("status");
-const studentInfo = document.getElementById("studentInfo");
-const gradesList = document.getElementById("gradesList");
-const encouragement = document.getElementById("encouragement");
+const searchBtn = document.getElementById("searchBtn");
+const printBtn = document.getElementById("printBtn");
 
-showBtn.addEventListener("click", async () => {
+let currentStudent = null;
+
+searchBtn.addEventListener("click", async () => {
     const civil = document.getElementById("civil").value.trim();
-    status.textContent = "";
-    studentInfo.innerHTML = "";
-    gradesList.innerHTML = "";
-    encouragement.textContent = "";
+    const status = document.getElementById("status");
+    const studentName = document.getElementById("studentName");
+    const studentClass = document.getElementById("studentClass");
+    const gradesList = document.getElementById("gradesList");
+    const encouragement = document.getElementById("encouragement");
 
-    if (!civil) {
-        status.textContent = "الرجاء إدخال الرقم المدني";
-        return;
+    status.innerHTML = "";
+    studentName.innerHTML = "";
+    studentClass.innerHTML = "";
+    gradesList.innerHTML = "";
+    encouragement.innerHTML = "";
+    currentStudent = null;
+
+    if (!civil) { 
+        status.innerHTML = "الرجاء إدخال الرقم المدني"; 
+        return; 
     }
 
     const files = ["grade5.json","grade6.json","grade7.json","grade8.json","grade9.json"];
@@ -25,26 +32,26 @@ showBtn.addEventListener("click", async () => {
             if (!res.ok) continue;
             const data = await res.json();
             const student = data.find(s => s["رقم_مدني"].toString().trim() === civil);
-            if (student) { foundStudent = student; break; }
-        } catch(err) {
-            console.warn("خطأ في قراءة:", file, err);
+            if (student) {
+                foundStudent = student;
+                break;
+            }
+        } catch (err) { 
+            console.warn("خطأ في قراءة:", file, err); 
         }
     }
 
-    if (!foundStudent) {
-        status.textContent = "لم يتم العثور على الرقم المدني في أي صف.";
-        return;
+    if (!foundStudent) { 
+        status.innerHTML = "لم يتم العثور على الرقم المدني في أي صف."; 
+        return; 
     }
 
-    // بيانات الطالب
-    studentInfo.innerHTML = `
-        <p><strong>الطالب:</strong> ${foundStudent["الاسم"]} | <strong>الرقم المدني:</strong> ${foundStudent["رقم_مدني"]}</p>
-        <p><strong>الصف:</strong> ${foundStudent["الصف"]} | <strong>الشعبة:</strong> ${foundStudent["الشعبة"]}</p>
-    `;
+    currentStudent = foundStudent;
+    studentName.innerHTML = `الطالب: ${foundStudent["الاسم"]}`;
+    studentClass.innerHTML = `الصف والشعبة: ${foundStudent["الصف"]} - ${foundStudent["الشعبة"]}`;
 
-    // جدول الدرجات
     let total = 0, count = 0;
-    let html = "<table><tr><th>المادة</th><th>الدرجة</th><th>تحليل وملاحظات</th></tr>";
+    let html = "<table><tr><th>المادة</th><th>الدرجة</th><th>ملاحظات</th></tr>";
 
     for (const key in foundStudent) {
         if (!["رقم_مدني","الاسم","الصف","الشعبة"].includes(key)) {
@@ -53,17 +60,47 @@ showBtn.addEventListener("click", async () => {
                          grade >= 75 ? "جيد جدًا" :
                          grade >= 50 ? "مقبول" : "ضعيف";
             html += `<tr><td>${key}</td><td>${grade}</td><td>${advice}</td></tr>`;
-            total += grade; count++;
+            total += grade;
+            count++;
         }
     }
-    html += "</table>";
-    gradesList.innerHTML = html;
 
-    // متوسط عام وملاحظة
-    const avg = total / count;
-    let msg = avg >= 90 ? "أداء ممتاز جدًا!" :
-              avg >= 75 ? "مستوى جيد جدًا" :
-              avg >= 50 ? "مقبول، يحتاج تحسين" :
-                          "ضعيف، يحتاج مراجعة";
-    encouragement.innerHTML = `<strong>متوسطك العام: ${avg.toFixed(2)}</strong> | ${msg}`;
+    html += "</table>";
+    gradesList.innerHTML = `<div style="overflow-x:auto;">${html}</div>`;
+
+    let avg = total / count;
+    let msg = avg >= 90 ? "أداء ممتاز جداً" :
+              avg >= 75 ? "مستوى جيد جداً" :
+              avg >= 50 ? "مستوى مقبول" : "المستوى ضعيف";
+    encouragement.innerHTML = `<strong>متوسطك العام: ${avg.toFixed(2)}</strong> - ${msg}`;
+});
+
+// زر طباعة الكشف
+printBtn.addEventListener("click", () => {
+    if (!currentStudent) { 
+        alert("الرجاء عرض درجات الطالب أولاً قبل الطباعة."); 
+        return; 
+    }
+
+    const printContent = `
+        <div style="text-align:center; font-family:Arial;">
+            <h1>صلالة الشرقية للتعليم الأساسي</h1>
+            <h2>الفصل الدراسي الثاني 2025-2026</h2>
+            <p><strong>الطالب:</strong> ${currentStudent["الاسم"]}</p>
+            <p><strong>الرقم المدني:</strong> ${currentStudent["رقم_مدني"]}</p>
+            <p><strong>الصف والشعبة:</strong> ${currentStudent["الصف"]} - ${currentStudent["الشعبة"]}</p>
+            <p><strong>متوسطك العام:</strong> ${document.getElementById("encouragement").innerText}</p>
+            ${document.getElementById("gradesList").innerHTML}
+        </div>
+    `;
+
+    const printWindow = window.open('', '', 'height=600,width=800');
+    printWindow.document.write('<html><head><title>كشف الدرجات</title>');
+    printWindow.document.write('<style>table {width:100%; border-collapse:collapse;} th, td {border:1px solid #00796b; padding:8px; text-align:center;} th {background-color:#004d40; color:white;}</style>');
+    printWindow.document.write('</head><body>');
+    printWindow.document.write(printContent);
+    printWindow.document.write('</body></html>');
+    printWindow.document.close();
+    printWindow.focus();
+    printWindow.print();
 });
