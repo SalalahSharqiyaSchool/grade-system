@@ -55,10 +55,10 @@ searchBtn.addEventListener("click", async () => {
     currentStudent = foundStudent;
 
     studentName.innerHTML = `الطالب: ${foundStudent["الاسم"]}`;
-    studentClass.innerHTML = `الصف والشعبة: ${foundStudent["الصف"]} - ${foundStudent["الشعبة"]}`;
+    studentClass.innerHTML = `${foundStudent["الصف"]} - ${foundStudent["الشعبة"]}    : الصف و الشعبة`;
 
     let total = 0, count = 0;
-    let html = "<table><tr><th>المادة</th><th>الدرجة</th><th>ملاحظة</th></tr>";
+    let html = "<table align='center'><tr><th>المادة</th><th>الدرجة</th><th>ملاحظة</th></tr>";
 
     for (const key in foundStudent) {
         if (!["رقم_مدني","الاسم","الصف","الشعبة"].includes(key)) {
@@ -92,7 +92,7 @@ searchBtn.addEventListener("click", async () => {
               avg >= 75 ? "مستوى جيد جدًا" :
               avg >= 50 ? "مستوى مقبول" : "المستوى ضعيف";
 
-    encouragement.innerHTML = `متوسطك العام: ${avg.toFixed(2)}<br>المستوى: ${msg}`;
+    encouragement.innerHTML = `${msg}   --- ${avg.toFixed(2)}    : متوسطك العام `;
 });
 
 // الطباعة مع توسيط المحتوى وإضافة اسم المدرسة والفصل الدراسي
