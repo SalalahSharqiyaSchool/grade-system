@@ -5,7 +5,7 @@
 <title>درجات الطالب - صلالة الشرقية</title>
 <style>
     body {
-        font-family: 'Arial', sans-serif;
+        font-family: Arial, sans-serif;
         background: linear-gradient(to right, #f9f9f9, #e0f7fa);
         margin: 0;
         padding: 0;
@@ -16,33 +16,27 @@
         color: white;
         padding: 20px;
         display: flex;
-        justify-content: space-between;
         align-items: center;
+        justify-content: space-between;
         flex-wrap: wrap;
     }
-    .header-left img {
-        width: 80px;
-        height: auto;
-        border-radius: 10px;
-    }
-    .header-center {
-        text-align: center;
+    header .school-info {
         flex: 1;
+        text-align: center;
     }
-    .header-center h1 {
+    header .school-info h1 {
         margin: 0;
         font-size: 28px;
         font-weight: bold;
     }
-    .header-center h2 {
+    header .school-info h2 {
         margin: 5px 0 0 0;
         font-size: 18px;
-        font-weight: normal;
     }
-    .header-right {
-        text-align: right;
-        font-size: 12px;
-        line-height: 1.2;
+    header img {
+        width: 80px;
+        height: auto;
+        border-radius: 5px;
     }
     .container {
         padding: 20px;
@@ -100,36 +94,20 @@
         color: red;
         margin-top: 10px;
     }
-    @media screen and (max-width: 600px) {
-        table, th, td {
-            font-size: 13px;
-        }
-        header {
-            flex-direction: column;
-            text-align: center;
-        }
-        .header-right {
-            text-align: center;
-            margin-top: 5px;
-        }
-    }
 </style>
 </head>
 <body>
 
 <header>
-    <div class="header-left">
-        <img src="https://raw.githubusercontent.com/SalalahSharqiyaSchool/grade-system/main/logo.png" alt="لوجو المدرسة">
-    </div>
-    <div class="header-center">
+    <img src="https://github.com/SalalahSharqiyaSchool/grade-system/raw/main/logo.png" alt="لوجو المدرسة">
+    <div class="school-info">
         <h1>صلالة الشرقية للتعليم الأساسي</h1>
         <h2>الفصل الدراسي الثاني 2025-2026</h2>
     </div>
-    <div class="header-right">
-        سلطنة عمان<br>
-        وزارة التربية والتعليم<br>
-        المديرية العامة للتربية والتعليم<br>
-        بمحافظة ظفار
+    <div class="school-right">
+        <p style="margin:0;font-weight:bold;">سلطنة عمان</p>
+        <p style="margin:0;font-weight:bold;">وزارة التربية والتعليم</p>
+        <p style="margin:0;font-weight:bold;font-size:14px;">المديرية العامة للتربية والتعليم بمحافظة ظفار</p>
     </div>
 </header>
 
@@ -137,11 +115,10 @@
     <h2>ادخل الرقم المدني لمعرفة درجاتك</h2>
     <input type="text" id="civil" placeholder="الرقم المدني">
     <br>
-    <button onclick="showGrades()">عرض الدرجات</button>
-    <button onclick="printGrades()" style="margin-top:10px;">طباعة الكشف</button>
+    <button id="showBtn">عرض الدرجات</button>
     <p id="status"></p>
 
-    <h3 id="studentName"></h3>
+    <div id="studentInfo"></div>
     <div id="gradesList"></div>
     <p class="message" id="encouragement"></p>
 </div>
