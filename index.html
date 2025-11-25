@@ -40,7 +40,7 @@
     }
     .container {
         padding: 15px;
-        max-width: 700px;
+        max-width: 900px;
         margin: 15px auto;
         background-color: white;
         border-radius: 12px;
@@ -64,24 +64,34 @@
     button:hover {
         background-color: #004d40;
     }
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        direction: rtl;
+    #gradesList {
+        margin-top: 15px;
     }
-    table, th, td {
-        border: 1px solid #00796b;
+    .card-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: center;
     }
-    th {
-        padding: 8px;
-        background-color: #004d40;
-        color: white;
-        text-align: center;
-    }
-    td {
-        padding: 8px;
+    .grade-card {
+        min-width: 120px;
+        max-width: 160px;
+        padding: 15px;
+        border-radius: 10px;
         text-align: center;
         font-weight: bold;
+        color: #333;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        flex: 1 1 120px;
+    }
+    #encouragement {
+        font-weight: bold;
+        margin: 10px 0;
+    }
+    @media screen and (max-width: 480px) {
+        header h1 { font-size: 24px; }
+        header h2 { font-size: 16px; }
+        .grade-card { min-width: 100px; padding:10px; }
     }
 </style>
 </head>
@@ -91,7 +101,7 @@
     <img src="https://github.com/SalalahSharqiyaSchool/grade-system/blob/main/logo.png?raw=true" alt="لوجو المدرسة">
     <div>
         <h1>صلالة الشرقية للتعليم الأساسي</h1>
-        <h2>الفصل الدراسي الثاني 2025-2026</h2>
+        <h2>الفصل الدراسي الأول 2025-2026</h2>
     </div>
 </header>
 
@@ -104,9 +114,9 @@
     <p id="studentName"></p>
     <p id="studentClass"></p>
 
-    <p id="encouragement" style="font-weight:bold;"></p>
+    <p id="encouragement"></p>
 
-    <div id="gradesList"></div>
+    <div id="gradesList" class="card-container"></div>
 </div>
 
 <script src="index.js"></script>
