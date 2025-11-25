@@ -3,14 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <title>درجات الطالب - صلالة الشرقية</title>
+
 <style>
     body {
         font-family: 'Arial', sans-serif;
         background: linear-gradient(to right, #f9f9f9, #e0f7fa);
         margin: 0;
         padding: 0;
-        text-align: center;
+        direction: rtl;
     }
+
+    /* شريط العنوان */
     header {
         background-color: #00796b;
         color: white;
@@ -18,110 +21,155 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        position: relative;
         gap: 15px;
         flex-wrap: wrap;
+        text-align: center;
     }
+
     header img {
-        width: 80px;
+        width: 85px;
         height: auto;
         border-radius: 10px;
     }
-    header h1 {
+
+    .title-box h1 {
         margin: 5px;
-        font-size: 28px;
+        font-size: 32px;
+        font-weight: bold;
     }
-    header h2 {
+
+    .title-box h2 {
         margin: 5px;
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    /* محافظة ظفار يمين */
+    .region {
+        position: absolute;
+        right: 20px;
+        top: 20px;
         font-size: 18px;
-        font-weight: normal;
-        width: 100%;
+        font-weight: bold;
     }
+
+    /* صندوق المحتوى */
     .container {
-        padding: 20px;
-        max-width: 700px;
+        padding: 25px;
+        max-width: 800px;
         margin: auto;
         background-color: white;
         border-radius: 12px;
         box-shadow: 0 0 15px rgba(0,0,0,0.1);
         margin-top: 20px;
+        text-align: center;
     }
+
     input, button {
-        padding: 10px;
+        padding: 12px;
         font-size: 16px;
-        margin: 5px 0;
+        margin: 6px;
         border-radius: 6px;
         border: 1px solid #ccc;
+        width: 80%;
+        max-width: 300px;
     }
+
     button {
         background-color: #00796b;
         color: white;
         border: none;
         cursor: pointer;
     }
+
     button:hover {
         background-color: #004d40;
     }
+
     #gradesList {
-        margin-top: 15px;
-        overflow-x: auto; /* Scroll أفقي دائم */
+        margin-top: 20px;
+        overflow-x: auto;
     }
+
     table {
         width: 100%;
-        min-width: 400px; /* يمنع انكماش الجدول على الهاتف */
+        min-width: 400px;
         border-collapse: collapse;
-        direction: rtl;
+        margin-top: 10px;
     }
-    table, th, td {
-        border: 1px solid #00796b;
-    }
+
     th, td {
-        padding: 8px;
-        text-align: right;
-        word-wrap: break-word;
+        border: 1px solid #00796b;
+        padding: 10px;
+        text-align: center;
+        font-weight: bold;
     }
+
     th {
         background-color: #004d40;
         color: white;
-    }
-    .message {
-        margin-top: 15px;
         font-size: 16px;
-        color: #00796b;
-        font-weight: bold;
     }
+
     #status {
         color: red;
         margin-top: 10px;
+        font-weight: bold;
     }
-    @media screen and (max-width: 600px) {
-        table, th, td {
-            font-size: 13px; /* تصغير الخط على الهواتف */
-        }
+
+    #studentInfo p {
+        font-size: 18px;
+        font-weight: bold;
+        margin: 5px 0;
+        text-align: right;
+        padding-right: 20px;
     }
+
 </style>
-<script src="index.js"></script>
+
 </head>
 <body>
 
 <header>
-    <img src="https://github.com/faissaltunisia/grade-system/blob/main/logo.png?raw=true" alt="لوجو المدرسة">
-    <div>
+
+    <!-- محافظة ظفار -->
+    <div class="region">محافظة ظفار</div>
+
+    <!-- شعار المدرسة -->
+    <img src="https://github.com/faissaltunisia/grade-system/blob/main/logo.png?raw=true">
+
+    <!-- عنوان المدرسة -->
+    <div class="title-box">
         <h1>صلالة الشرقية للتعليم الأساسي</h1>
         <h2>الفصل الدراسي الأول 2025-2026</h2>
     </div>
+
 </header>
 
 <div class="container">
-    <h2>ادخل رقمك المدني لمعرفة درجاتك</h2>
-    <input type="text" id="civil" placeholder="الرقم المدني">
+
+    <!-- مربع الإدخال -->
+    <input type="text" id="civil" placeholder="أدخل الرقم المدني">
+
     <br>
+
+    <!-- الأزرار -->
     <button onclick="showGrades()">عرض الدرجات</button>
+    <button onclick="printGrades()">طباعة الكشف</button>
+
+    <!-- رسائل -->
     <p id="status"></p>
 
-    <h3 id="studentName"></h3>
+    <!-- معلومات الطالب -->
+    <div id="studentInfo"></div>
+
+    <!-- جدول الدرجات -->
     <div id="gradesList"></div>
-    <p class="message" id="encouragement"></p>
+
 </div>
+
+<script src="index.js"></script>
 
 </body>
 </html>
