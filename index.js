@@ -3,15 +3,15 @@ const printBtn = document.getElementById("printBtn");
 
 let currentStudent = null;
 
-// دالة الملاحظات الذكية محليًا
-function getDynamicFeedback(subject, grade) {
+// دالة الملاحظات بدون اسم المادة
+function getDynamicFeedback(grade) {
     if (grade >= 90) 
-        return `${subject}: أداء ممتاز! حافظ على هذا المستوى.`;
+        return `أداء ممتاز! حافظ على هذا المستوى.`;
     if (grade >= 75) 
-        return `${subject}: جيد جدًا، حاول التركيز على التفاصيل الصغيرة لتحسن أكثر.`;
+        return `جيد جدًا، حاول التركيز على التفاصيل الصغيرة لتحسن أكثر.`;
     if (grade >= 50) 
-        return `${subject}: مقبول، من الأفضل مراجعة الدروس الأساسية.`;
-    return `${subject}: ضعيف، ينصح بعمل تمارين إضافية ومراجعة النقاط الأساسية.`;
+        return `مقبول، من الأفضل مراجعة الدروس الأساسية.`;
+    return `ضعيف، ينصح بعمل تمارين إضافية ومراجعة النقاط الأساسية.`;
 }
 
 searchBtn.addEventListener("click", async () => {
@@ -55,7 +55,7 @@ searchBtn.addEventListener("click", async () => {
     currentStudent = foundStudent;
 
     studentName.innerHTML = `الطالب: ${foundStudent["الاسم"]}`;
-    studentClass.innerHTML = `الصف والشعبة: ${foundStudent["الصف"]} - ${foundStudent["الشعبة"]}`;
+    studentClass.innerHTML = `${foundStudent["الصف"]} - ${foundStudent["الشعبة"]}    : الصف و الشعبة`;
 
     let total = 0, count = 0;
     let html = "<table><tr><th>المادة</th><th>الدرجة</th><th>ملاحظة</th></tr>";
@@ -63,7 +63,7 @@ searchBtn.addEventListener("click", async () => {
     for (const key in foundStudent) {
         if (!["رقم_مدني","الاسم","الصف","الشعبة"].includes(key)) {
             let grade = parseFloat(foundStudent[key]);
-            let feedback = getDynamicFeedback(key, grade);
+            let feedback = getDynamicFeedback(grade); // الآن بدون اسم المادة
 
             let color =
                 grade >= 90 ? "#A8E6A3" :
@@ -92,7 +92,7 @@ searchBtn.addEventListener("click", async () => {
               avg >= 75 ? "مستوى جيد جدًا" :
               avg >= 50 ? "مستوى مقبول" : "المستوى ضعيف";
 
-    encouragement.innerHTML = `متوسطك العام: ${avg.toFixed(2)}<br>المستوى: ${msg}`;
+    encouragement.innerHTML = `${msg}   --- ${avg.toFixed(2)}    : متوسطك العام`;
 });
 
 // الطباعة مع توسيط المحتوى
