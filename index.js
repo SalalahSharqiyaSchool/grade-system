@@ -55,11 +55,17 @@ searchBtn.addEventListener("click", async () => {
 
     for (const key in foundStudent) {
         if (!["رقم_مدني","الاسم","الصف","الشعبة"].includes(key)) {
+
             let grade = parseFloat(foundStudent[key]);
             let advice = grade >= 90 ? "ممتاز جدًا" :
                          grade >= 75 ? "جيد جدًا" :
                          grade >= 50 ? "مقبول" : "ضعيف";
-            html += `<tr><td>${key}</td><td>${grade}</td><td>${advice}</td></tr>`;
+
+            // 🔵 جميع الصفوف باللون الأخضر الفاتح
+            let rowColor = "style='background-color:#d4f9d4;'";
+
+            html += `<tr ${rowColor}><td>${key}</td><td>${grade}</td><td>${advice}</td></tr>`;
+
             total += grade;
             count++;
         }
@@ -96,7 +102,7 @@ printBtn.addEventListener("click", () => {
 
     const printWindow = window.open('', '', 'height=700,width=800');
     printWindow.document.write('<html><head><title>كشف الدرجات</title>');
-    printWindow.document.write('<style>table {width:100%; border-collapse:collapse;} th, td {border:1px solid #00796b; padding:8px; text-align:center;} th {background-color:#004d40; color:white;} body{font-family:Arial;}</style>');
+    printWindow.document.write('<style>table {width:100%; border-collapse:collapse;} th, td {border:1px solid #00796b; padding:8px; text-align:center;} th {background-color:#004d40; color:white;} body{font-family:Arial;} td{background:#d4f9d4;}</style>');
     printWindow.document.write('</head><body>');
     printWindow.document.write(printContent);
     printWindow.document.write('</body></html>');
