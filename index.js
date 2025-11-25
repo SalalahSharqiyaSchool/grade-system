@@ -1,3 +1,6 @@
+// ------------------------------
+// دالة البحث وعرض الدرجات
+// ------------------------------
 async function showGrades() {
     const civil = document.getElementById("civil").value.trim();
     const status = document.getElementById("status");
@@ -5,6 +8,7 @@ async function showGrades() {
     const gradesList = document.getElementById("gradesList");
     const encouragement = document.getElementById("encouragement");
 
+    // إعادة تهيئة الصفحة لكل بحث جديد
     status.innerHTML = "";
     studentName.innerHTML = "";
     gradesList.innerHTML = "";
@@ -25,6 +29,7 @@ async function showGrades() {
 
     let foundStudent = null;
 
+    // البحث في جميع الملفات
     for (const file of files) {
         try {
             const res = await fetch(file + "?time=" + Date.now());
@@ -47,6 +52,7 @@ async function showGrades() {
 
     studentName.innerHTML = `الطالب: ${foundStudent["الاسم"]}`;
 
+    // إنشاء جدول الدرجات
     let total = 0;
     let count = 0;
     let html = "<table>";
@@ -84,22 +90,40 @@ async function showGrades() {
     encouragement.innerHTML = `<strong>متوسطك العام: ${avg.toFixed(2)}</strong><br>${msg}`;
 }
 
-// 🖨 دالة الطباعة
+// ------------------------------
+// دالة الطباعة المتوافقة مع الهاتف والكمبيوتر
+// ------------------------------
 function printGrades() {
-    const printContent = document.querySelector(".container").innerHTML;
-    const printWindow = window.open('', '', 'height=600,width=800');
-    printWindow.document.write('<html><head><title>كشف الدرجات</title>');
-    printWindow.document.write('<style>');
-    printWindow.document.write('body { font-family: Arial; direction: rtl; text-align: center; }');
-    printWindow.document.write('table { width: 100%; border-collapse: collapse; margin-top: 20px; }');
-    printWindow.document.write('th, td { border: 1px solid #000; padding: 8px; text-align: center; }');
-    printWindow.document.write('th { background-color: #00796b; color: white; }');
-    printWindow.document.write('</style>');
-    printWindow.document.write('</head><body>');
-    printWindow.document.write(printContent);
-    printWindow.document.write('</body></html>');
-    printWindow.document.close();
-    printWindow.focus();
-    printWindow.print();
-    printWindow.close();
+    const container = document.querySelector(".container");
+    if (!container) return;
+
+    // إزالة أي iframe سابق
+    let iframe = document.getElementById("printFrame");
+    if (iframe) iframe.remove();
+
+    // إنشاء iframe مخفي جديد
+    iframe = document.createElement("iframe");
+    iframe.id = "printFrame";
+    iframe.style.position = "absolute";
+    iframe.style.width = "0";
+    iframe.style.height = "0";
+    iframe.style.border = "0";
+    document.body.appendChild(iframe);
+
+    const doc = iframe.contentWindow.document;
+    doc.open();
+    doc.write('<html><head><title>كشف الدرجات</title>');
+    doc.write('<style>');
+    doc.write('body { font-family: Arial; direction: rtl; text-align: center; }');
+    doc.write('table { width: 100%; border-collapse: collapse; margin-top: 20px; }');
+    doc.write('th, td { border: 1px solid #000; padding: 8px; text-align: center; }');
+    doc.write('th { background-color: #00796b; color: white; }');
+    doc.write('</style>');
+    doc.write('</head><body>');
+    doc.write(container.innerHTML);
+    doc.write('</body></html>');
+    doc.close();
+
+    iframe.contentWindow.focus();
+    iframe.contentWindow.print();
 }
