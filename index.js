@@ -44,7 +44,7 @@ searchBtn.addEventListener("click", async () => {
     currentStudent = foundStudent;
 
     studentName.innerHTML = `الطالب: ${foundStudent["الاسم"]}`;
-    studentClass.innerHTML = ` ${foundStudent["الصف"]} - ${foundStudent["الشعبة"]}     الصف و الشعبة :`;
+    studentClass.innerHTML = ` ${foundStudent["الصف"]} - ${foundStudent["الشعبة"]}    : الصف و الشعبة `;
 
     let total = 0, count = 0;
 
@@ -86,7 +86,7 @@ searchBtn.addEventListener("click", async () => {
               avg >= 75 ? "مستوى جيد جدًا" :
               avg >= 50 ? "مستوى مقبول" : "المستوى ضعيف";
 
-    encouragement.innerHTML = `متوسطك العام: ${avg.toFixed(2)} - ${msg}`;
+    encouragement.innerHTML = ` ${avg.toFixed(2)} - ${msg}   : متوسطك العام `;
 });
 
 // الطباعة
