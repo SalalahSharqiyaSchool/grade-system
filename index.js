@@ -1,74 +1,86 @@
-const searchBtn = document.getElementById("searchBtn");
-const printBtn = document.getElementById("printBtn");
-let currentStudent = null;
-
-searchBtn.addEventListener("click", async () => {
+function showGrades() {
     const civil = document.getElementById("civil").value.trim();
     const status = document.getElementById("status");
     const studentName = document.getElementById("studentName");
     const gradesList = document.getElementById("gradesList");
     const encouragement = document.getElementById("encouragement");
 
-    // إعادة تعيين المحتوى
+    // مسح المحتوى القديم
     status.innerHTML = "";
     studentName.innerHTML = "";
     gradesList.innerHTML = "";
     encouragement.innerHTML = "";
-    currentStudent = null;
 
-    // التحقق من إدخال الرقم المدني
-    if (!civil) { status.innerHTML = "الرجاء إدخال الرقم المدني"; return; }
-
-    const files = ["grade5.json", "grade6.json", "grade7.json", "grade8.json", "grade9.json"];
-    let foundStudent = null;
-
-    // البحث في الملفات
-    for (const file of files) {
-        try {
-            const res = await fetch(file + "?time=" + Date.now());
-            if (!res.ok) continue;
-            const data = await res.json();
-            const student = data.find(s => s["رقم_مدني"].toString().trim() === civil);
-            if (student) { foundStudent = student; break; }
-        } catch (err) { console.warn("خطأ في قراءة:", file, err); }
+    if (!civil) {
+        status.innerHTML = "الرجاء إدخال الرقم المدني";
+        return;
     }
 
-    // التحقق من العثور على الطالب
-    if (!foundStudent) { status.innerHTML = "لم يتم العثور على الرقم المدني في أي صف."; return; }
+    status.innerHTML = "جارٍ تحميل البيانات...";
 
-    currentStudent = foundStudent;
-    studentName.innerHTML = `الطالب: ${foundStudent["الاسم"]}`;
+    // الرابط الصحيح للملف Raw على GitHub
+    const url = "https://raw.githubusercontent.com/SalalahSharqiyaSchool/grade-system/main/grades.json?time=" + Date.now();
 
-    let total = 0, count = 0, html = "<table><tr><th>المادة</th><th>الدرجة</th><th>ملاحظات</th></tr>";
-    for (const key in foundStudent) {
-        if (key !== "رقم_مدني" && key !== "الاسم") {
-            let grade = parseFloat(foundStudent[key]);
-            let advice = grade >= 90 ? "ممتاز جدًا 🌟" :
-                         grade >= 75 ? "جيد جدًا 👍" :
-                         grade >= 50 ? "مقبول 📘" : "ضعيف 📌";
-            html += `<tr><td>${key}</td><td>${grade}</td><td>${advice}</td></tr>`;
-            total += grade; count++;
-        }
-    }
-    html += "</table>";
-    gradesList.innerHTML = `<div style="overflow-x:auto;">${html}</div>`;
+    fetch(url)
+        .then(res => {
+            if (!res.ok) throw new Error("الرابط غير صالح أو الملف غير موجود على GitHub");
+            return res.json();
+        })
+        .then(data => {
+            if (!Array.isArray(data)) throw new Error("ملف JSON غير صالح");
 
-    let avg = total / count;
-    let msg = avg >= 90 ? "أداء ممتاز جداً! 🌟" :
-              avg >= 75 ? "مستوى جيد جداً 💪" :
-              avg >= 50 ? "مستوى مقبول 📚" : "المستوى ضعيف 🔔";
-    encouragement.innerHTML = `<strong>متوسطك العام: ${avg.toFixed(2)}</strong><br>${msg}`;
-});
+            const student = data.find(s => s.رقم_مدني == civil);
+            if (!student) {
+                status.innerHTML = "لم يتم العثور على الرقم المدني في البيانات";
+                return;
+            }
 
-// دالة الطباعة
-printBtn.addEventListener("click", () => {
-    const element = document.querySelector(".container");
-    const printWindow = window.open('', '', 'height=600,width=800');
-    printWindow.document.write('<html><head><title>طباعة كشف الدرجات</title>');
-    printWindow.document.write('<style>body { font-family: Arial, sans-serif; } table { width: 100%; border-collapse: collapse; } th, td { border: 1px solid #00796b; padding: 8px; text-align: center; } th { background-color: #004d40; color: white; }</style>');
-    printWindow.document.write('</head><body>');
-    printWindow.document.write(element.innerHTML);
-    printWindow.document.write('</body></html>');
-    printWindow.document.close();
-    printWindow.print();
-});
+            status.innerHTML = "";
+            studentName.innerHTML = `الطالب: ${student.اسم}`;
+
+            const adviceMap = [
+                { min: 90, msg: "ممتاز! حافظ على هذا المستوى." },
+                { min: 75, msg: "جيد جدًا، ركز على مراجعة النقاط الصعبة." },
+                { min: 50, msg: "مقبول، يحتاج المزيد من الممارسة." },
+                { min: 0,  msg: "ضعيف، ننصح بمراجعة الدروس مع المعلم." }
+            ];
+
+            let html = "<table><tr><th>المادة</th><th>الدرجة</th><th>تحليل ونصيحة</th></tr>";
+            let total = 0, count = 0;
+
+            for (const key in student) {
+                if (key !== "رقم_مدني" && key !== "اسم") {
+                    const grade = parseFloat(student[key]);
+                    const advice = adviceMap.find(a => grade >= a.min).msg;
+                    let color = grade >= 90 ? "#c8e6c9" : grade >= 75 ? "#fff9c4" : grade >= 50 ? "#ffe0b2" : "#ffcdd2";
+
+                    html += `<tr style="background-color:${color}"><td>${key}</td><td>${grade}</td><td>${advice}</td></tr>`;
+                    total += grade;
+                    count++;
+                }
+            }
+
+            html += "</table>";
+            gradesList.innerHTML = `<div style="overflow-x:auto;">${html}</div>`;
+
+            const average = total / count;
+            let generalAdvice = average >= 90 ? "ممتاز! استمر على هذا المستوى الرائع 🌟"
+                              : average >= 75 ? "جيد جدًا! ركز على المواد التي تحتاج تعزيزًا 💪"
+                              : average >= 50 ? "مقبول، تحتاج لمزيد من الاجتهاد والمراجعة 📚"
+                              : "ينصح بمراجعة شاملة والدعم من المعلم 🔔";
+
+            encouragement.innerHTML = `<strong>متوسطك العام: ${average.toFixed(2)}</strong><br>${generalAdvice}`;
+        })
+        .catch(err => {
+            status.innerHTML = `خطأ في تحميل الدرجات: ${err.message}`;
+            console.error(err);
+        });
+}
+
+function printGrades() {
+    const printContent = document.querySelector(".container").innerHTML;
+    const originalContent = document.body.innerHTML;
+    document.body.innerHTML = printContent;
+    window.print();
+    document.body.innerHTML = originalContent;
+}
