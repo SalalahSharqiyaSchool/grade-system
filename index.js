@@ -15,7 +15,6 @@ async function showGrades() {
         return;
     }
 
-    // 🟦 ملفات كل الصفوف
     const files = [
         "grade5.json",
         "grade6.json",
@@ -26,15 +25,12 @@ async function showGrades() {
 
     let foundStudent = null;
 
-    // 🔎 البحث في كل الملفات واحدًا واحدًا
     for (const file of files) {
         try {
             const res = await fetch(file + "?time=" + Date.now());
             if (!res.ok) continue;
-
             const data = await res.json();
-            const student = data.find(s => s["رقم_مدني"] == civil);
-
+            const student = data.find(s => s["رقم_مدني"].toString().trim() === civil);
             if (student) {
                 foundStudent = student;
                 break;
@@ -49,7 +45,6 @@ async function showGrades() {
         return;
     }
 
-    // 🟢 عرض البيانات
     studentName.innerHTML = `الطالب: ${foundStudent["الاسم"]}`;
 
     let total = 0;
@@ -59,10 +54,8 @@ async function showGrades() {
 
     for (const key in foundStudent) {
         if (key !== "رقم_مدني" && key !== "الاسم") {
-
             let grade = parseFloat(foundStudent[key]);
             let advice = "";
-
             if (grade >= 90) advice = "ممتاز جدًا 🌟";
             else if (grade >= 75) advice = "جيد جدًا 👍";
             else if (grade >= 50) advice = "مقبول، يحتاج جهدًا أكثر 📘";
@@ -73,7 +66,6 @@ async function showGrades() {
                         <td>${grade}</td>
                         <td>${advice}</td>
                      </tr>`;
-
             total += grade;
             count++;
         }
@@ -82,14 +74,32 @@ async function showGrades() {
     html += "</table>";
     gradesList.innerHTML = `<div style="overflow-x:auto;">${html}</div>`;
 
-    // 🟢 حساب المتوسط العام
     let avg = total / count;
     let msg = "";
-
     if (avg >= 90) msg = "أداء ممتاز جداً! استمر على هذا المستوى الرائع 🌟";
     else if (avg >= 75) msg = "مستوى جيد جداً، حاول تعزيز بعض المواد 💪";
     else if (avg >= 50) msg = "مستوى مقبول، تحتاج للمزيد من المتابعة 📚";
     else msg = "المستوى ضعيف، ننصح بالدعم الإضافي والمراجعة 🔔";
 
     encouragement.innerHTML = `<strong>متوسطك العام: ${avg.toFixed(2)}</strong><br>${msg}`;
+}
+
+// 🖨 دالة الطباعة
+function printGrades() {
+    const printContent = document.querySelector(".container").innerHTML;
+    const printWindow = window.open('', '', 'height=600,width=800');
+    printWindow.document.write('<html><head><title>كشف الدرجات</title>');
+    printWindow.document.write('<style>');
+    printWindow.document.write('body { font-family: Arial; direction: rtl; text-align: center; }');
+    printWindow.document.write('table { width: 100%; border-collapse: collapse; margin-top: 20px; }');
+    printWindow.document.write('th, td { border: 1px solid #000; padding: 8px; text-align: center; }');
+    printWindow.document.write('th { background-color: #00796b; color: white; }');
+    printWindow.document.write('</style>');
+    printWindow.document.write('</head><body>');
+    printWindow.document.write(printContent);
+    printWindow.document.write('</body></html>');
+    printWindow.document.close();
+    printWindow.focus();
+    printWindow.print();
+    printWindow.close();
 }
