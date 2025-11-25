@@ -1,93 +1,149 @@
-let currentStudent = null;
-
-function searchStudent() {
-    const civil = document.getElementById("civil").value.trim();
-    if (!civil) { alert("الرجاء إدخال الرقم المدني"); return; }
-    showGrades(civil);
-}
-
-async function showGrades(civilInput) {
-    const civil = civilInput || document.getElementById("civil").value.trim();
-    const status = document.getElementById("status");
-    const studentInfo = document.getElementById("studentInfo");
-    const gradesList = document.getElementById("gradesList");
-
-    status.innerHTML = "";
-    studentInfo.innerHTML = "";
-    gradesList.innerHTML = "";
-    currentStudent = null;
-
-    const files = ["grade5.json","grade6.json","grade7.json","grade8.json","grade9.json"];
-    let foundStudent = null;
-
-    for (const file of files) {
-        try {
-            const res = await fetch(file + "?time=" + Date.now());
-            if (!res.ok) continue;
-            const data = await res.json();
-            const student = data.find(s => s["رقم_مدني"].toString().trim() === civil);
-            if (student) { foundStudent = student; break; }
-        } catch (err) { console.warn("خطأ في قراءة:", file, err); }
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<title>درجات الطالب - صلالة الشرقية</title>
+<style>
+    body {
+        font-family: 'Arial', sans-serif;
+        background: linear-gradient(to right, #f9f9f9, #e0f7fa);
+        margin: 0;
+        padding: 0;
+        text-align: center;
     }
 
-    if (!foundStudent) { status.innerHTML = "لم يتم العثور على الرقم المدني في أي صف."; return; }
-
-    currentStudent = foundStudent;
-
-    // بيانات الطالب + الصف + الشعبة + المتوسط + توصيات
-    let total = 0, count = 0;
-    let htmlTable = "<table><tr><th>المادة</th><th>الدرجة</th><th>توصية</th></tr>";
-
-    for (const key in foundStudent) {
-        if (!["رقم_مدني","الاسم","الصف","الشعبة"].includes(key)) {
-            const grade = parseFloat(foundStudent[key]);
-            const advice = grade >= 90 ? "ممتاز جدًا 🌟" :
-                           grade >= 75 ? "جيد جدًا 👍" :
-                           grade >= 50 ? "مقبول 📘" : "ضعيف 📌";
-            htmlTable += `<tr><td>${key}</td><td>${grade}</td><td>${advice}</td></tr>`;
-            total += grade; count++;
-        }
+    /* رأس الصفحة */
+    .header {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        padding: 15px 20px;
+        background-color: #00796b;
+        color: white;
+        gap: 15px;
+        flex-wrap: wrap;
     }
-    htmlTable += "</table>";
-    gradesList.innerHTML = `<div style="overflow-x:auto;">${htmlTable}</div>`;
-    const avg = total / count;
-    const generalAdvice = avg >= 90 ? "أداء ممتاز جدًا!" :
-                          avg >= 75 ? "جيد جدًا!" :
-                          avg >= 50 ? "مقبول، يحتاج مجهود أكثر." : "ضعيف، يرجى الدعم والمراجعة.";
 
-    studentInfo.innerHTML = `
-        <p><strong>اسم الطالب:</strong> ${foundStudent["الاسم"]} &nbsp;&nbsp;
-           <strong>الرقم المدني:</strong> ${foundStudent["رقم_مدني"]}</p>
-        <p><strong>الصف:</strong> ${foundStudent["الصف"] || "-"} &nbsp;&nbsp;
-           <strong>الشعبة:</strong> ${foundStudent["الشعبة"] || "-"}</p>
-        <p><strong>متوسط الدرجات:</strong> ${avg.toFixed(2)}</p>
-        <p><strong>ملاحظة عامة:</strong> ${generalAdvice}</p>
-    `;
-}
+    .header img {
+        width: 100px;
+        height: auto;
+        border-radius: 8px;
+    }
 
-// الطباعة
-function printGrades() {
-    if (!currentStudent) { alert("الرجاء عرض درجات الطالب أولاً."); return; }
+    .school-info {
+        text-align: left;
+        flex-grow: 1;
+    }
 
-    const printContent = `
-        <div style="text-align:center;">
-            <img src="https://github.com/faissaltunisia/grade-system/blob/main/logo.png?raw=true" style="width:80px; border-radius:5px;">
-            <h2>صلالة الشرقية للتعليم الأساسي</h2>
-            <div>محافظة ظفار</div>
-            <div>الفصل الدراسي الأول 2025-2026</div>
-            <hr>
-            ${document.getElementById("studentInfo").innerHTML}
-            ${document.getElementById("gradesList").innerHTML}
-        </div>
-    `;
+    .school-info h1 {
+        margin: 0;
+        font-size: 32px;
+        font-weight: bold;
+        display: inline-block;
+    }
 
-    const printWindow = window.open('', '', 'height=700,width=900');
-    printWindow.document.write('<html><head><title>كشف الدرجات</title>');
-    printWindow.document.write('<style>body { font-family: Arial; text-align: center; direction: rtl; } table { width: 100%; border-collapse: collapse; margin-top: 10px; } th, td { border: 1px solid #00796b; padding: 8px; text-align: center; } th { background-color: #004d40; color: white; }</style>');
-    printWindow.document.write('</head><body>');
-    printWindow.document.write(printContent);
-    printWindow.document.write('</body></html>');
-    printWindow.document.close();
-    printWindow.focus();
-    printWindow.print();
-}
+    .school-info div {
+        font-size: 20px;
+        font-weight: bold;
+        margin-top: 5px;
+    }
+
+    .province {
+        font-size: 20px;
+        font-weight: bold;
+        text-align: right;
+        flex-shrink: 0;
+    }
+
+    .semester {
+        text-align: center;
+        margin: 15px 0;
+        font-size: 22px;
+        font-weight: bold;
+    }
+
+    .container {
+        padding: 20px;
+        max-width: 750px;
+        margin: auto;
+        background-color: white;
+        border-radius: 12px;
+        box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        margin-top: 20px;
+        text-align: right;
+        direction: rtl;
+    }
+
+    #civil {
+        padding: 12px;
+        font-size: 18px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        width: 65%;
+        text-align: right;
+        margin-bottom: 10px;
+    }
+
+    .buttons {
+        text-align: center;
+        margin: 15px 0;
+    }
+    button {
+        padding: 12px 25px;
+        font-size: 18px;
+        margin: 5px;
+        border-radius: 6px;
+        border: none;
+        background-color: #00796b;
+        color: white;
+        cursor: pointer;
+        font-weight: bold;
+    }
+    button:hover { background-color: #004d40; }
+
+    #studentInfo p { margin: 6px 0; font-size: 18px; font-weight: bold; }
+    #gradesList { margin-top: 15px; overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    th, td { border: 1px solid #00796b; padding: 10px; text-align: center; font-weight: bold; }
+    th { background-color: #004d40; color: white; }
+
+    #status { color: red; margin-top: 10px; text-align: center; font-size: 18px; font-weight: bold; }
+
+    @media screen and (max-width: 600px) {
+        table, th, td { font-size: 14px; }
+        #civil { width: 85%; font-size: 16px; }
+        .header { flex-direction: column; gap: 10px; }
+        .school-info h1 { font-size: 28px; }
+        .school-info div, .province { font-size: 18px; }
+    }
+</style>
+</head>
+<body>
+
+<div class="header">
+    <img src="https://github.com/faissaltunisia/grade-system/blob/main/logo.png?raw=true" alt="لوجو المدرسة">
+    <div class="school-info">
+        <h1>صلالة الشرقية للتعليم الأساسي</h1>
+        <div>الفصل الدراسي الأول 2025-2026</div>
+    </div>
+    <div class="province">محافظة ظفار</div>
+</div>
+
+<div class="semester">كشف درجات الطالب</div>
+
+<div class="container">
+    <input type="text" id="civil" placeholder="الرقم المدني">
+
+    <div class="buttons">
+        <button onclick="showGrades()">عرض الدرجات</button>
+        <button onclick="printGrades()">طباعة الكشف</button>
+    </div>
+
+    <p id="status"></p>
+    <div id="studentInfo"></div>
+    <div id="gradesList"></div>
+</div>
+
+<script src="index.js"></script>
+</body>
+</html>
