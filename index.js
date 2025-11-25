@@ -55,7 +55,7 @@ searchBtn.addEventListener("click", async () => {
     currentStudent = foundStudent;
 
     studentName.innerHTML = `الطالب: ${foundStudent["الاسم"]}`;
-    studentClass.innerHTML = `${foundStudent["الصف"]} - ${foundStudent["الشعبة"]}    : الصف و الشعبة`;
+    studentClass.innerHTML = `  : الصف و الشعبة ${foundStudent["الصف"]} - ${foundStudent["الشعبة"]}   `;
 
     let total = 0, count = 0;
     let html = "<table align='center'><tr><th>المادة</th><th>الدرجة</th><th>ملاحظة</th></tr>";
