@@ -1,6 +1,8 @@
 const searchBtn = document.getElementById("searchBtn");
 const printBtn = document.getElementById("printBtn");
 
+let currentStudent = null; // لتخزين الطالب الحالي
+
 searchBtn.addEventListener("click", async () => {
     const civil = document.getElementById("civil").value.trim();
     const status = document.getElementById("status");
@@ -12,6 +14,7 @@ searchBtn.addEventListener("click", async () => {
     studentName.innerHTML = "";
     gradesList.innerHTML = "";
     encouragement.innerHTML = "";
+    currentStudent = null;
 
     if (!civil) {
         status.innerHTML = "الرجاء إدخال الرقم المدني";
@@ -40,6 +43,8 @@ searchBtn.addEventListener("click", async () => {
         status.innerHTML = "لم يتم العثور على الرقم المدني في أي صف.";
         return;
     }
+
+    currentStudent = foundStudent;
 
     studentName.innerHTML = `الطالب: ${foundStudent["الاسم"]}`;
 
@@ -71,29 +76,25 @@ searchBtn.addEventListener("click", async () => {
 });
 
 printBtn.addEventListener("click", () => {
+    if (!currentStudent) {
+        alert("الرجاء عرض درجات الطالب أولاً قبل التحميل.");
+        return;
+    }
+
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ orientation: "portrait", unit: "pt", format: "a4" });
+
     const container = document.querySelector(".container");
-    if (!container) return;
+    const table = container.querySelector("table");
+    if (!table) return alert("لا يوجد درجات للطباعة.");
 
-    // فتح نافذة جديدة للطباعة
-    const printWindow = window.open('', '', 'width=800,height=600');
-    if (!printWindow) return alert("تعذر فتح نافذة الطباعة. تحقق من إعدادات المتصفح.");
+    doc.text("كشف درجات الطالب", 40, 40);
+    doc.text(container.querySelector("#studentName").innerText, 40, 60);
 
-    printWindow.document.write('<html><head><title>كشف الدرجات</title>');
-    printWindow.document.write('<style>');
-    printWindow.document.write('body { font-family: Arial; direction: rtl; text-align: center; }');
-    printWindow.document.write('table { width: 100%; border-collapse: collapse; margin-top: 20px; }');
-    printWindow.document.write('th, td { border: 1px solid #000; padding: 8px; text-align: center; }');
-    printWindow.document.write('th { background-color: #00796b; color: white; }');
-    printWindow.document.write('</style>');
-    printWindow.document.write('</head><body>');
-    printWindow.document.write(container.innerHTML);
-    printWindow.document.write('</body></html>');
-    printWindow.document.close();
-    printWindow.focus();
+    doc.autoTable({ html: table, startY: 80, styles: { font: "helvetica", fontSize: 12 }, theme: 'grid' });
 
-    // تأخير صغير لضمان تحميل المحتوى على الهواتف قبل الطباعة
-    setTimeout(() => {
-        printWindow.print();
-        printWindow.close();
-    }, 500);
+    const avgMsg = container.querySelector("#encouragement").innerText;
+    doc.text(avgMsg, 40, doc.lastAutoTable.finalY + 20);
+
+    doc.save("كشف_الدرجات.pdf");
 });
