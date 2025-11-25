@@ -1,99 +1,128 @@
-let currentStudent = null;
-
-async function showGrades() {
-    const civil = document.getElementById("civil").value.trim();
-    const status = document.getElementById("status");
-    const studentInfo = document.getElementById("studentInfo");
-    const gradesList = document.getElementById("gradesList");
-
-    status.textContent = "";
-    studentInfo.innerHTML = "";
-    gradesList.innerHTML = "";
-    currentStudent = null;
-
-    if (!civil) {
-        status.textContent = "الرجاء إدخال الرقم المدني";
-        return;
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<title>درجات الطالب - صلالة الشرقية</title>
+<style>
+    body {
+        font-family: 'Arial', sans-serif;
+        background: linear-gradient(to right, #f9f9f9, #e0f7fa);
+        margin: 0;
+        padding: 0;
+        text-align: center;
     }
-
-    const files = ["grade5.json","grade6.json","grade7.json","grade8.json","grade9.json"];
-    let foundStudent = null;
-    let studentClass = "";
-
-    for (const file of files) {
-        try {
-            const res = await fetch(file + "?time=" + Date.now());
-            if (!res.ok) continue;
-            const data = await res.json();
-            const student = data.find(s => s["رقم_مدني"].toString().trim() === civil);
-            if (student) {
-                foundStudent = student;
-                studentClass = file.replace(".json","");
-                break;
-            }
-        } catch (err) {
-            console.warn("خطأ في قراءة:", file, err);
-        }
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 20px;
+        background-color: #00796b;
+        color: white;
     }
-
-    if (!foundStudent) {
-        status.textContent = "لم يتم العثور على الرقم المدني في أي صف.";
-        return;
+    .header h1 {
+        margin: 0;
+        font-size: 26px;
     }
-
-    currentStudent = foundStudent;
-
-    // عرض بيانات الطالب قبل الجدول
-    let total = 0, count = 0;
-    for (const key in foundStudent) {
-        if (key !== "رقم_مدني" && key !== "الاسم") {
-            total += parseFloat(foundStudent[key]);
-            count++;
-        }
+    .header div {
+        font-size: 16px;
     }
-    const avg = (total / count).toFixed(2);
-
-    let advice = avg >= 90 ? "أداء ممتاز جداً 🌟" :
-                 avg >= 75 ? "مستوى جيد جداً 💪" :
-                 avg >= 50 ? "مستوى مقبول 📚" : "المستوى ضعيف 🔔";
-
-    studentInfo.innerHTML = `
-        <p><strong>الطالب:</strong> ${foundStudent["الاسم"]}</p>
-        <p><strong>الرقم المدني:</strong> ${foundStudent["رقم_مدني"]}</p>
-        <p><strong>الصف والشعبة:</strong> ${studentClass}</p>
-        <p><strong>متوسط الدرجات:</strong> ${avg}</p>
-        <p><strong>ملاحظات:</strong> ${advice}</p>
-    `;
-
-    // إنشاء جدول الدرجات
-    let tableHtml = "<table><tr><th>المادة</th><th>الدرجة</th><th>ملاحظات</th></tr>";
-    for (const key in foundStudent) {
-        if (key !== "رقم_مدني" && key !== "الاسم") {
-            const grade = parseFloat(foundStudent[key]);
-            let remark = grade >= 90 ? "ممتاز 🌟" :
-                         grade >= 75 ? "جيد جدًا 👍" :
-                         grade >= 50 ? "مقبول 📘" : "ضعيف 📌";
-            tableHtml += `<tr><td>${key}</td><td>${grade}</td><td>${remark}</td></tr>`;
-        }
+    .semester {
+        text-align: center;
+        margin: 10px 0;
+        font-size: 18px;
+        font-weight: bold;
     }
-    tableHtml += "</table>";
-    gradesList.innerHTML = tableHtml;
-}
-
-// طباعة الجزء الخاص بالطالب
-function printGrades() {
-    if (!currentStudent) {
-        alert("الرجاء عرض درجات الطالب أولاً قبل الطباعة.");
-        return;
+    .container {
+        padding: 20px;
+        max-width: 700px;
+        margin: auto;
+        background-color: white;
+        border-radius: 12px;
+        box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        margin-top: 20px;
+        text-align: right;
+        direction: rtl;
     }
-    const content = document.querySelector(".container").innerHTML;
-    const printWindow = window.open('', '', 'height=700,width=900');
-    printWindow.document.write('<html><head><title>كشف الدرجات</title>');
-    printWindow.document.write('<style>body{font-family:Arial;direction:rtl;text-align:right;} table{width:100%;border-collapse:collapse;margin-top:10px;} th,td{border:1px solid #000;padding:8px;text-align:center;} th{background-color:#00796b;color:white;}</style>');
-    printWindow.document.write('</head><body>');
-    printWindow.document.write(content);
-    printWindow.document.write('</body></html>');
-    printWindow.document.close();
-    printWindow.focus();
-    printWindow.print();
-}
+    input {
+        padding: 10px;
+        font-size: 16px;
+        margin: 5px 0;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        width: 60%;
+        text-align: right;
+    }
+    .buttons {
+        text-align: center;
+        margin: 10px 0;
+    }
+    button {
+        padding: 10px 20px;
+        font-size: 16px;
+        margin: 5px;
+        border-radius: 6px;
+        border: none;
+        background-color: #00796b;
+        color: white;
+        cursor: pointer;
+    }
+    button:hover {
+        background-color: #004d40;
+    }
+    p {
+        margin: 5px 0;
+        font-size: 16px;
+        display: inline-block;
+        margin-right: 15px;
+    }
+    #gradesList {
+        margin-top: 15px;
+        overflow-x: auto;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+    }
+    th, td {
+        border: 1px solid #00796b;
+        padding: 8px;
+        text-align: center;
+    }
+    th {
+        background-color: #004d40;
+        color: white;
+    }
+    #status {
+        color: red;
+        margin-top: 10px;
+        text-align: center;
+    }
+</style>
+</head>
+<body>
+
+<div class="header">
+    <div>محافظة ظفار</div>
+    <h1>صلالة الشرقية للتعليم الأساسي</h1>
+    <div></div>
+</div>
+
+<div class="semester">الفصل الدراسي الأول 2025-2026</div>
+
+<div class="container">
+    <input type="text" id="civil" placeholder="الرقم المدني">
+    
+    <div class="buttons">
+        <button onclick="showGrades()">عرض الدرجات</button>
+        <button onclick="printGrades()">طباعة الكشف</button>
+    </div>
+    
+    <p id="status"></p>
+    <div id="studentInfo"></div>
+    <div id="gradesList"></div>
+</div>
+
+<script src="index.js"></script>
+</body>
+</html>
