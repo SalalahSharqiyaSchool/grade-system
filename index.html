@@ -20,30 +20,36 @@
         justify-content: center;
         gap: 15px;
         flex-wrap: wrap;
-    }
-    header img {
-        width: 100px;
-        height: auto;
-        border-radius: 10px;
-        order: 1; /* اللوغو على اليمين */
-    }
-    header div {
-        order: 2;
-        text-align: center;
+        position: relative;
     }
     header h1 {
-        margin: 5px;
         font-size: 32px;
         font-weight: bold;
+        margin: 5px;
     }
     header h2 {
-        margin: 5px;
-        font-size: 18px;
+        font-size: 20px;
         font-weight: bold;
+        margin: 5px;
+    }
+    header img {
+        height: 60px;
+    }
+    header .logo-school {
+        position: absolute;
+        left: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+    header .logo-ministry {
+        position: absolute;
+        right: 20px;
+        top: 50%;
+        transform: translateY(-50%);
     }
     .container {
         padding: 20px;
-        max-width: 800px;
+        max-width: 700px;
         margin: auto;
         background-color: white;
         border-radius: 12px;
@@ -51,7 +57,7 @@
         margin-top: 20px;
     }
     input, button {
-        padding: 12px;
+        padding: 10px;
         font-size: 16px;
         margin: 5px 0;
         border-radius: 6px;
@@ -62,7 +68,7 @@
         color: white;
         border: none;
         cursor: pointer;
-        font-weight: bold;
+        min-width: 100px;
     }
     button:hover {
         background-color: #004d40;
@@ -88,55 +94,46 @@
     th {
         background-color: #004d40;
         color: white;
-        font-weight: bold;
     }
-    .message, #studentInfo {
+    .message {
         margin-top: 15px;
         font-size: 16px;
-        font-weight: bold;
         color: #00796b;
-        text-align: right;
+        font-weight: bold;
     }
     #status {
         color: red;
         margin-top: 10px;
-        font-weight: bold;
     }
-    @media screen and (max-width: 600px) {
-        table, th, td {
-            font-size: 13px;
-        }
-        input, button {
-            width: 90%;
-        }
+    .student-info {
+        font-weight: bold;
+        font-size: 16px;
+        text-align: right;
+        margin-top: 10px;
     }
 </style>
 </head>
 <body>
 
 <header>
-    <img src="https://raw.githubusercontent.com/SalalahSharqiyaSchool/grade-system/main/logo1.jpg" alt="لوجو  الوزارة>
-    <div>
-        <h1>صلالة الشرقية للتعليم الأساسي</h1>
-        <h2>محافظة ظفار — الفصل الدراسي الأول 2025-2026</h2>
-    </div>
+    <h1>صلالة الشرقية للتعليم الأساسي</h1>
+    <h2>الفصل الدراسي الأول 2025-2026</h2>
+    <img src="https://raw.githubusercontent.com/USERNAME/REPO/main/logo1.png" class="logo-school" alt="لوجو المدرسة">
+    <img src="https://raw.githubusercontent.com/USERNAME/REPO/main/logoMinistry.png" class="logo-ministry" alt="شعار وزارة التربية والتعليم">
 </header>
 
 <div class="container">
-    <h2>ادخل رقمك المدني لمعرفة درجاتك</h2>
     <input type="text" id="civil" placeholder="الرقم المدني">
     <br>
     <button onclick="showGrades()">عرض الدرجات</button>
-    <button onclick="downloadPDF()" style="margin-left:10px;">تحميل PDF</button>
+    <button onclick="printGrades()" style="margin-left: 10px;">طباعة الكشف</button>
     <p id="status"></p>
 
-    <div id="studentInfo"></div>
+    <div id="studentInfo" class="student-info"></div>
     <div id="gradesList"></div>
     <p class="message" id="encouragement"></p>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
 <script src="index.js"></script>
 </body>
 </html>
