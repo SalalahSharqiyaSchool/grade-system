@@ -47,9 +47,8 @@ searchBtn.addEventListener("click", async () => {
     studentClass.innerHTML = `الصف والشعبة: ${foundStudent["الصف"]} - ${foundStudent["الشعبة"]}`;
 
     let total = 0, count = 0;
-    gradesList.innerHTML = ""; // نظف العرض
-    const container = document.createElement("div");
-    container.className = "card-container";
+
+    let html = "<table><tr><th>المادة</th><th>الدرجة</th><th>ملاحظات</th></tr>";
 
     for (const key in foundStudent) {
         if (!["رقم_مدني","الاسم","الصف","الشعبة"].includes(key)) {
@@ -59,29 +58,28 @@ searchBtn.addEventListener("click", async () => {
                          grade >= 75 ? "جيد جدًا" :
                          grade >= 50 ? "مقبول" : "ضعيف";
 
-            // ألوان فاتحة لكل ملاحظة
+            // 🎨 ألوان فاتحة ومريحة للعين لكل ملاحظة
             let color =
                 advice === "ممتاز جدًا" ? "#A8E6A3" :   // أخضر فاتح
                 advice === "جيد جدًا"   ? "#A3C9E6" :   // أزرق فاتح
                 advice === "مقبول"      ? "#FFD9A3" :   // برتقالي فاتح
                                           "#F7A8A8";    // أحمر فاتح
 
-            const card = document.createElement("div");
-            card.className = "grade-card";
-            card.style.backgroundColor = color;
-            card.innerHTML = `
-                <div>${key}</div>
-                <div>الدرجة: ${grade}</div>
-                <div>${advice}</div>
+            html += `
+                <tr style="background-color:${color};">
+                    <td>${key}</td>
+                    <td>${grade}</td>
+                    <td>${advice}</td>
+                </tr>
             `;
-            container.appendChild(card);
 
             total += grade;
             count++;
         }
     }
 
-    gradesList.appendChild(container);
+    html += "</table>";
+    gradesList.innerHTML = html;
 
     let avg = total / count;
     let msg = avg >= 90 ? "أداء ممتاز جدًا" :
@@ -98,9 +96,9 @@ printBtn.addEventListener("click", () => {
         return;
     }
 
-    const printWindow = window.open("", "", "width=900,height=700");
+    const printWindow = window.open("", "", "width=800,height=700");
     printWindow.document.write("<html><head><title>كشف الدرجات</title>");
-    printWindow.document.write("<style>body{font-family:Arial; text-align:center;} .grade-card{display:inline-block;margin:5px;padding:15px;border-radius:10px;min-width:120px; max-width:160px; text-align:center;font-weight:bold;color:#333;}</style>");
+    printWindow.document.write("<style>table{width:100%;border-collapse:collapse;} td,th{border:1px solid #333;padding:8px;text-align:center;} </style>");
     printWindow.document.write("</head><body>");
     printWindow.document.write(document.querySelector(".container").innerHTML);
     printWindow.document.write("</body></html>");
