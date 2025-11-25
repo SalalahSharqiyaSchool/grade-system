@@ -48,7 +48,7 @@ searchBtn.addEventListener("click", async () => {
     studentName.innerHTML = `الطالب: ${foundStudent["الاسم"]}`;
 
     // عرض الصف والشعبة أولاً
-    studentClass.innerHTML = `الصف والشعبة: ${foundStudent["الصف"]} - ${foundStudent["الشعبة"]}`;
+    studentClass.innerHTML = `${foundStudent["الصف"]} - ${foundStudent["الشعبة"]}    : الصف و الشعبة `;
 
     // حساب المتوسط وإنشاء الجدول
     let total = 0, count = 0;
@@ -89,7 +89,7 @@ searchBtn.addEventListener("click", async () => {
               avg >= 50 ? "مستوى مقبول" : "المستوى ضعيف";
 
     // عرض متوسطك العام ثم المستوى
-    encouragement.innerHTML = `متوسطك العام: ${avg.toFixed(2)}<br>المستوى: ${msg}`;
+    encouragement.innerHTML = `${msg}   --- ${avg.toFixed(2)}    : متوسطك العام   `;
 });
 
 // الطباعة مع توسيط البيانات
