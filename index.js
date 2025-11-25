@@ -11,7 +11,6 @@ searchBtn.addEventListener("click", async () => {
     const gradesList = document.getElementById("gradesList");
     const encouragement = document.getElementById("encouragement");
 
-    // إعادة تهيئة العرض
     status.innerHTML = "";
     studentName.innerHTML = "";
     studentClass.innerHTML = "";
@@ -44,25 +43,27 @@ searchBtn.addEventListener("click", async () => {
 
     currentStudent = foundStudent;
 
-    // اسم الطالب
     studentName.innerHTML = `الطالب: ${foundStudent["الاسم"]}`;
+    studentClass.innerHTML = `الصف والشعبة: ${foundStudent["الصف"]} - ${foundStudent["الشعبة"]}`;
 
-    // حساب المتوسط
     let total = 0, count = 0;
+
     let html = "<table><tr><th>المادة</th><th>الدرجة</th><th>ملاحظات</th></tr>";
 
     for (const key in foundStudent) {
         if (!["رقم_مدني","الاسم","الصف","الشعبة"].includes(key)) {
+
             let grade = parseFloat(foundStudent[key]);
             let advice = grade >= 90 ? "ممتاز جدًا" :
                          grade >= 75 ? "جيد جدًا" :
                          grade >= 50 ? "مقبول" : "ضعيف";
 
+            // 🎨 ألوان فاتحة ومريحة للعين لكل ملاحظة
             let color =
-                advice === "ممتاز جدًا" ? "#A8E6A3" :
-                advice === "جيد جدًا"   ? "#A3C9E6" :
-                advice === "مقبول"      ? "#FFD9A3" :
-                                          "#F7A8A8";
+                advice === "ممتاز جدًا" ? "#A8E6A3" :   // أخضر فاتح
+                advice === "جيد جدًا"   ? "#A3C9E6" :   // أزرق فاتح
+                advice === "مقبول"      ? "#FFD9A3" :   // برتقالي فاتح
+                                          "#F7A8A8";    // أحمر فاتح
 
             html += `
                 <tr style="background-color:${color};">
@@ -85,9 +86,7 @@ searchBtn.addEventListener("click", async () => {
               avg >= 75 ? "مستوى جيد جدًا" :
               avg >= 50 ? "مستوى مقبول" : "المستوى ضعيف";
 
-    // ترتيب العرض الجديد
-    studentClass.innerHTML = `الصف والشعبة: ${foundStudent["الصف"]} - ${foundStudent["الشعبة"]}`;
-    encouragement.innerHTML = `متوسطك العام: ${avg.toFixed(2)}<br>المستوى: ${msg}`;
+    encouragement.innerHTML = `متوسطك العام: ${avg.toFixed(2)} - ${msg}`;
 });
 
 // الطباعة
@@ -99,16 +98,9 @@ printBtn.addEventListener("click", () => {
 
     const printWindow = window.open("", "", "width=800,height=700");
     printWindow.document.write("<html><head><title>كشف الدرجات</title>");
-    printWindow.document.write("<style>");
-    printWindow.document.write("table{width:100%;border-collapse:collapse;} td,th{border:1px solid #333;padding:8px;text-align:center;}");
-    printWindow.document.write("</style></head><body>");
-    
-    // عرض المعلومات بالترتيب الجديد
-    printWindow.document.write(`<h3>${document.getElementById("studentName").innerHTML}</h3>`);
-    printWindow.document.write(`<p>${document.getElementById("studentClass").innerHTML}</p>`);
-    printWindow.document.write(`<p>${document.getElementById("encouragement").innerHTML}</p>`);
-    printWindow.document.write(document.getElementById("gradesList").innerHTML);
-
+    printWindow.document.write("<style>table{width:100%;border-collapse:collapse;} td,th{border:1px solid #333;padding:8px;text-align:center;} </style>");
+    printWindow.document.write("</head><body>");
+    printWindow.document.write(document.querySelector(".container").innerHTML);
     printWindow.document.write("</body></html>");
     printWindow.document.close();
     printWindow.print();
