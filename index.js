@@ -63,7 +63,7 @@ searchBtn.addEventListener("click", async () => {
     for (const key in foundStudent) {
         if (!["رقم_مدني","الاسم","الصف","الشعبة"].includes(key)) {
             let grade = parseFloat(foundStudent[key]);
-            let feedback = getDynamicFeedback(grade); // الآن بدون اسم المادة
+            let feedback = getDynamicFeedback(grade); // بدون اسم المادة
 
             let color =
                 grade >= 90 ? "#A8E6A3" :
@@ -92,15 +92,18 @@ searchBtn.addEventListener("click", async () => {
               avg >= 75 ? "مستوى جيد جدًا" :
               avg >= 50 ? "مستوى مقبول" : "المستوى ضعيف";
 
-    encouragement.innerHTML = `${msg}   --- ${avg.toFixed(2)}    : متوسطك العام`;
+    encouragement.innerHTML = `${msg}   --- ${avg.toFixed(2)}    : متوسطك العام `;
 });
 
-// الطباعة مع توسيط المحتوى
+// الطباعة مع توسيط المحتوى وإضافة اسم المدرسة والفصل الدراسي
 printBtn.addEventListener("click", () => {
     if (!currentStudent) {
         alert("الرجاء عرض الدرجات أولاً");
         return;
     }
+
+    const schoolName = "صلالة الشرقية للتعليم الأساسي"; // اسم المدرسة
+    const semester = "الفصل الدراسي الأول 2025 - 2026"; // الفصل الدراسي
 
     const printWindow = window.open("", "", "width=800,height=700");
     printWindow.document.write("<html><head><title>كشف الدرجات</title>");
@@ -110,6 +113,8 @@ printBtn.addEventListener("click", () => {
     printWindow.document.write("td, th { border: 1px solid #333; padding: 8px; text-align: center; }");
     printWindow.document.write("</style></head><body>");
     
+    printWindow.document.write(`<h2>${schoolName}</h2>`);
+    printWindow.document.write(`<h3>${semester}</h3>`);
     printWindow.document.write(`<h3>${document.getElementById("studentName").innerHTML}</h3>`);
     printWindow.document.write(`<p>${document.getElementById("studentClass").innerHTML}</p>`);
     printWindow.document.write(`<p>${document.getElementById("encouragement").innerHTML}</p>`);
