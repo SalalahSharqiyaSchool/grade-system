@@ -86,7 +86,7 @@ searchBtn.addEventListener("click", async () => {
               avg >= 75 ? "مستوى جيد جدًا" :
               avg >= 50 ? "مستوى مقبول" : "المستوى ضعيف";
 
-    encouragement.innerHTML = ` ${avg.toFixed(2)} - ${msg}   : متوسطك العام `;
+    encouragement.innerHTML = `- ${msg} ${avg.toFixed(2)}    : متوسطك العام `;
 });
 
 // الطباعة
