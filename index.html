@@ -1,94 +1,128 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
-    <meta charset="UTF-8" />
-    <title>كشف درجات الطالب</title>
-
-    <style>
-        body {
-            font-family: "Tajawal", Arial, sans-serif;
-            background: #f5f5f5;
-            margin: 0; padding: 20px;
-            text-align: center;
+<meta charset="UTF-8">
+<title>درجات الطالب - صلالة الشرقية</title>
+<style>
+    body {
+        font-family: 'Arial', sans-serif;
+        background: linear-gradient(to right, #f9f9f9, #e0f7fa);
+        margin: 0;
+        padding: 0;
+        text-align: center;
+    }
+    header {
+        background-color: #00796b;
+        color: white;
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 15px;
+        flex-wrap: wrap;
+    }
+    header img {
+        width: 80px;
+        height: auto;
+        border-radius: 10px;
+    }
+    header h1 {
+        margin: 5px;
+        font-size: 28px;
+    }
+    header h2 {
+        margin: 5px;
+        font-size: 18px;
+        font-weight: normal;
+        width: 100%;
+    }
+    .container {
+        padding: 20px;
+        max-width: 700px;
+        margin: auto;
+        background-color: white;
+        border-radius: 12px;
+        box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        margin-top: 20px;
+    }
+    input, button {
+        padding: 10px;
+        font-size: 16px;
+        margin: 5px 0;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+    }
+    button {
+        background-color: #00796b;
+        color: white;
+        border: none;
+        cursor: pointer;
+    }
+    button:hover {
+        background-color: #004d40;
+    }
+    #gradesList {
+        margin-top: 15px;
+        overflow-x: auto;
+    }
+    table {
+        width: 100%;
+        min-width: 400px;
+        border-collapse: collapse;
+        direction: rtl;
+    }
+    table, th, td {
+        border: 1px solid #00796b;
+    }
+    th, td {
+        padding: 8px;
+        text-align: center;
+        word-wrap: break-word;
+    }
+    th {
+        background-color: #004d40;
+        color: white;
+    }
+    .message {
+        margin-top: 15px;
+        font-size: 16px;
+        color: #00796b;
+        font-weight: bold;
+    }
+    #status {
+        color: red;
+        margin-top: 10px;
+    }
+    @media screen and (max-width: 600px) {
+        table, th, td {
+            font-size: 13px;
         }
-
-        .container {
-            background: white;
-            padding: 20px;
-            margin: auto;
-            max-width: 600px;
-            border-radius: 12px;
-            box-shadow: 0 0 10px #ccc;
-        }
-
-        input {
-            width: 90%;
-            padding: 12px;
-            margin-bottom: 15px;
-            border: 2px solid #00796b;
-            border-radius: 8px;
-            font-size: 18px;
-            text-align: center;
-        }
-
-        button {
-            width: 45%;
-            padding: 12px;
-            font-size: 18px;
-            background: #00796b;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            margin: 5px;
-        }
-
-        button:hover {
-            background: #005f52;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
-        }
-
-        th, td {
-            border: 1px solid #444;
-            padding: 10px;
-        }
-
-        th {
-            background: #00796b;
-            color: white;
-        }
-
-        #printFrame {
-            display: none;
-        }
-    </style>
+    }
+</style>
 </head>
-
 <body>
 
+<header>
+    <img src="https://github.com/faissaltunisia/grade-system/blob/main/logo.png?raw=true" alt="لوجو المدرسة">
+    <div>
+        <h1>صلالة الشرقية للتعليم الأساسي</h1>
+        <h2>الفصل الدراسي الأول 2025-2026</h2>
+    </div>
+</header>
+
 <div class="container">
-    <h2>نظام عرض درجات الطالب</h2>
-
-    <input id="civil" placeholder="أدخل الرقم المدني" />
-
-    <div id="status" style="color:red; font-weight:bold;"></div>
-
-    <button id="searchBtn">بحث</button>
-    <button id="printBtn">طباعة الكشف</button>
+    <h2>ادخل الرقم المدني لمعرفة درجاتك</h2>
+    <input type="text" id="civil" placeholder="الرقم المدني">
+    <br>
+    <button onclick="showGrades()">عرض الدرجات</button>
+    <button onclick="printGrades()" style="margin-top:10px;">طباعة الكشف</button>
+    <p id="status"></p>
 
     <h3 id="studentName"></h3>
     <div id="gradesList"></div>
-    <div id="encouragement" style="margin-top:10px; font-size:18px; font-weight:bold;"></div>
+    <p class="message" id="encouragement"></p>
 </div>
 
-<iframe id="printFrame"></iframe>
-
 <script src="index.js"></script>
-
 </body>
 </html>
