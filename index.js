@@ -9,17 +9,20 @@ searchBtn.addEventListener("click", async () => {
     const gradesList = document.getElementById("gradesList");
     const encouragement = document.getElementById("encouragement");
 
+    // إعادة تعيين المحتوى
     status.innerHTML = "";
     studentName.innerHTML = "";
     gradesList.innerHTML = "";
     encouragement.innerHTML = "";
     currentStudent = null;
 
+    // التحقق من إدخال الرقم المدني
     if (!civil) { status.innerHTML = "الرجاء إدخال الرقم المدني"; return; }
 
-    const files = ["grade5.json","grade6.json","grade7.json","grade8.json","grade9.json"];
+    const files = ["grade5.json", "grade6.json", "grade7.json", "grade8.json", "grade9.json"];
     let foundStudent = null;
 
+    // البحث في الملفات
     for (const file of files) {
         try {
             const res = await fetch(file + "?time=" + Date.now());
@@ -30,6 +33,7 @@ searchBtn.addEventListener("click", async () => {
         } catch (err) { console.warn("خطأ في قراءة:", file, err); }
     }
 
+    // التحقق من العثور على الطالب
     if (!foundStudent) { status.innerHTML = "لم يتم العثور على الرقم المدني في أي صف."; return; }
 
     currentStudent = foundStudent;
@@ -69,5 +73,7 @@ printBtn.addEventListener("click", () => {
         jsPDF: { unit: "pt", format: "a4", orientation: "portrait" },
         pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
     };
+
+    // إضافة دعم الخطوط العربية
     html2pdf().set(opt).from(element).save();
 });
