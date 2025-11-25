@@ -1,107 +1,114 @@
-const searchBtn = document.getElementById("searchBtn");
-const printBtn = document.getElementById("printBtn");
-
-let currentStudent = null;
-
-searchBtn.addEventListener("click", async () => {
-    const civil = document.getElementById("civil").value.trim();
-    const status = document.getElementById("status");
-    const studentName = document.getElementById("studentName");
-    const studentClass = document.getElementById("studentClass");
-    const gradesList = document.getElementById("gradesList");
-    const encouragement = document.getElementById("encouragement");
-
-    status.innerHTML = "";
-    studentName.innerHTML = "";
-    studentClass.innerHTML = "";
-    gradesList.innerHTML = "";
-    encouragement.innerHTML = "";
-    currentStudent = null;
-
-    if (!civil) { 
-        status.innerHTML = "الرجاء إدخال الرقم المدني"; 
-        return; 
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<title>درجات الطالب - صلالة الشرقية</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+    body {
+        font-family: 'Arial', sans-serif;
+        background: linear-gradient(to right, #f9f9f9, #e0f7fa);
+        margin: 0;
+        padding: 0;
+        text-align: center;
     }
-
-    const files = ["grade5.json","grade6.json","grade7.json","grade8.json","grade9.json"];
-    let foundStudent = null;
-
-    for (const file of files) {
-        try {
-            const res = await fetch(file + "?time=" + Date.now());
-            if (!res.ok) continue;
-            const data = await res.json();
-            const student = data.find(s => s["رقم_مدني"].toString().trim() === civil);
-            if (student) { foundStudent = student; break; }
-        } catch {}
+    header {
+        background-color: #00796b;
+        color: white;
+        padding: 15px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
     }
-
-    if (!foundStudent) { 
-        status.innerHTML = "لم يتم العثور على الرقم المدني في أي صف."; 
-        return; 
+    header img {
+        width: 80px;
+        height: auto;
+        border-radius: 10px;
     }
-
-    currentStudent = foundStudent;
-
-    studentName.innerHTML = `الطالب: ${foundStudent["الاسم"]}`;
-    studentClass.innerHTML = `الصف والشعبة: ${foundStudent["الصف"]} - ${foundStudent["الشعبة"]}`;
-
-    let total = 0, count = 0;
-
-    let html = "<table><tr><th>المادة</th><th>الدرجة</th><th>ملاحظات</th></tr>";
-
-    for (const key in foundStudent) {
-        if (!["رقم_مدني","الاسم","الصف","الشعبة"].includes(key)) {
-
-            let grade = parseFloat(foundStudent[key]);
-            let advice = grade >= 90 ? "ممتاز جدًا" :
-                         grade >= 75 ? "جيد جدًا" :
-                         grade >= 50 ? "مقبول" : "ضعيف";
-
-            // 🎨 تحديد لون كل ملاحظة
-            let color =
-                advice === "ممتاز جدًا" ? "#4CAF50" :   // أخضر غامق
-                advice === "جيد جدًا"   ? "#2196F3" :   // أزرق
-                advice === "مقبول"      ? "#FF9800" :   // برتقالي
-                                            "#F44336";    // أحمر
-
-            html += `
-                <tr style="background-color:${color}; color:white;">
-                    <td>${key}</td>
-                    <td>${grade}</td>
-                    <td>${advice}</td>
-                </tr>
-            `;
-
-            total += grade;
-            count++;
-        }
+    header h1 {
+        margin: 5px;
+        font-size: 28px;
+        font-weight: bold;
     }
-
-    html += "</table>";
-    gradesList.innerHTML = html;
-
-    let avg = total / count;
-    let msg = avg >= 90 ? "أداء ممتاز جدًا" :
-              avg >= 75 ? "مستوى جيد جدًا" :
-              avg >= 50 ? "مستوى مقبول" : "المستوى ضعيف";
-
-    encouragement.innerHTML = `متوسطك العام: ${avg.toFixed(2)} - ${msg}`;
-});
-
-// الطباعة
-printBtn.addEventListener("click", () => {
-    if (!currentStudent) {
-        alert("الرجاء عرض الدرجات أولاً");
-        return;
+    header h2 {
+        margin: 5px;
+        font-size: 18px;
+        font-weight: normal;
+        width: 100%;
     }
+    .container {
+        padding: 15px;
+        max-width: 700px;
+        margin: 15px auto;
+        background-color: white;
+        border-radius: 12px;
+        box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    }
+    input, button {
+        width: 90%;
+        max-width: 400px;
+        padding: 12px;
+        font-size: 16px;
+        margin: 8px 0;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+    }
+    button {
+        background-color: #00796b;
+        color: white;
+        border: none;
+        cursor: pointer;
+    }
+    button:hover {
+        background-color: #004d40;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        direction: rtl;
+    }
+    table, th, td {
+        border: 1px solid #00796b;
+    }
+    th {
+        padding: 8px;
+        background-color: #004d40;
+        color: white;
+        text-align: center;
+    }
+    td {
+        padding: 8px;
+        text-align: center;
+        font-weight: bold;
+    }
+</style>
+</head>
+<body>
 
-    const printWindow = window.open("", "", "width=800,height=700");
-    printWindow.document.write("<html><head><title>كشف الدرجات</title>");
-    printWindow.document.write("<style>table{width:100%;border-collapse:collapse;} td,th{border:1px solid #333;padding:8px;text-align:center;} </style>");
-    printWindow.document.write("</head><body>");
-    printWindow.document.write(document.querySelector(".container").innerHTML);
-    printWindow.document.write("</body></html>");
-    printWindow.document.close();
-    printWindow.print();
-});
+<header>
+    <img src="https://github.com/SalalahSharqiyaSchool/grade-system/blob/main/logo.png?raw=true" alt="لوجو المدرسة">
+    <div>
+        <h1>صلالة الشرقية للتعليم الأساسي</h1>
+        <h2>الفصل الدراسي الثاني 2025-2026</h2>
+    </div>
+</header>
+
+<div class="container">
+    <input type="text" id="civil" placeholder="الرقم المدني">
+    <button id="searchBtn">عرض الدرجات</button>
+    <button id="printBtn">طباعة الكشف</button>
+    <p id="status"></p>
+
+    <p id="studentName"></p>
+    <p id="studentClass"></p>
+
+    <p id="encouragement" style="font-weight:bold;"></p>
+
+    <div id="gradesList"></div>
+</div>
+
+<script src="index.js"></script>
+</body>
+</html>
