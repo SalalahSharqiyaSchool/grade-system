@@ -1,22 +1,14 @@
-const civilInput = document.getElementById("civil");
-const showBtn = document.querySelector("button[onclick='showGrades()']");
-const printBtn = document.querySelector("button[onclick='printGrades()']");
-
 let currentStudent = null;
 
 async function showGrades() {
-    const civil = civilInput.value.trim();
+    const civil = document.getElementById("civil").value.trim();
     const status = document.getElementById("status");
-    const studentName = document.getElementById("studentName");
+    const studentInfo = document.getElementById("studentInfo");
     const gradesList = document.getElementById("gradesList");
-    const encouragement = document.getElementById("encouragement");
-    const comparison = document.getElementById("comparison");
 
     status.textContent = "";
-    studentName.textContent = "";
+    studentInfo.innerHTML = "";
     gradesList.innerHTML = "";
-    encouragement.textContent = "";
-    comparison.textContent = "";
     currentStudent = null;
 
     if (!civil) {
@@ -51,56 +43,55 @@ async function showGrades() {
 
     currentStudent = foundStudent;
 
-    // عرض المعلومات قبل الجدول
-    studentName.innerHTML = `<strong>الطالب:</strong> ${foundStudent["الاسم"]} | <strong>الرقم المدني:</strong> ${foundStudent["رقم_مدني"]}`;
-    encouragement.innerHTML = `<strong>الفصل الدراسي:</strong> الأول 2025-2026 | <strong>الصف والشعبة:</strong> ${studentClass}`;
-    comparison.innerHTML = `ملاحظة: حافظ على مستواك وراجع النقاط الصعبة!`;
+    // عرض بيانات الطالب قبل الجدول
+    let total = 0, count = 0;
+    for (const key in foundStudent) {
+        if (key !== "رقم_مدني" && key !== "الاسم") {
+            total += parseFloat(foundStudent[key]);
+            count++;
+        }
+    }
+    const avg = (total / count).toFixed(2);
+
+    let advice = avg >= 90 ? "أداء ممتاز جداً 🌟" :
+                 avg >= 75 ? "مستوى جيد جداً 💪" :
+                 avg >= 50 ? "مستوى مقبول 📚" : "المستوى ضعيف 🔔";
+
+    studentInfo.innerHTML = `
+        <p><strong>الطالب:</strong> ${foundStudent["الاسم"]}</p>
+        <p><strong>الرقم المدني:</strong> ${foundStudent["رقم_مدني"]}</p>
+        <p><strong>الصف والشعبة:</strong> ${studentClass}</p>
+        <p><strong>متوسط الدرجات:</strong> ${avg}</p>
+        <p><strong>ملاحظات:</strong> ${advice}</p>
+    `;
 
     // إنشاء جدول الدرجات
-    let total = 0, count = 0, tableHtml = "<table><tr><th>المادة</th><th>الدرجة</th><th>ملاحظات</th></tr>";
+    let tableHtml = "<table><tr><th>المادة</th><th>الدرجة</th><th>ملاحظات</th></tr>";
     for (const key in foundStudent) {
         if (key !== "رقم_مدني" && key !== "الاسم") {
             const grade = parseFloat(foundStudent[key]);
-            let advice = grade >= 90 ? "ممتاز جدًا 🌟" :
+            let remark = grade >= 90 ? "ممتاز 🌟" :
                          grade >= 75 ? "جيد جدًا 👍" :
                          grade >= 50 ? "مقبول 📘" : "ضعيف 📌";
-            tableHtml += `<tr><td>${key}</td><td>${grade}</td><td>${advice}</td></tr>`;
-            total += grade; count++;
+            tableHtml += `<tr><td>${key}</td><td>${grade}</td><td>${remark}</td></tr>`;
         }
     }
     tableHtml += "</table>";
     gradesList.innerHTML = tableHtml;
-
-    const avg = total / count;
-    let avgMsg = avg >= 90 ? "أداء ممتاز جداً! 🌟" :
-                 avg >= 75 ? "مستوى جيد جداً 💪" :
-                 avg >= 50 ? "مستوى مقبول 📚" : "المستوى ضعيف 🔔";
-    comparison.innerHTML += `<br><strong>متوسط الطالب:</strong> ${avg.toFixed(2)} | ${avgMsg}`;
 }
 
-// طباعة التقرير بالكامل
+// طباعة الجزء الخاص بالطالب
 function printGrades() {
     if (!currentStudent) {
         alert("الرجاء عرض درجات الطالب أولاً قبل الطباعة.");
         return;
     }
-
-    const container = document.querySelector(".container");
-    const printContent = `
-        <div style="text-align:center; font-family:Arial; direction: rtl;">
-            <h2>كشف درجات الطالب - صلالة الشرقية</h2>
-            <p>${container.querySelector("#studentName").innerHTML}</p>
-            <p>${container.querySelector("#encouragement").innerHTML}</p>
-            <p>${container.querySelector("#comparison").innerHTML}</p>
-            ${container.querySelector("#gradesList").innerHTML}
-        </div>
-    `;
-
+    const content = document.querySelector(".container").innerHTML;
     const printWindow = window.open('', '', 'height=700,width=900');
     printWindow.document.write('<html><head><title>كشف الدرجات</title>');
-    printWindow.document.write('<style>body { font-family: Arial; direction: rtl; text-align: center; } table { width: 100%; border-collapse: collapse; margin-top: 20px; } th, td { border: 1px solid #000; padding: 8px; text-align: center; } th { background-color: #00796b; color: white; }</style>');
+    printWindow.document.write('<style>body{font-family:Arial;direction:rtl;text-align:right;} table{width:100%;border-collapse:collapse;margin-top:10px;} th,td{border:1px solid #000;padding:8px;text-align:center;} th{background-color:#00796b;color:white;}</style>');
     printWindow.document.write('</head><body>');
-    printWindow.document.write(printContent);
+    printWindow.document.write(content);
     printWindow.document.write('</body></html>');
     printWindow.document.close();
     printWindow.focus();
