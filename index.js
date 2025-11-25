@@ -40,15 +40,15 @@ async function showGrades() {
 
     // بيانات الطالب قبل الجدول
     studentInfo.innerHTML = `
-        <p>الاسم: <strong>${foundStudent["الاسم"]}</strong> &nbsp;&nbsp; الرقم المدني: <strong>${foundStudent["رقم_مدني"]}</strong></p>
-        <p>الصف: <strong>${foundStudent["الصف"] || "-"}</strong> &nbsp;&nbsp; الشعبة: <strong>${foundStudent["الشعبة"] || "-"}</strong></p>
-        <p>ملاحظة: <strong>${foundStudent["ملاحظة"] || "لا توجد ملاحظات"}</strong></p>
+        <p>الاسم: ${foundStudent["الاسم"]} &nbsp;&nbsp; الرقم المدني: ${foundStudent["رقم_مدني"]}</p>
+        <p>الصف: ${foundStudent["الصف"] || "-"} &nbsp;&nbsp; الشعبة: ${foundStudent["الشعبة"] || "-"}</p>
+        <p>ملاحظة: ${foundStudent["ملاحظة"] || "لا توجد ملاحظات"}</p>
     `;
 
     // جدول الدرجات
-    let total = 0, count = 0, html = `<table><tr><th>المادة</th><th>الدرجة</th><th>الملاحظات</th></tr>`;
+    let total = 0, count = 0, html = `<table><tr><th>المادة</th><th>الدرجة</th><th>ملاحظات</th></tr>`;
     for (const key in foundStudent) {
-        if (!["رقم_مدني", "الاسم", "الصف", "الشعبة", "ملاحظة"].includes(key)) {
+        if (!["رقم_مدني","الاسم","الصف","الشعبة","ملاحظة"].includes(key)) {
             let grade = parseFloat(foundStudent[key]);
             let advice = grade >= 90 ? "ممتاز جدًا 🌟" :
                          grade >= 75 ? "جيد جدًا 👍" :
@@ -59,7 +59,7 @@ async function showGrades() {
     }
     html += "</table>";
 
-    // متوسط
+    // المتوسط
     let avg = total / count;
     html += `<p style="font-size:18px; font-weight:bold; margin-top:10px;">
                 المتوسط العام: ${avg.toFixed(2)} &nbsp;&nbsp; ${
