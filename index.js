@@ -92,7 +92,7 @@ searchBtn.addEventListener("click", async () => {
               avg >= 75 ? "مستوى جيد جدًا" :
               avg >= 50 ? "مستوى مقبول" : "المستوى ضعيف";
 
-    encouragement.innerHTML = `   ${msg}   ---  : متوسطك العام ${avg.toFixed(2)}     `;
+    encouragement.innerHTML = `   ${msg}   ---   متوسطك العام : ${avg.toFixed(2)}     `;
 });
 
 // الطباعة مع توسيط المحتوى وإضافة اسم المدرسة والفصل الدراسي
