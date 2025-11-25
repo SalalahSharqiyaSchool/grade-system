@@ -55,7 +55,7 @@ searchBtn.addEventListener("click", async () => {
     currentStudent = foundStudent;
 
     studentName.innerHTML = `الطالب: ${foundStudent["الاسم"]}`;
-    studentClass.innerHTML = `${foundStudent["الصف"]} - ${foundStudent["الشعبة"]}    : الصف و الشعبة`;
+    studentClass.innerHTML = `${foundStudent["الصف"]} - ${foundStudent["الشعبة"]}    : الصف و الشعبة `;
 
     let total = 0, count = 0;
     let html = "<table><tr><th>المادة</th><th>الدرجة</th><th>ملاحظة</th></tr>";
@@ -96,6 +96,7 @@ searchBtn.addEventListener("click", async () => {
 });
 
 // الطباعة مع توسيط المحتوى وإضافة اسم المدرسة والفصل الدراسي
+// وتنسيق الجدول كما في العرض
 printBtn.addEventListener("click", () => {
     if (!currentStudent) {
         alert("الرجاء عرض الدرجات أولاً");
@@ -110,7 +111,10 @@ printBtn.addEventListener("click", () => {
     printWindow.document.write("<style>");
     printWindow.document.write("body { text-align: center; font-family: Arial, sans-serif; }");
     printWindow.document.write("table { width: 80%; margin: 0 auto; border-collapse: collapse; }");
-    printWindow.document.write("td, th { border: 1px solid #333; padding: 8px; text-align: center; }");
+    printWindow.document.write("th, td { border: 1px solid #333; padding: 8px; }");
+    printWindow.document.write("th:first-child, td:first-child { text-align: right; }");   // المادة من اليمين
+    printWindow.document.write("th:nth-child(2), td:nth-child(2) { text-align: center; }"); // الدرجة في الوسط
+    printWindow.document.write("th:last-child, td:last-child { text-align: left; }");      // الملاحظة على اليسار
     printWindow.document.write("</style></head><body>");
     
     printWindow.document.write(`<h2>${schoolName}</h2>`);
