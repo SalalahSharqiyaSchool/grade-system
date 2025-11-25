@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>درجات الطالب - صلالة الشرقية</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
     body {
         font-family: 'Arial', sans-serif;
@@ -16,12 +17,8 @@
         color: white;
         padding: 15px;
         display: flex;
-        align-items: center;
-        justify-content: space-between;
         flex-wrap: wrap;
-    }
-    header .school-logo {
-        display: flex;
+        justify-content: center;
         align-items: center;
         gap: 10px;
     }
@@ -30,37 +27,31 @@
         height: auto;
         border-radius: 10px;
     }
-    header .school-title {
-        text-align: center;
-        flex-grow: 1;
-    }
     header h1 {
-        margin: 0;
+        margin: 5px;
         font-size: 28px;
         font-weight: bold;
     }
     header h2 {
-        margin: 0;
+        margin: 5px;
         font-size: 18px;
         font-weight: normal;
-    }
-    header .right-info {
-        text-align: right;
-        font-size: 14px;
+        width: 100%;
     }
     .container {
-        padding: 20px;
-        max-width: 800px;
-        margin: auto;
+        padding: 15px;
+        max-width: 700px;
+        margin: 15px auto;
         background-color: white;
         border-radius: 12px;
         box-shadow: 0 0 15px rgba(0,0,0,0.1);
-        margin-top: 20px;
     }
     input, button {
-        padding: 10px;
+        width: 90%;
+        max-width: 400px;
+        padding: 12px;
         font-size: 16px;
-        margin: 5px 0;
+        margin: 8px 0;
         border-radius: 6px;
         border: 1px solid #ccc;
     }
@@ -69,7 +60,6 @@
         color: white;
         border: none;
         cursor: pointer;
-        margin: 5px;
     }
     button:hover {
         background-color: #004d40;
@@ -80,7 +70,6 @@
     }
     table {
         width: 100%;
-        min-width: 400px;
         border-collapse: collapse;
         direction: rtl;
     }
@@ -90,14 +79,13 @@
     th, td {
         padding: 8px;
         text-align: center;
-        word-wrap: break-word;
     }
     th {
         background-color: #004d40;
         color: white;
     }
     .message {
-        margin-top: 15px;
+        margin-top: 10px;
         font-size: 16px;
         color: #00796b;
         font-weight: bold;
@@ -106,45 +94,44 @@
         color: red;
         margin-top: 10px;
     }
-    @media screen and (max-width: 600px) {
+    #studentInfo p {
+        margin: 4px 0;
+        font-weight: bold;
+        font-size: 16px;
+    }
+    @media screen and (max-width: 480px) {
         table, th, td {
-            font-size: 13px;
+            font-size: 14px;
         }
+        header h1 { font-size: 24px; }
+        header h2 { font-size: 16px; }
     }
 </style>
 </head>
 <body>
 
 <header>
-    <div class="school-logo">
-        <img src="https://github.com/SalalahSharqiyaSchool/grade-system/blob/main/logo1.png?raw=true" alt="لوجو المدرسة">
-        <div class="school-title">
-            <h1>صلالة الشرقية للتعليم الأساسي</h1>
-            <h2>الفصل الدراسي الأول 2025-2026</h2>
-        </div>
-    </div>
-    <div class="right-info">
-        <p>سلطنة عمان</p>
-        <p>وزارة التربية والتعليم</p>
-        <p>المديرية العامة للتربية والتعليم بمحافظة ظفار</p>
+    <img src="https://github.com/SalalahSharqiyaSchool/grade-system/blob/main/logo.png?raw=true" alt="لوجو المدرسة">
+    <div>
+        <h1>صلالة الشرقية للتعليم الأساسي</h1>
+        <h2>الفصل الدراسي الثاني 2025-2026</h2>
     </div>
 </header>
 
 <div class="container">
-    <input type="text" id="civil" placeholder="أدخل الرقم المدني">
-    <br>
-    <button onclick="showGrades()">عرض الدرجات</button>
-    <button onclick="printGrades()">طباعة الكشف</button>
+    <input type="text" id="civil" placeholder="الرقم المدني">
+    <button id="searchBtn">عرض الدرجات</button>
+    <button id="printBtn">طباعة الكشف</button>
     <p id="status"></p>
 
-    <h3 id="studentName"></h3>
-    <p id="studentInfo"></p>
+    <div id="studentInfo">
+        <p id="studentName"></p>
+        <p id="studentClass"></p>
+    </div>
     <p class="message" id="encouragement"></p>
     <div id="gradesList"></div>
 </div>
 
 <script src="index.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
 </body>
 </html>
