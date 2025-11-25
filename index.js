@@ -1,6 +1,5 @@
 const searchBtn = document.getElementById("searchBtn");
 const printBtn = document.getElementById("printBtn");
-
 let currentStudent = null;
 
 searchBtn.addEventListener("click", async () => {
@@ -57,17 +56,19 @@ searchBtn.addEventListener("click", async () => {
     encouragement.innerHTML = `<strong>متوسطك العام: ${avg.toFixed(2)}</strong><br>${msg}`;
 });
 
-// تحميل PDF مع دعم العربية
-printBtn.addEventListener("click", () => {
+// تحميل PDF عربي كامل
+printBtn.addEventListener("click", async () => {
     if (!currentStudent) { alert("الرجاء عرض درجات الطالب أولاً قبل التحميل."); return; }
 
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF({ orientation: "portrait", unit: "pt", format: "a4" });
 
-    // **خط عربي Amiri Base64** (ضع Base64 الخاص بالخط هنا)
-    // مثال: doc.addFileToVFS("Amiri-Regular.ttf", "<Base64_الخط>");
-    // doc.addFont("Amiri-Regular.ttf", "Amiri", "normal");
-    // doc.setFont("Amiri");
+    // إضافة خط Amiri عربي (Base64)
+    // يمكنك تحميل ملف TTF وتحويله لـ Base64
+    // ثم استبدل "<Base64_هنا>" بالبيانات الفعلية
+    doc.addFileToVFS("Amiri-Regular.ttf", "<Base64_هنا>");
+    doc.addFont("Amiri-Regular.ttf", "Amiri", "normal");
+    doc.setFont("Amiri");
 
     const container = document.querySelector(".container");
     const table = container.querySelector("table");
@@ -78,7 +79,8 @@ printBtn.addEventListener("click", () => {
     doc.setFontSize(14);
     doc.text(container.querySelector("#studentName").innerText, 40, 60);
 
-    doc.autoTable({ html: table, startY: 80, styles: { fontSize: 12 }, theme: 'grid' });
+    doc.autoTable({ html: table, startY: 80, styles: { font: "Amiri", fontSize: 12 }, theme: 'grid' });
+
     const avgMsg = container.querySelector("#encouragement").innerText;
     doc.text(avgMsg, 40, doc.lastAutoTable.finalY + 20);
 
