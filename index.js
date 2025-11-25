@@ -1,7 +1,13 @@
 let currentStudent = null;
 
-async function showGrades() {
+function searchStudent() {
     const civil = document.getElementById("civil").value.trim();
+    if (!civil) { alert("الرجاء إدخال الرقم المدني"); return; }
+    showGrades(civil);
+}
+
+async function showGrades(civilInput) {
+    const civil = civilInput || document.getElementById("civil").value.trim();
     const status = document.getElementById("status");
     const studentInfo = document.getElementById("studentInfo");
     const gradesList = document.getElementById("gradesList");
@@ -10,8 +16,6 @@ async function showGrades() {
     studentInfo.innerHTML = "";
     gradesList.innerHTML = "";
     currentStudent = null;
-
-    if (!civil) { status.innerHTML = "الرجاء إدخال الرقم المدني"; return; }
 
     const files = ["grade5.json","grade6.json","grade7.json","grade8.json","grade9.json"];
     let foundStudent = null;
@@ -30,44 +34,51 @@ async function showGrades() {
 
     currentStudent = foundStudent;
 
-    // عرض بيانات الطالب
-    studentInfo.innerHTML = `
-        <p><strong>اسم الطالب:</strong> ${foundStudent["الاسم"]} &nbsp;&nbsp; 
-           <strong>الرقم المدني:</strong> ${foundStudent["رقم_مدني"]}</p>
-        <p><strong>الصف:</strong> ${foundStudent["الصف"] || "-"} &nbsp;&nbsp;
-           <strong>الشعبة:</strong> ${foundStudent["الشعبة"] || "-"}</p>
-    `;
+    // بيانات الطالب + الصف + الشعبة + المتوسط + توصيات
+    let total = 0, count = 0;
+    let htmlTable = "<table><tr><th>المادة</th><th>الدرجة</th><th>توصية</th></tr>";
 
-    // إنشاء جدول الدرجات
-    let total = 0, count = 0, html = "<table><tr><th>المادة</th><th>الدرجة</th><th>ملاحظات</th></tr>";
     for (const key in foundStudent) {
         if (!["رقم_مدني","الاسم","الصف","الشعبة"].includes(key)) {
             const grade = parseFloat(foundStudent[key]);
             const advice = grade >= 90 ? "ممتاز جدًا 🌟" :
                            grade >= 75 ? "جيد جدًا 👍" :
                            grade >= 50 ? "مقبول 📘" : "ضعيف 📌";
-            html += `<tr><td>${key}</td><td>${grade}</td><td>${advice}</td></tr>`;
+            htmlTable += `<tr><td>${key}</td><td>${grade}</td><td>${advice}</td></tr>`;
             total += grade; count++;
         }
     }
-    html += "</table>";
-    gradesList.innerHTML = `<div style="overflow-x:auto;">${html}</div>`;
-
-    // متوسط درجات الطالب
+    htmlTable += "</table>";
+    gradesList.innerHTML = `<div style="overflow-x:auto;">${htmlTable}</div>`;
     const avg = total / count;
-    studentInfo.innerHTML += `<p><strong>متوسط الدرجات:</strong> ${avg.toFixed(2)}</p>`;
+    const generalAdvice = avg >= 90 ? "أداء ممتاز جدًا!" :
+                          avg >= 75 ? "جيد جدًا!" :
+                          avg >= 50 ? "مقبول، يحتاج مجهود أكثر." : "ضعيف، يرجى الدعم والمراجعة.";
+
+    studentInfo.innerHTML = `
+        <p><strong>اسم الطالب:</strong> ${foundStudent["الاسم"]} &nbsp;&nbsp;
+           <strong>الرقم المدني:</strong> ${foundStudent["رقم_مدني"]}</p>
+        <p><strong>الصف:</strong> ${foundStudent["الصف"] || "-"} &nbsp;&nbsp;
+           <strong>الشعبة:</strong> ${foundStudent["الشعبة"] || "-"}</p>
+        <p><strong>متوسط الدرجات:</strong> ${avg.toFixed(2)}</p>
+        <p><strong>ملاحظة عامة:</strong> ${generalAdvice}</p>
+    `;
 }
 
-// طباعة جدول الطالب مع معلوماته
+// الطباعة
 function printGrades() {
     if (!currentStudent) { alert("الرجاء عرض درجات الطالب أولاً."); return; }
 
     const printContent = `
-        <h2>صلالة الشرقية للتعليم الأساسي</h2>
-        <p>محافظة ظفار</p>
-        <p>الفصل الدراسي الأول 2025-2026</p>
-        ${document.getElementById("studentInfo").innerHTML}
-        ${document.getElementById("gradesList").innerHTML}
+        <div style="text-align:center;">
+            <img src="https://github.com/faissaltunisia/grade-system/blob/main/logo.png?raw=true" style="width:80px; border-radius:5px;">
+            <h2>صلالة الشرقية للتعليم الأساسي</h2>
+            <div>محافظة ظفار</div>
+            <div>الفصل الدراسي الأول 2025-2026</div>
+            <hr>
+            ${document.getElementById("studentInfo").innerHTML}
+            ${document.getElementById("gradesList").innerHTML}
+        </div>
     `;
 
     const printWindow = window.open('', '', 'height=700,width=900');
