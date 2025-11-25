@@ -1,24 +1,28 @@
-const searchBtn = document.getElementById("searchBtn");
-const printBtn = document.getElementById("printBtn");
+const civilInput = document.getElementById("civil");
+const showBtn = document.querySelector("button[onclick='showGrades()']");
+const printBtn = document.querySelector("button[onclick='printGrades()']");
 
 let currentStudent = null;
 
-searchBtn.addEventListener("click", async () => {
-    const civil = document.getElementById("civil").value.trim();
+async function showGrades() {
+    const civil = civilInput.value.trim();
     const status = document.getElementById("status");
     const studentName = document.getElementById("studentName");
     const gradesList = document.getElementById("gradesList");
     const encouragement = document.getElementById("encouragement");
     const comparison = document.getElementById("comparison");
 
-    status.innerHTML = "";
-    studentName.innerHTML = "";
+    status.textContent = "";
+    studentName.textContent = "";
     gradesList.innerHTML = "";
-    encouragement.innerHTML = "";
-    comparison.innerHTML = "";
+    encouragement.textContent = "";
+    comparison.textContent = "";
     currentStudent = null;
 
-    if (!civil) { status.innerHTML = "الرجاء إدخال الرقم المدني"; return; }
+    if (!civil) {
+        status.textContent = "الرجاء إدخال الرقم المدني";
+        return;
+    }
 
     const files = ["grade5.json","grade6.json","grade7.json","grade8.json","grade9.json"];
     let foundStudent = null;
@@ -35,49 +39,56 @@ searchBtn.addEventListener("click", async () => {
                 studentClass = file.replace(".json","");
                 break;
             }
-        } catch (err) { console.warn("خطأ في قراءة:", file, err); }
+        } catch (err) {
+            console.warn("خطأ في قراءة:", file, err);
+        }
     }
 
-    if (!foundStudent) { status.innerHTML = "لم يتم العثور على الرقم المدني في أي صف."; return; }
+    if (!foundStudent) {
+        status.textContent = "لم يتم العثور على الرقم المدني في أي صف.";
+        return;
+    }
 
     currentStudent = foundStudent;
 
-    // معلومات الطالب أعلى الجدول
-    studentName.innerHTML = `الطالب: ${foundStudent["الاسم"]} | الرقم المدني: ${foundStudent["رقم_مدني"]}`;
-    encouragement.innerHTML = `الفصل الدراسي: الأول 2025-2026 | الصف والشعبة: ${studentClass}`;
-    comparison.innerHTML = "ملاحظة: حافظ على مستواك وراجع النقاط الصعبة!";
+    // عرض المعلومات قبل الجدول
+    studentName.innerHTML = `<strong>الطالب:</strong> ${foundStudent["الاسم"]} | <strong>الرقم المدني:</strong> ${foundStudent["رقم_مدني"]}`;
+    encouragement.innerHTML = `<strong>الفصل الدراسي:</strong> الأول 2025-2026 | <strong>الصف والشعبة:</strong> ${studentClass}`;
+    comparison.innerHTML = `ملاحظة: حافظ على مستواك وراجع النقاط الصعبة!`;
 
-    // جدول الدرجات
-    let total = 0, count = 0, html = "<table><tr><th>المادة</th><th>الدرجة</th><th>ملاحظات</th></tr>";
+    // إنشاء جدول الدرجات
+    let total = 0, count = 0, tableHtml = "<table><tr><th>المادة</th><th>الدرجة</th><th>ملاحظات</th></tr>";
     for (const key in foundStudent) {
         if (key !== "رقم_مدني" && key !== "الاسم") {
-            let grade = parseFloat(foundStudent[key]);
+            const grade = parseFloat(foundStudent[key]);
             let advice = grade >= 90 ? "ممتاز جدًا 🌟" :
                          grade >= 75 ? "جيد جدًا 👍" :
                          grade >= 50 ? "مقبول 📘" : "ضعيف 📌";
-            html += `<tr><td>${key}</td><td>${grade}</td><td>${advice}</td></tr>`;
+            tableHtml += `<tr><td>${key}</td><td>${grade}</td><td>${advice}</td></tr>`;
             total += grade; count++;
         }
     }
-    html += "</table>";
-    gradesList.innerHTML = `<div style="overflow-x:auto;">${html}</div>`;
+    tableHtml += "</table>";
+    gradesList.innerHTML = tableHtml;
 
-    // متوسط الطالب
-    let avg = total / count;
+    const avg = total / count;
     let avgMsg = avg >= 90 ? "أداء ممتاز جداً! 🌟" :
                  avg >= 75 ? "مستوى جيد جداً 💪" :
                  avg >= 50 ? "مستوى مقبول 📚" : "المستوى ضعيف 🔔";
-    comparison.innerHTML += `<br>متوسط الطالب: ${avg.toFixed(2)} | ${avgMsg}`;
-});
+    comparison.innerHTML += `<br><strong>متوسط الطالب:</strong> ${avg.toFixed(2)} | ${avgMsg}`;
+}
 
-// طباعة الجدول مع المعلومات
-printBtn.addEventListener("click", () => {
-    if (!currentStudent) { alert("الرجاء عرض درجات الطالب أولاً قبل الطباعة."); return; }
+// طباعة التقرير بالكامل
+function printGrades() {
+    if (!currentStudent) {
+        alert("الرجاء عرض درجات الطالب أولاً قبل الطباعة.");
+        return;
+    }
 
     const container = document.querySelector(".container");
     const printContent = `
-        <div style="text-align:center; font-family:Arial;">
-            <h2>كشف درجات الطالب</h2>
+        <div style="text-align:center; font-family:Arial; direction: rtl;">
+            <h2>كشف درجات الطالب - صلالة الشرقية</h2>
             <p>${container.querySelector("#studentName").innerHTML}</p>
             <p>${container.querySelector("#encouragement").innerHTML}</p>
             <p>${container.querySelector("#comparison").innerHTML}</p>
@@ -94,4 +105,4 @@ printBtn.addEventListener("click", () => {
     printWindow.document.close();
     printWindow.focus();
     printWindow.print();
-});
+}
