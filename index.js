@@ -60,20 +60,15 @@ searchBtn.addEventListener("click", async () => {
     encouragement.innerHTML = `<strong>متوسطك العام: ${avg.toFixed(2)}</strong><br>${msg}`;
 });
 
-// تحميل PDF عربي صحيح
+// دالة الطباعة
 printBtn.addEventListener("click", () => {
-    if (!currentStudent) { alert("الرجاء عرض درجات الطالب أولاً قبل التحميل."); return; }
-
     const element = document.querySelector(".container");
-    const opt = {
-        margin: 10,
-        filename: `كشف_الدرجات_${currentStudent["الاسم"]}.pdf`,
-        image: { type: "jpeg", quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true },
-        jsPDF: { unit: "pt", format: "a4", orientation: "portrait" },
-        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
-    };
-
-    // إضافة دعم الخطوط العربية
-    html2pdf().set(opt).from(element).save();
+    const printWindow = window.open('', '', 'height=600,width=800');
+    printWindow.document.write('<html><head><title>طباعة كشف الدرجات</title>');
+    printWindow.document.write('<style>body { font-family: Arial, sans-serif; } table { width: 100%; border-collapse: collapse; } th, td { border: 1px solid #00796b; padding: 8px; text-align: center; } th { background-color: #004d40; color: white; }</style>');
+    printWindow.document.write('</head><body>');
+    printWindow.document.write(element.innerHTML);
+    printWindow.document.write('</body></html>');
+    printWindow.document.close();
+    printWindow.print();
 });
