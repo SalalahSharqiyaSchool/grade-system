@@ -22,30 +22,28 @@
         flex-wrap: wrap;
         position: relative;
     }
-    header h1 {
-        font-size: 32px;
-        font-weight: bold;
-        margin: 5px;
+    header img.logo {
+        width: 80px;
+        height: auto;
+        border-radius: 10px;
     }
-    header h2 {
-        font-size: 20px;
-        font-weight: bold;
-        margin: 5px;
-    }
-    header img {
-        height: 60px;
-    }
-    header .logo-school {
-        position: absolute;
-        left: 20px;
-        top: 50%;
-        transform: translateY(-50%);
-    }
-    header .logo-ministry {
+    header img.ministry {
+        width: 60px;
+        height: auto;
         position: absolute;
         right: 20px;
-        top: 50%;
-        transform: translateY(-50%);
+        top: 20px;
+    }
+    header h1 {
+        margin: 5px;
+        font-size: 32px;
+        font-weight: bold;
+    }
+    header h2 {
+        margin: 5px;
+        font-size: 20px;
+        font-weight: bold;
+        width: 100%;
     }
     .container {
         padding: 20px;
@@ -68,7 +66,6 @@
         color: white;
         border: none;
         cursor: pointer;
-        min-width: 100px;
     }
     button:hover {
         background-color: #004d40;
@@ -95,6 +92,12 @@
         background-color: #004d40;
         color: white;
     }
+    .student-info {
+        text-align: right;
+        font-weight: bold;
+        margin-bottom: 15px;
+        font-size: 16px;
+    }
     .message {
         margin-top: 15px;
         font-size: 16px;
@@ -105,31 +108,33 @@
         color: red;
         margin-top: 10px;
     }
-    .student-info {
-        font-weight: bold;
-        font-size: 16px;
-        text-align: right;
-        margin-top: 10px;
+    @media screen and (max-width: 600px) {
+        table, th, td {
+            font-size: 13px;
+        }
     }
 </style>
 </head>
 <body>
 
 <header>
-    <h1>صلالة الشرقية للتعليم الأساسي</h1>
-    <h2>الفصل الدراسي الأول 2025-2026</h2>
-    <img src="https://raw.githubusercontent.com/SalalahSharqiyaSchool/grade-system/main/logo1.png" class="logo-school" alt="لوجو المدرسة">
-    <img src="https://raw.githubusercontent.com/SalalahSharqiyaSchool/grade-system/main/logoMinistry.png" class="logo-ministry" alt="شعار وزارة التربية والتعليم">
+    <img src="https://github.com/SalalahSharqiyaSchool/garde-system/blob/main/logo.png?raw=true" class="logo" alt="لوجو المدرسة">
+    <img src="https://github.com/SalalahSharqiyaSchool/garde-system/blob/main/logo1.png?raw=true" class="ministry" alt="شعار وزارة التربية والتعليم">
+    <div>
+        <h1>صلالة الشرقية للتعليم الأساسي</h1>
+        <h2>الفصل الدراسي الثاني 2025-2026</h2>
+    </div>
 </header>
 
 <div class="container">
+    <h2>ادخل الرقم المدني لمعرفة درجاتك</h2>
     <input type="text" id="civil" placeholder="الرقم المدني">
     <br>
     <button onclick="showGrades()">عرض الدرجات</button>
-    <button onclick="printGrades()" style="margin-left: 10px;">طباعة الكشف</button>
+    <button onclick="printGrades()" style="margin-top:10px;">طباعة الكشف</button>
     <p id="status"></p>
 
-    <div id="studentInfo" class="student-info"></div>
+    <div class="student-info" id="studentInfo"></div>
     <div id="gradesList"></div>
     <p class="message" id="encouragement"></p>
 </div>
