@@ -11,30 +11,26 @@
         padding: 0;
         text-align: center;
     }
-    header {
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 20px;
         background-color: #00796b;
         color: white;
-        padding: 20px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 15px;
-        flex-wrap: wrap;
     }
-    header img {
-        width: 80px;
-        height: auto;
-        border-radius: 10px;
+    .header h1 {
+        margin: 0;
+        font-size: 26px;
     }
-    header h1 {
-        margin: 5px;
-        font-size: 28px;
+    .header div {
+        font-size: 16px;
     }
-    header h2 {
-        margin: 5px;
+    .semester {
+        text-align: center;
+        margin: 10px 0;
         font-size: 18px;
-        font-weight: normal;
-        width: 100%;
+        font-weight: bold;
     }
     .container {
         padding: 20px;
@@ -44,6 +40,8 @@
         border-radius: 12px;
         box-shadow: 0 0 15px rgba(0,0,0,0.1);
         margin-top: 20px;
+        text-align: right;
+        direction: rtl;
     }
     input, button {
         padding: 10px;
@@ -61,67 +59,53 @@
     button:hover {
         background-color: #004d40;
     }
+    p {
+        margin: 5px 0;
+        font-size: 16px;
+    }
     #gradesList {
         margin-top: 15px;
         overflow-x: auto;
     }
     table {
         width: 100%;
-        min-width: 400px;
         border-collapse: collapse;
-        direction: rtl;
-    }
-    table, th, td {
-        border: 1px solid #00796b;
+        margin-top: 10px;
     }
     th, td {
+        border: 1px solid #00796b;
         padding: 8px;
         text-align: center;
-        word-wrap: break-word;
     }
     th {
         background-color: #004d40;
         color: white;
     }
-    .message {
-        margin-top: 15px;
-        font-size: 16px;
-        color: #00796b;
-        font-weight: bold;
-    }
     #status {
         color: red;
         margin-top: 10px;
-    }
-    @media screen and (max-width: 600px) {
-        table, th, td {
-            font-size: 13px;
-        }
     }
 </style>
 </head>
 <body>
 
-<header>
-    <img src="https://github.com/faissaltunisia/grade-system/blob/main/logo.png?raw=true" alt="لوجو المدرسة">
-    <div>
-        <h1>صلالة الشرقية للتعليم الأساسي</h1>
-        <h2>الفصل الدراسي الأول 2025-2026</h2>
-    </div>
-</header>
+<div class="header">
+    <div>محافظة ظفار</div>
+    <h1>صلالة الشرقية للتعليم الأساسي</h1>
+    <div></div>
+</div>
+
+<div class="semester">الفصل الدراسي الأول 2025-2026</div>
 
 <div class="container">
-    <h2>ادخل الرقم المدني لمعرفة درجاتك</h2>
     <input type="text" id="civil" placeholder="الرقم المدني">
     <br>
     <button onclick="showGrades()">عرض الدرجات</button>
-    <button onclick="printGrades()" style="margin-top:10px;">طباعة الكشف</button>
-
+    <button onclick="printGrades()">طباعة الكشف</button>
     <p id="status"></p>
-    <h3 id="studentName"></h3>
+
+    <div id="studentInfo"></div>
     <div id="gradesList"></div>
-    <p class="message" id="encouragement"></p>
-    <p class="message" id="comparison"></p>
 </div>
 
 <script src="index.js"></script>
