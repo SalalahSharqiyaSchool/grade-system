@@ -1,5 +1,6 @@
 let currentStudent = null;
 
+// دالة عرض الدرجات
 async function showGrades() {
     const civil = document.getElementById("civil").value.trim();
     const status = document.getElementById("status");
@@ -88,35 +89,62 @@ async function showGrades() {
     encouragement.innerHTML = `<strong>متوسطك العام: ${avg.toFixed(2)}</strong><br>${msg}`;
 }
 
-// دالة الطباعة
+// دالة الطباعة (جدول فقط + اسم المدرسة + الطالب + المحافظة + الفصل الدراسي)
 function printGrades() {
     if (!currentStudent) {
         alert("الرجاء عرض درجات الطالب أولاً قبل الطباعة.");
         return;
     }
 
-    const container = document.querySelector(".container");
-    const printContent = container.innerHTML;
+    const table = document.querySelector("#gradesList table");
+    const encouragement = document.querySelector("#encouragement");
+    if (!table) {
+        alert("لا يوجد جدول درجات للطباعة.");
+        return;
+    }
 
-    const printWindow = window.open("", "", "width=800,height=600");
-    printWindow.document.write(`
+    // إزالة أي iframe موجود
+    let iframe = document.getElementById("printFrame");
+    if (iframe) iframe.remove();
+
+    // إنشاء iframe مخفي للطباعة
+    iframe = document.createElement("iframe");
+    iframe.id = "printFrame";
+    iframe.style.position = "absolute";
+    iframe.style.width = "0";
+    iframe.style.height = "0";
+    iframe.style.border = "0";
+    document.body.appendChild(iframe);
+
+    const doc = iframe.contentWindow.document;
+    doc.open();
+
+    doc.write(`
         <html>
         <head>
-            <title>كشف الدرجات</title>
             <meta charset="UTF-8">
+            <title>كشف الدرجات</title>
             <style>
-                body { font-family: Arial; direction: rtl; text-align: center; }
-                table { width: 100%; border-collapse: collapse; margin-top:20px; }
-                th, td { border: 1px solid #000; padding: 8px; }
-                th { background: #00796b; color: white; }
+                body { font-family: Arial; direction: rtl; text-align: center; margin: 20px; }
+                h1, h2, h3 { margin: 5px; }
+                table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+                th, td { border: 1px solid #000; padding: 8px; text-align: center; }
+                th { background-color: #00796b; color: white; }
+                .notes { margin-top: 15px; font-weight: bold; color: #00796b; }
             </style>
         </head>
         <body>
-            ${printContent}
+            <h1>صلالة الشرقية للتعليم الأساسي</h1>
+            <h2>محافظة ظفار</h2>
+            <h3>الفصل الدراسي الأول 2025-2026</h3>
+            <h3>الطالب: ${currentStudent["الاسم"]}</h3>
+            ${table.outerHTML}
+            <div class="notes">${encouragement.innerHTML}</div>
         </body>
         </html>
     `);
-    printWindow.document.close();
-    printWindow.focus();
-    printWindow.print();
+
+    doc.close();
+    iframe.contentWindow.focus();
+    iframe.contentWindow.print();
 }
