@@ -40,7 +40,7 @@
     }
     .container {
         padding: 15px;
-        max-width: 700px;
+        max-width: 900px;
         margin: 15px auto;
         background-color: white;
         border-radius: 12px;
@@ -67,21 +67,37 @@
     table {
         width: 100%;
         border-collapse: collapse;
+        margin-top: 15px;
         direction: rtl;
     }
-    table, th, td {
+    th, td {
         border: 1px solid #00796b;
+        padding: 8px;
+        text-align: center;
     }
     th {
-        padding: 8px;
         background-color: #004d40;
         color: white;
-        text-align: center;
     }
-    td {
-        padding: 8px;
-        text-align: center;
+    #encouragement {
         font-weight: bold;
+        margin: 10px 0;
+    }
+    #status {
+        color: red;
+        margin-top: 10px;
+    }
+    #studentInfo p {
+        margin: 4px 0;
+        font-weight: bold;
+        font-size: 16px;
+    }
+    @media screen and (max-width: 480px) {
+        table, th, td {
+            font-size: 14px;
+        }
+        header h1 { font-size: 24px; }
+        header h2 { font-size: 16px; }
     }
 </style>
 </head>
@@ -101,11 +117,12 @@
     <button id="printBtn">طباعة الكشف</button>
     <p id="status"></p>
 
-    <p id="studentName"></p>
-    <p id="studentClass"></p>
+    <div id="studentInfo">
+        <p id="studentName"></p>
+        <p id="studentClass"></p>
+    </div>
 
-    <p id="encouragement" style="font-weight:bold;"></p>
-
+    <p id="encouragement"></p>
     <div id="gradesList"></div>
 </div>
 
