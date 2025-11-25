@@ -11,6 +11,8 @@
         padding: 0;
         text-align: center;
     }
+
+    /* رأس الصفحة */
     .header {
         display: flex;
         justify-content: space-between;
@@ -19,19 +21,18 @@
         background-color: #00796b;
         color: white;
     }
-    .header h1 {
-        margin: 0;
-        font-size: 26px;
-    }
-    .header div {
-        font-size: 16px;
-    }
+    .header h1 { margin:0; font-size: 26px; display:inline; }
+    .header img { width: 80px; height: auto; border-radius: 8px; }
+    .header div { font-size: 16px; }
+
     .semester {
         text-align: center;
         margin: 10px 0;
         font-size: 18px;
         font-weight: bold;
     }
+
+    /* الحاوية الرئيسية */
     .container {
         padding: 20px;
         max-width: 700px;
@@ -43,15 +44,23 @@
         text-align: right;
         direction: rtl;
     }
-    input {
+
+    /* مربع البحث */
+    .search-box {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 10px;
+    }
+    #civil {
         padding: 10px;
         font-size: 16px;
-        margin: 5px 0;
         border-radius: 6px;
         border: 1px solid #ccc;
         width: 60%;
         text-align: right;
     }
+
+    /* الأزرار */
     .buttons {
         text-align: center;
         margin: 10px 0;
@@ -66,15 +75,15 @@
         color: white;
         cursor: pointer;
     }
-    button:hover {
-        background-color: #004d40;
-    }
-    p {
+    button:hover { background-color: #004d40; }
+
+    /* بيانات الطالب */
+    #studentInfo p {
         margin: 5px 0;
         font-size: 16px;
-        display: inline-block;
-        margin-right: 15px;
     }
+
+    /* الجدول */
     #gradesList {
         margin-top: 15px;
         overflow-x: auto;
@@ -89,35 +98,40 @@
         padding: 8px;
         text-align: center;
     }
-    th {
-        background-color: #004d40;
-        color: white;
-    }
-    #status {
-        color: red;
-        margin-top: 10px;
-        text-align: center;
+    th { background-color: #004d40; color: white; }
+
+    /* حالة الخطأ */
+    #status { color: red; margin-top: 10px; text-align: center; }
+
+    /* تجاوب الهواتف */
+    @media screen and (max-width: 600px) {
+        table, th, td { font-size: 13px; }
+        #civil { width: 80%; }
+        .header { flex-direction: column; gap: 10px; }
     }
 </style>
 </head>
 <body>
 
 <div class="header">
-    <div>محافظة ظفار</div>
+    <img src="https://github.com/faissaltunisia/grade-system/blob/main/logo.png?raw=true" alt="لوجو المدرسة">
     <h1>صلالة الشرقية للتعليم الأساسي</h1>
-    <div></div>
+    <div>محافظة ظفار</div>
 </div>
 
 <div class="semester">الفصل الدراسي الأول 2025-2026</div>
 
 <div class="container">
-    <input type="text" id="civil" placeholder="الرقم المدني">
-    
+    <div class="search-box">
+        <input type="text" id="civil" placeholder="الرقم المدني">
+    </div>
+
     <div class="buttons">
+        <button onclick="searchStudent()">بحث</button>
         <button onclick="showGrades()">عرض الدرجات</button>
         <button onclick="printGrades()">طباعة الكشف</button>
     </div>
-    
+
     <p id="status"></p>
     <div id="studentInfo"></div>
     <div id="gradesList"></div>
