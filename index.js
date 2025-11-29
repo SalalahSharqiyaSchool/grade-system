@@ -88,9 +88,9 @@ searchBtn.addEventListener("click", async () => {
     gradesList.innerHTML = html;
 
     let avg = total / count;
-    let msg = avg >= 90 ? "أداء ممتاز جدًا" :
-              avg >= 75 ? "مستوى جيد جدًا" :
-              avg >= 50 ? "مستوى مقبول" : "المستوى ضعيف";
+    let msg = avg >= 90 ? "أداء ممتاز جدًا " :
+              avg >= 75 ? "المستوى :  جيد جدًا" :
+              avg >= 50 ? "المستوى : مقبول" : "المستوى : ضعيف";
 
     encouragement.innerHTML = `   ${msg}   ---   متوسطك العام : ${avg.toFixed(2)}     `;
 });
