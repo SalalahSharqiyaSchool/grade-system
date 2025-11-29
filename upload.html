@@ -5,17 +5,90 @@
 <title>رفع درجات الطلاب</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script src="upload.js"></script>
+
+<style>
+    body {
+        font-family: "Tajawal", Arial;
+        padding: 20px;
+        direction: rtl;
+        text-align: right;
+        background: #f2f4f7;
+    }
+
+    /* الشعار + الهوية */
+    .header-box {
+        text-align: center;
+        margin-bottom: 25px;
+    }
+
+    .header-box img {
+        width: 110px;
+        margin-bottom: 10px;
+    }
+
+    .header-title {
+        font-size: 22px;
+        font-weight: bold;
+        color: #003366;
+    }
+
+    .header-sub {
+        font-size: 14px;
+        color: #444;
+        margin-top: 5px;
+    }
+
+    /* صندوق الرفع */
+    .box {
+        background: white;
+        padding: 25px;
+        border-radius: 12px;
+        max-width: 450px;
+        margin: auto;
+        box-shadow: 0 0 12px #ccc;
+    }
+
+    button {
+        padding: 10px 20px;
+        background: #0057b8;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    button:hover {
+        background: #003f87;
+    }
+
+    #status {
+        margin-top: 15px;
+        font-weight: bold;
+    }
+</style>
 </head>
-<body style="font-family: Arial; padding: 20px; direction: rtl; text-align: right">
 
-<h2>رفع درجات الطلاب (Excel → JSON)</h2>
+<body>
 
-<input type="file" id="excelFile" accept=".xlsx, .xls" />
-<br><br>
+<!-- هوية المدرسة -->
+<div class="header-box">
+    <img src="logo.png" alt="شعار المدرسة">
+    <div class="header-title">مدرسة صلالة الشرقية للتعليم الأساسي (5–9)</div>
+    <div class="header-sub">قسم تقنية المعلومات – نظام رفع درجات الطلاب</div>
+</div>
 
-<button onclick="convertExcel()">تحويل ورفع</button>
+<!-- صندوق رفع وتحويل الإكسل -->
+<div class="box">
+    <h3 style="margin-bottom: 10px;">رفع درجات الطلاب (Excel → JSON)</h3>
 
-<p id="status" style="color: green; margin-top: 20px;"></p>
+    <input type="file" id="excelFile" accept=".xlsx, .xls">
+    <br><br>
+
+    <button onclick="convertExcel()">تحويل الملف</button>
+
+    <p id="status"></p>
+</div>
 
 </body>
 </html>
