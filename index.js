@@ -103,7 +103,7 @@ printBtn.addEventListener("click", () => {
         return;
     }
 
-    const schoolName = "صلالة الشرقية للتعليم الأساسي"; // اسم المدرسة
+    const schoolName = "صلالة الشرقية للتعليم الأساسي (5-9)"; // اسم المدرسة
     const semester = "الفصل الدراسي الأول 2025 - 2026"; // الفصل الدراسي
 
     const printWindow = window.open("", "", "width=800,height=700");
