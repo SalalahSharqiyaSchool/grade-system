@@ -95,6 +95,72 @@ searchBtn.addEventListener("click", async () => {
     encouragement.innerHTML = `   ${msg}   ---   متوسطك العام : ${avg.toFixed(2)}     `;
 });
 
+
+const rankBtn = document.getElementById("rankBtn");
+
+rankBtn.addEventListener("click", async () => {
+    const rankResult = document.getElementById("rankResult");
+
+    if (!currentStudent) {
+        rankResult.innerHTML = "الرجاء البحث عن الطالب أولاً";
+        return;
+    }
+
+    const classFile = `grade${currentStudent["الصف"]}.json`;
+
+    try {
+        const res = await fetch(classFile + "?time=" + Date.now());
+        const data = await res.json();
+
+        // احسب مجموع كل طالب
+        const studentsTotals = data.map(s => {
+            let total = 0;
+            let count = 0;
+            for (const key in s) {
+                if (!["رقم_مدني","الاسم","الصف","الشعبة"].includes(key)) {
+                    total += parseFloat(s[key]);
+                    count++;
+                }
+            }
+            return {
+                name: s["الاسم"],
+                civil: s["رقم_مدني"],
+                total,
+                average: total / count
+            };
+        });
+
+        // ترتيب الطلاب حسب المجموع
+        studentsTotals.sort((a, b) => b.total - a.total);
+
+        const top1 = studentsTotals[0];
+        const top2 = studentsTotals[1];
+        const top3 = studentsTotals[2];
+
+        // الحصول على ترتيب الطالب الحالي
+        const myRank = studentsTotals.findIndex(s => s.civil == currentStudent["رقم_مدني"]) + 1;
+
+        rankResult.innerHTML = `
+            <br>
+            <table border="1" style="width:80%; margin:auto; border-collapse:collapse; text-align:center;">
+                <tr><th>المركز</th><th>اسم الطالب</th><th>مجموع الدرجات</th></tr>
+                <tr><td>الأول</td><td>${top1.name}</td><td>${top1.total}</td></tr>
+                <tr><td>الثاني</td><td>${top2.name}</td><td>${top2.total}</td></tr>
+                <tr><td>الثالث</td><td>${top3.name}</td><td>${top3.total}</td></tr>
+            </table>
+
+            <h3 style="margin-top:20px; text-align:center;">
+                ترتيبك في الصف: <span style="color:blue;">${myRank}</span> من أصل ${studentsTotals.length} طالب
+            </h3>
+        `;
+    } catch (error) {
+        rankResult.innerHTML = "حدث خطأ أثناء تحميل بيانات الصف";
+    }
+});
+
+
+
+
 // الطباعة مع توسيط المحتوى وإضافة اسم المدرسة والفصل الدراسي
 // وتنسيق الجدول كما في العرض (المادة يمين، الدرجة وسط، الملاحظة يسار)
 printBtn.addEventListener("click", () => {
