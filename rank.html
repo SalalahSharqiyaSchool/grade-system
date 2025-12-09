@@ -19,11 +19,7 @@ th{ background:#004d40; color:white; }
 .sidebar button.active{ background:#00695c; font-weight:bold; }
 
 /* القائمة المنسدلة */
-#servicesMenu button{
-  padding-left:30px;
-  text-align:right;
-  font-size:15px;
-}
+#servicesMenu button{ padding-left:30px; text-align:right; font-size:15px; }
 
 /* زر القائمة دائمًا ظاهر على الهاتف */
 #mobileToggle{
@@ -41,7 +37,6 @@ th{ background:#004d40; color:white; }
   display:none;
 }
 
-/* الشاشات الصغيرة */
 @media screen and (max-width:768px){
   .sidebar{ transform: translateX(100%); }
   .sidebar.show{ transform: translateX(0); }
@@ -74,23 +69,26 @@ const servicesBtn = document.getElementById("servicesBtn");
 const servicesMenu = document.getElementById("servicesMenu");
 
 mobileToggle.addEventListener("click", ()=> sidebar.classList.toggle("show"));
-servicesBtn.addEventListener("click", ()=> {
-    servicesMenu.style.display = servicesMenu.style.display==="flex"?"none":"flex";
-});
+servicesBtn.addEventListener("click", ()=> servicesMenu.style.display = servicesMenu.style.display==="flex"?"none":"flex");
 
-// إخفاء الشريط عند الضغط على الروابط الداخلية فقط
-[document.getElementById("navHome"),
- document.getElementById("navGrades"),
- document.getElementById("navRank")].forEach(btn=>{
-    btn.addEventListener("click", ()=> sidebar.classList.remove("show"));
+document.querySelectorAll(".sidebar button").forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+        if(btn.id.startsWith("nav")) sidebar.classList.remove("show");
+    });
 });
 
 const urlParams = new URLSearchParams(window.location.search);
 const civil = urlParams.get("civil");
 
 document.getElementById("navHome").addEventListener("click", ()=> window.location="index.html");
-document.getElementById("navGrades").addEventListener("click", ()=> window.location=`grades.html?civil=${civil}`);
-document.getElementById("navRank").addEventListener("click", ()=> window.location=`rank.html?civil=${civil}`);
+document.getElementById("navGrades").addEventListener("click", ()=> {
+    if(!civil){ alert("الرجاء إدخال الرقم المدني"); return; }
+    window.location=`grades.html?civil=${civil}`;
+});
+document.getElementById("navRank").addEventListener("click", ()=> {
+    if(!civil){ alert("الرجاء إدخال الرقم المدني"); return; }
+    window.location=`rank.html?civil=${civil}`;
+});
 
 if(!civil){
     document.getElementById("rankResult").innerHTML = "الرجاء الدخول من صفحة عرض الدرجات أولاً";
