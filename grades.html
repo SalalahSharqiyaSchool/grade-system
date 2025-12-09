@@ -11,13 +11,28 @@ body{ font-family:Arial; margin:0; padding:0; background:#f0f4f5; }
 table{ width:100%; border-collapse:collapse; direction:rtl; }
 th, td{ border:1px solid #00796b; padding:8px; text-align:center; }
 th{ background:#004d40; color:white; }
-.sidebar{ width:250px; background:linear-gradient(180deg,#00796b,#004d40); color:white; display:flex; flex-direction:column; position:fixed; right:0; top:0; bottom:0; box-shadow:-2px 0 5px rgba(0,0,0,0.2); transition:width 0.3s; z-index:1000; }
+.sidebar{ width:250px; background:linear-gradient(180deg,#00796b,#004d40); color:white; display:flex; flex-direction:column; position:fixed; right:0; top:0; bottom:0; box-shadow:-2px 0 5px rgba(0,0,0,0.2); transition:width 0.3s, transform 0.3s; z-index:1000; }
 .sidebar button{ background:none; border:none; color:white; padding:15px; text-align:right; font-size:16px; cursor:pointer; display:flex; align-items:center; gap:10px; width:100%; transition: background 0.3s; }
 .sidebar button:hover{ background: linear-gradient(to right,#004d40,#00695c);}
 .sidebar button.active{ background:#00695c; font-weight:bold; }
 .sidebar .toggle-btn{ font-size:22px; text-align:center; padding:15px 0; cursor:pointer; border-bottom:1px solid rgba(255,255,255,0.2);}
 button#printBtn{ margin-top:15px; background:#00796b; color:white; padding:10px 20px; border:none; border-radius:6px; cursor:pointer; }
 button#printBtn:hover{ background:#004d40; }
+
+/* الشاشات الصغيرة */
+@media screen and (max-width:768px){
+  .sidebar{
+    width:200px;
+    transform: translateX(100%);
+    position:fixed;
+  }
+  .sidebar.show{
+    transform: translateX(0);
+  }
+  .container{
+    margin:20px auto; 
+  }
+}
 </style>
 </head>
 <body>
@@ -38,7 +53,14 @@ button#printBtn:hover{ background:#004d40; }
 <script>
 const sidebar = document.getElementById("sidebar");
 const toggleBtn = document.getElementById("toggleBtn");
-toggleBtn.addEventListener("click", ()=> sidebar.classList.toggle("collapsed"));
+
+toggleBtn.addEventListener("click", ()=>{
+    if(window.innerWidth <= 768){
+        sidebar.classList.toggle("show");
+    } else {
+        sidebar.classList.toggle("collapsed");
+    }
+});
 
 function getFeedback(grade){
   if(grade>=90) return "أداء ممتاز! حافظ على هذا المستوى.";
