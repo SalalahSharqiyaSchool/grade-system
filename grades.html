@@ -19,7 +19,11 @@ th{ background:#004d40; color:white; }
 .sidebar button.active{ background:#00695c; font-weight:bold; }
 
 /* القائمة المنسدلة */
-#servicesMenu button{ padding-left:30px; text-align:right; font-size:15px; }
+#servicesMenu button{
+  padding-left:30px;
+  text-align:right;
+  font-size:15px;
+}
 
 /* زر القائمة دائمًا ظاهر على الهاتف */
 #mobileToggle{
@@ -37,12 +41,14 @@ th{ background:#004d40; color:white; }
   display:none;
 }
 
+/* الشاشات الصغيرة */
 @media screen and (max-width:768px){
   .sidebar{ transform: translateX(100%); }
   .sidebar.show{ transform: translateX(0); }
   #mobileToggle{ display:block; }
   .container{ margin:20px auto; }
 }
+
 button#printBtn{ margin-top:15px; background:#00796b; color:white; padding:10px 20px; border:none; border-radius:6px; cursor:pointer; }
 button#printBtn:hover{ background:#004d40; }
 </style>
@@ -75,28 +81,15 @@ const servicesMenu = document.getElementById("servicesMenu");
 mobileToggle.addEventListener("click", ()=> sidebar.classList.toggle("show"));
 servicesBtn.addEventListener("click", ()=> servicesMenu.style.display = servicesMenu.style.display==="flex"?"none":"flex");
 
-// روابط القائمة
-document.getElementById("navHome").addEventListener("click", ()=> window.location="index.html");
-document.getElementById("navGrades").addEventListener("click", ()=> {
-    const civil = new URLSearchParams(window.location.search).get("civil");
-    if(!civil){ alert("الرجاء إدخال الرقم المدني"); return; }
-    window.location=`grades.html?civil=${civil}`;
-});
-document.getElementById("navRank").addEventListener("click", ()=> {
-    const civil = new URLSearchParams(window.location.search).get("civil");
-    if(!civil){ alert("الرجاء إدخال الرقم المدني"); return; }
-    window.location=`rank.html?civil=${civil}`;
-});
-
-// إخفاء الشريط عند الضغط على أي زر رابط داخلي داخل الشريط
-document.querySelectorAll(".sidebar button").forEach(btn=>{
-    btn.addEventListener("click", ()=>{
-        if(btn.id.startsWith("nav")) sidebar.classList.remove("show");
-    });
-});
+// إخفاء الشريط عند الضغط على أي زر من القائمة
+document.querySelectorAll(".sidebar button").forEach(btn=> btn.addEventListener("click", ()=> sidebar.classList.remove("show")));
 
 const urlParams = new URLSearchParams(window.location.search);
 const civil = urlParams.get("civil");
+
+document.getElementById("navHome").addEventListener("click", ()=> window.location="index.html");
+document.getElementById("navGrades").addEventListener("click", ()=> window.location=`grades.html?civil=${civil}`);
+document.getElementById("navRank").addEventListener("click", ()=> window.location=`rank.html?civil=${civil}`);
 
 function getFeedback(grade){
   if(grade>=90) return "أداء ممتاز! حافظ على هذا المستوى.";
