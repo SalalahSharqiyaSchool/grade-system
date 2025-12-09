@@ -7,7 +7,13 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
 body{ font-family:Arial; margin:0; padding:0; background:#f0f4f5; text-align:center; }
+header{ background-color:#00796b; color:white; padding:15px; display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:10px; }
+header img{ width:80px; height:auto; border-radius:10px; }
+header h1{ margin:5px; font-size:28px; font-weight:bold; }
+header h2{ margin:5px; font-size:18px; font-weight:normal; width:100%; }
+
 .container{ margin:50px auto; padding:20px; max-width:400px; background:white; border-radius:12px; box-shadow:0 0 15px rgba(0,0,0,0.1); }
+
 input, button{ width:90%; max-width:350px; padding:12px; margin:10px 0; font-size:16px; border-radius:6px; border:1px solid #ccc; }
 button{ background:#00796b; color:white; border:none; cursor:pointer; }
 button:hover{ background:#004d40; }
@@ -19,27 +25,10 @@ button:hover{ background:#004d40; }
 .sidebar button.active{ background:#00695c; font-weight:bold; }
 
 /* القائمة المنسدلة */
-#servicesMenu button{
-  padding-left:30px;
-  text-align:right;
-  font-size:15px;
-}
+#servicesMenu button{ padding-left:30px; text-align:right; font-size:15px; }
 
 /* زر القائمة دائمًا ظاهر على الهاتف */
-#mobileToggle{
-  position:fixed;
-  top:15px;
-  right:15px;
-  z-index:2000;
-  background:#00796b;
-  color:white;
-  border:none;
-  padding:10px 15px;
-  border-radius:6px;
-  font-size:18px;
-  cursor:pointer;
-  display:none;
-}
+#mobileToggle{ position:fixed; top:15px; right:15px; z-index:2000; background:#00796b; color:white; border:none; padding:10px 15px; border-radius:6px; font-size:18px; cursor:pointer; display:none; }
 
 /* الشاشات الصغيرة */
 @media screen and (max-width:768px){
@@ -63,6 +52,14 @@ button:hover{ background:#004d40; }
   </div>
 </div>
 
+<header>
+  <img src="https://github.com/SalalahSharqiyaSchool/grade-system/blob/main/logo.png?raw=true" alt="لوجو المدرسة">
+  <div>
+      <h1>صلالة الشرقية للتعليم الأساسي (5-9)</h1>
+      <h2>الفصل الدراسي الأول 2025-2026</h2>
+  </div>
+</header>
+
 <div class="container">
     <h3>أدخل الرقم المدني للطالب</h3>
     <input type="text" id="civil" placeholder="الرقم المدني">
@@ -77,43 +74,30 @@ const servicesBtn = document.getElementById("servicesBtn");
 const servicesMenu = document.getElementById("servicesMenu");
 
 mobileToggle.addEventListener("click", ()=> sidebar.classList.toggle("show"));
-servicesBtn.addEventListener("click", ()=> {
-    servicesMenu.style.display = servicesMenu.style.display==="flex"?"none":"flex";
+servicesBtn.addEventListener("click", ()=> servicesMenu.style.display = servicesMenu.style.display==="flex"?"none":"flex");
+
+// إخفاء الشريط عند الضغط على أي زر داخل القائمة المنسدلة
+document.querySelectorAll("#servicesMenu button").forEach(btn=> btn.addEventListener("click", ()=> sidebar.classList.remove("show")));
+
+const civilInput = document.getElementById("civil");
+function goToPage(page){
+    const civil = civilInput.value.trim();
+    if(!civil){ alert("الرجاء إدخال الرقم المدني"); return; }
+    window.location = `${page}.html?civil=${civil}`;
+}
+
+document.getElementById("gradesBtn").addEventListener("click", ()=> goToPage("grades"));
+document.getElementById("rankBtn").addEventListener("click", ()=> goToPage("rank"));
+
+civilInput.addEventListener("keyup", (event)=>{
+    if(event.key === "Enter"){ goToPage("grades"); }
 });
 
-// روابط القائمة
 document.getElementById("navHome").addEventListener("click", ()=> window.location="index.html");
-document.getElementById("navGrades").addEventListener("click", ()=> {
-    const civil = document.getElementById("civil").value.trim();
-    if(!civil){ alert("الرجاء إدخال الرقم المدني"); return; }
-    window.location=`grades.html?civil=${civil}`;
-});
-document.getElementById("navRank").addEventListener("click", ()=> {
-    const civil = document.getElementById("civil").value.trim();
-    if(!civil){ alert("الرجاء إدخال الرقم المدني"); return; }
-    window.location=`rank.html?civil=${civil}`;
-});
-
-// أزرار الصفحة الرئيسية
-document.getElementById("gradesBtn").addEventListener("click", ()=> {
-    const civil = document.getElementById("civil").value.trim();
-    if(!civil){ alert("الرجاء إدخال الرقم المدني"); return; }
-    window.location=`grades.html?civil=${civil}`;
-});
-document.getElementById("rankBtn").addEventListener("click", ()=> {
-    const civil = document.getElementById("civil").value.trim();
-    if(!civil){ alert("الرجاء إدخال الرقم المدني"); return; }
-    window.location=`rank.html?civil=${civil}`;
-});
-
-// إخفاء الشريط عند الضغط على أي زر رابط داخلي داخل الشريط
-document.querySelectorAll(".sidebar button").forEach(btn=>{
-    btn.addEventListener("click", ()=>{
-        if(btn.id.startsWith("nav")) sidebar.classList.remove("show");
-    });
-});
+document.getElementById("navGrades").addEventListener("click", ()=> goToPage("grades"));
+document.getElementById("navRank").addEventListener("click", ()=> goToPage("rank"));
 </script>
 
-<footer style="margin-top:20px;font-size:14px;color:#555;text-align:center;">© 2025 - جميع الحقوق محفوظة للأستاذ فيصل العريبي</footer>
+<footer style="margin-top:20px; font-size:14px; color:#555;">© 2025 - جميع الحقوق محفوظة للأستاذ فيصل العريبي</footer>
 </body>
 </html>
