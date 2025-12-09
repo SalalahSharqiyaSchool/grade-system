@@ -48,6 +48,7 @@ th{ background:#004d40; color:white; }
   #mobileToggle{ display:block; }
   .container{ margin:20px auto; }
 }
+
 button#printBtn{ margin-top:15px; background:#00796b; color:white; padding:10px 20px; border:none; border-radius:6px; cursor:pointer; }
 button#printBtn:hover{ background:#004d40; }
 </style>
@@ -78,10 +79,16 @@ const servicesBtn = document.getElementById("servicesBtn");
 const servicesMenu = document.getElementById("servicesMenu");
 
 mobileToggle.addEventListener("click", ()=> sidebar.classList.toggle("show"));
-servicesBtn.addEventListener("click", ()=> servicesMenu.style.display = servicesMenu.style.display==="flex"?"none":"flex");
+servicesBtn.addEventListener("click", ()=> {
+    servicesMenu.style.display = servicesMenu.style.display==="flex"?"none":"flex";
+});
 
-// إخفاء الشريط عند الضغط على أي زر
-document.querySelectorAll(".sidebar button").forEach(btn=> btn.addEventListener("click", ()=> sidebar.classList.remove("show")));
+// إخفاء الشريط عند الضغط على الروابط الداخلية فقط
+[document.getElementById("navHome"),
+ document.getElementById("navGrades"),
+ document.getElementById("navRank")].forEach(btn=>{
+    btn.addEventListener("click", ()=> sidebar.classList.remove("show"));
+});
 
 const urlParams = new URLSearchParams(window.location.search);
 const civil = urlParams.get("civil");
