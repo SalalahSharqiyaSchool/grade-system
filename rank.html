@@ -1,144 +1,132 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>ترتيب الطالب - صلالة الشرقية</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>عرض الترتيب</title>
+
 <style>
-body{ font-family:Arial; margin:0; padding:0; background:#f0f4f5; }
-.container{ margin:50px auto; padding:20px; max-width:700px; background:white; border-radius:12px; box-shadow:0 0 15px rgba(0,0,0,0.1); text-align:center; }
-table{ width:100%; border-collapse:collapse; direction:rtl; }
-th, td{ border:1px solid #00796b; padding:8px; text-align:center; }
-th{ background:#004d40; color:white; }
+/* زر القائمة للهاتف */
+.menu-btn {
+    font-size: 26px;
+    background: #2c3e50;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .menu-btn {
+        display: block;
+    }
+}
 
 /* الشريط الجانبي */
-.sidebar{ width:250px; background:linear-gradient(180deg,#00796b,#004d40); color:white; display:flex; flex-direction:column; position:fixed; right:0; top:0; bottom:0; box-shadow:-2px 0 5px rgba(0,0,0,0.2); transition:transform 0.3s; z-index:1000; }
-.sidebar button{ background:none; border:none; color:white; padding:15px; text-align:right; font-size:16px; cursor:pointer; display:flex; align-items:center; gap:10px; width:100%; transition: background 0.3s; }
-.sidebar button:hover{ background: linear-gradient(to right,#004d40,#00695c);}
-.sidebar button.active{ background:#00695c; font-weight:bold; }
-
-/* القائمة المنسدلة */
-#servicesMenu button{
-  padding-left:30px;
-  text-align:right;
-  font-size:15px;
+.sidebar {
+    width: 250px;
+    background: #2c3e50;
+    color: white;
+    height: 100vh;
+    position: fixed;
+    left: -250px;
+    top: 0;
+    padding-top: 20px;
+    transition: left 0.3s;
+    z-index: 1000;
 }
 
-/* زر القائمة دائمًا ظاهر على الهاتف */
-#mobileToggle{
-  position:fixed;
-  top:15px;
-  right:15px;
-  z-index:2000;
-  background:#00796b;
-  color:white;
-  border:none;
-  padding:10px 15px;
-  border-radius:6px;
-  font-size:18px;
-  cursor:pointer;
-  display:none;
+.sidebar.active { left: 0; }
+
+.sidebar .menu-item {
+    padding: 15px;
+    cursor: pointer;
 }
 
-/* الشاشات الصغيرة */
-@media screen and (max-width:768px){
-  .sidebar{ transform: translateX(100%); }
-  .sidebar.show{ transform: translateX(0); }
-  #mobileToggle{ display:block; }
-  .container{ margin:20px auto; }
+.dropdown-content {
+    display: none;
+    background: #34495e;
+}
+
+.dropdown-content a {
+    display: block;
+    padding: 12px 20px;
+}
+
+.dropdown.active + .dropdown-content {
+    display: block;
+}
+
+/* التعتيم */
+.overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.3);
+}
+.overlay.active { display: block; }
+
+/* محتوى الصفحة */
+.page-container {
+    padding: 20px;
+    padding-top: 60px;
 }
 </style>
 </head>
+
 <body>
 
-<button id="mobileToggle">☰</button>
+<button id="menuBtn" class="menu-btn">☰</button>
 
-<div class="sidebar" id="sidebar">
-  <button id="navHome"><i class="fas fa-home"></i> الصفحة الرئيسية</button>
-  <button id="servicesBtn"><i class="fas fa-school"></i> خدمات المدرسة <i class="fas fa-chevron-down" style="margin-left:auto;"></i></button>
-  <div id="servicesMenu" style="display:none; flex-direction:column; background:#00695c;">
-    <button id="navGrades"><i class="fas fa-graduation-cap"></i> عرض الدرجات</button>
-    <button id="navRank"><i class="fas fa-trophy"></i> عرض الترتيب</button>
-  </div>
+<!-- الشريط -->
+<div id="sidebar" class="sidebar">
+
+    <h3 class="menu-item">مدرستي</h3>
+
+    <a href="index.html" class="menu-item" onclick="closeSidebar()">الصفحة الرئيسية</a>
+
+    <div class="menu-item dropdown" id="servicesBtn">خدمات المدرسة ▾</div>
+
+    <div id="servicesMenu" class="dropdown-content">
+        <a href="grade.html" onclick="closeSidebar()">عرض الدرجات</a>
+        <a href="rank.html" onclick="closeSidebar()">عرض الترتيب</a>
+    </div>
+
 </div>
 
-<div class="container">
-  <div id="rankResult"></div>
+<div id="overlay" class="overlay"></div>
+
+<div class="page-container">
+    <h2>🏆 عرض الترتيب</h2>
+    <p>ضع هنا جدول الترتيب أو نتائج الفرز.</p>
 </div>
 
 <script>
 const sidebar = document.getElementById("sidebar");
-const mobileToggle = document.getElementById("mobileToggle");
+const overlay = document.getElementById("overlay");
+const menuBtn = document.getElementById("menuBtn");
+
 const servicesBtn = document.getElementById("servicesBtn");
-const servicesMenu = document.getElementById("servicesMenu");
 
-mobileToggle.addEventListener("click", ()=> sidebar.classList.toggle("show"));
-servicesBtn.addEventListener("click", ()=> servicesMenu.style.display = servicesMenu.style.display==="flex"?"none":"flex");
+menuBtn.addEventListener("click", () => {
+    sidebar.classList.add("active");
+    overlay.classList.add("active");
+});
 
-// إخفاء الشريط عند الضغط على أي زر داخل القائمة
-document.querySelectorAll(".sidebar button").forEach(btn=> btn.addEventListener("click", ()=> sidebar.classList.remove("show")));
+servicesBtn.addEventListener("click", () => {
+    servicesBtn.classList.toggle("active");
+});
 
-const urlParams = new URLSearchParams(window.location.search);
-const civil = urlParams.get("civil");
-
-document.getElementById("navHome").addEventListener("click", ()=> window.location="index.html");
-document.getElementById("navGrades").addEventListener("click", ()=> window.location=`grades.html?civil=${civil}`);
-document.getElementById("navRank").addEventListener("click", ()=> window.location=`rank.html?civil=${civil}`);
-
-if(!civil){
-    document.getElementById("rankResult").innerHTML = "الرجاء الدخول من صفحة عرض الدرجات أولاً";
-} else {
-    showRank(civil);
+function closeSidebar() {
+    sidebar.classList.remove("active");
+    overlay.classList.remove("active");
+    servicesBtn.classList.remove("active");
 }
 
-async function showRank(civil){
-    const files = ["grade5.json","grade6.json","grade7.json","grade8.json","grade9.json"];
-    let currentStudent = null;
-    let allData = null;
-
-    for(const f of files){
-        try{
-            const res = await fetch(f+"?time="+Date.now());
-            if(!res.ok) continue;
-            const data = await res.json();
-            const s = data.find(st => st["رقم_مدني"].toString().trim() === civil);
-            if(s){ currentStudent = s; allData = data; break; }
-        }catch{}
-    }
-
-    if(!currentStudent){ document.getElementById("rankResult").innerHTML="لم يتم العثور على الطالب"; return; }
-
-    const studentsTotals = allData.map(s=>{
-        let total=0, count=0;
-        for(const key in s){
-            if(!["رقم_مدني","الاسم","الصف","الشعبة"].includes(key)){
-                total += parseFloat(s[key]);
-                count++;
-            }
-        }
-        return { name:s["الاسم"], civil:s["رقم_مدني"], total, average: total/count };
-    });
-
-    studentsTotals.sort((a,b)=>b.total-a.total);
-
-    const top1 = studentsTotals[0];
-    const top2 = studentsTotals[1];
-    const top3 = studentsTotals[2];
-    const myRank = studentsTotals.findIndex(s=>s.civil==civil)+1;
-
-    document.getElementById("rankResult").innerHTML=`
-        <h3 style="margin-bottom:20px;">ترتيبك في الصف: <span style="color:blue;">${myRank}</span> من أصل ${studentsTotals.length} طالب</h3>
-        <table>
-            <tr><th>المركز</th><th>اسم الطالب</th><th>مجموع الدرجات</th></tr>
-            <tr><td>الأول</td><td>${top1.name}</td><td>${top1.total}</td></tr>
-            <tr><td>الثاني</td><td>${top2.name}</td><td>${top2.total}</td></tr>
-            <tr><td>الثالث</td><td>${top3.name}</td><td>${top3.total}</td></tr>
-        </table>
-    `;
-}
+overlay.addEventListener("click", closeSidebar);
 </script>
 
-<footer style="margin-top:20px;font-size:14px;color:#555;text-align:center;">© 2025 - جميع الحقوق محفوظة للأستاذ فيصل العريبي</footer>
 </body>
 </html>
