@@ -28,20 +28,13 @@ header img {
     height:auto;
     border-radius:10px;
 }
-header h1 {
-    margin:5px;
-    font-size:28px;
-    font-weight:bold;
+header h1, header h2 {
     width:100%;
     text-align:center;
-}
-header h2 {
     margin:5px;
-    font-size:18px;
-    font-weight:normal;
-    width:100%;
-    text-align:center;
 }
+header h1 { font-size:28px; font-weight:bold; }
+header h2 { font-size:18px; font-weight:normal; }
 
 .container {
     margin:50px auto;
@@ -119,6 +112,7 @@ header h2 {
   #mobileToggle{ display:block; }
   .container{ margin:20px auto; }
 }
+
 button{
   width:90%;
   max-width:350px;
@@ -172,13 +166,10 @@ const mobileToggle = document.getElementById("mobileToggle");
 const servicesBtn = document.getElementById("servicesBtn");
 const servicesMenu = document.getElementById("servicesMenu");
 
-// إظهار/إخفاء الشريط على الهاتف
 mobileToggle.addEventListener("click", ()=> sidebar.classList.toggle("show"));
-
-// إظهار/إخفاء القائمة المنسدلة
 servicesBtn.addEventListener("click", ()=> servicesMenu.style.display = servicesMenu.style.display==="flex"?"none":"flex");
 
-// إخفاء الشريط عند الضغط على أي زر داخل القائمة (بعد اختيار زر)
+// إخفاء الشريط عند الضغط على زر من القائمة
 document.querySelectorAll(".sidebar button").forEach(btn=>{
   btn.addEventListener("click", ()=> sidebar.classList.remove("show"));
 });
@@ -216,6 +207,5 @@ civilInput.addEventListener("keyup", (event)=>{
 </script>
 
 <footer style="margin-top:20px; font-size:14px; color:#555; text-align:center;">© 2025 - جميع الحقوق محفوظة للأستاذ فيصل العريبي</footer>
-
 </body>
 </html>
