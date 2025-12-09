@@ -1,146 +1,133 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>عرض الدرجات - صلالة الشرقية</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>عرض الدرجات</title>
+
 <style>
-body{ font-family:Arial; margin:0; padding:0; background:#f0f4f5; }
-.container{ margin:50px auto; padding:20px; max-width:700px; background:white; border-radius:12px; box-shadow:0 0 15px rgba(0,0,0,0.1); text-align:center; }
-table{ width:100%; border-collapse:collapse; direction:rtl; }
-th, td{ border:1px solid #00796b; padding:8px; text-align:center; }
-th{ background:#004d40; color:white; }
+/* زر القائمة للهاتف */
+.menu-btn {
+    font-size: 26px;
+    background: #2c3e50;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .menu-btn {
+        display: block;
+    }
+}
 
 /* الشريط الجانبي */
-.sidebar{ width:250px; background:linear-gradient(180deg,#00796b,#004d40); color:white; display:flex; flex-direction:column; position:fixed; right:0; top:0; bottom:0; box-shadow:-2px 0 5px rgba(0,0,0,0.2); transition:transform 0.3s; z-index:1000; }
-.sidebar button{ background:none; border:none; color:white; padding:15px; text-align:right; font-size:16px; cursor:pointer; display:flex; align-items:center; gap:10px; width:100%; transition: background 0.3s; }
-.sidebar button:hover{ background: linear-gradient(to right,#004d40,#00695c);}
-.sidebar button.active{ background:#00695c; font-weight:bold; }
-
-/* القائمة المنسدلة */
-#servicesMenu button{
-  padding-left:30px;
-  text-align:right;
-  font-size:15px;
+.sidebar {
+    width: 250px;
+    background: #2c3e50;
+    color: white;
+    height: 100vh;
+    position: fixed;
+    left: -250px;
+    top: 0;
+    padding-top: 20px;
+    transition: left 0.3s;
+    z-index: 1000;
 }
 
-/* زر القائمة دائمًا ظاهر على الهاتف */
-#mobileToggle{
-  position:fixed;
-  top:15px;
-  right:15px;
-  z-index:2000;
-  background:#00796b;
-  color:white;
-  border:none;
-  padding:10px 15px;
-  border-radius:6px;
-  font-size:18px;
-  cursor:pointer;
-  display:none;
+.sidebar.active { left: 0; }
+
+.sidebar .menu-item {
+    padding: 15px;
+    cursor: pointer;
 }
 
-/* الشاشات الصغيرة */
-@media screen and (max-width:768px){
-  .sidebar{ transform: translateX(100%); }
-  .sidebar.show{ transform: translateX(0); }
-  #mobileToggle{ display:block; }
-  .container{ margin:20px auto; }
+.dropdown-content {
+    display: none;
+    background: #34495e;
 }
-button#printBtn{ margin-top:15px; background:#00796b; color:white; padding:10px 20px; border:none; border-radius:6px; cursor:pointer; }
-button#printBtn:hover{ background:#004d40; }
+
+.dropdown-content a {
+    display: block;
+    padding: 12px 20px;
+}
+
+.dropdown.active + .dropdown-content {
+    display: block;
+}
+
+/* التعتيم */
+.overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.3);
+}
+.overlay.active { display: block; }
+
+/* محتوى الصفحة */
+.page-container {
+    padding: 20px;
+    padding-top: 60px;
+}
 </style>
 </head>
+
 <body>
 
-<button id="mobileToggle">☰</button>
+<button id="menuBtn" class="menu-btn">☰</button>
 
-<div class="sidebar" id="sidebar">
-  <button id="navHome"><i class="fas fa-home"></i> الصفحة الرئيسية</button>
-  <button id="servicesBtn"><i class="fas fa-school"></i> خدمات المدرسة <i class="fas fa-chevron-down" style="margin-left:auto;"></i></button>
-  <div id="servicesMenu" style="display:none; flex-direction:column; background:#00695c;">
-    <button id="navGrades"><i class="fas fa-graduation-cap"></i> عرض الدرجات</button>
-    <button id="navRank"><i class="fas fa-trophy"></i> عرض الترتيب</button>
-  </div>
+<!-- الشريط الجانبي -->
+<div id="sidebar" class="sidebar">
+
+    <h3 class="menu-item">مدرستي</h3>
+
+    <a href="index.html" class="menu-item" onclick="closeSidebar()">الصفحة الرئيسية</a>
+
+    <div class="menu-item dropdown" id="servicesBtn">خدمات المدرسة ▾</div>
+
+    <div id="servicesMenu" class="dropdown-content">
+        <a href="grade.html" onclick="closeSidebar()">عرض الدرجات</a>
+        <a href="rank.html" onclick="closeSidebar()">عرض الترتيب</a>
+    </div>
+
 </div>
 
-<div class="container">
-  <div id="studentInfo"></div>
-  <div id="gradesList"></div>
-  <button id="printBtn">طباعة كشف الدرجات</button>
+<div id="overlay" class="overlay"></div>
+
+<div class="page-container">
+    <h2>📘 عرض الدرجات</h2>
+    <p>ضع هنا جدول الدرجات أو كود جلب البيانات من Firebase.</p>
 </div>
 
 <script>
+// جافاسكربت الخاص بالشريط
 const sidebar = document.getElementById("sidebar");
-const mobileToggle = document.getElementById("mobileToggle");
+const overlay = document.getElementById("overlay");
+const menuBtn = document.getElementById("menuBtn");
+
 const servicesBtn = document.getElementById("servicesBtn");
-const servicesMenu = document.getElementById("servicesMenu");
 
-mobileToggle.addEventListener("click", ()=> sidebar.classList.toggle("show"));
-servicesBtn.addEventListener("click", ()=> servicesMenu.style.display = servicesMenu.style.display==="flex"?"none":"flex");
-
-// إخفاء الشريط عند الضغط على أي زر
-document.querySelectorAll(".sidebar button").forEach(btn=> btn.addEventListener("click", ()=> sidebar.classList.remove("show")));
-
-const urlParams = new URLSearchParams(window.location.search);
-const civil = urlParams.get("civil");
-
-document.getElementById("navHome").addEventListener("click", ()=> window.location="index.html");
-document.getElementById("navGrades").addEventListener("click", ()=> window.location=`grades.html?civil=${civil}`);
-document.getElementById("navRank").addEventListener("click", ()=> window.location=`rank.html?civil=${civil}`);
-
-function getFeedback(grade){
-  if(grade>=90) return "أداء ممتاز! حافظ على هذا المستوى.";
-  if(grade>=75) return "جيد جدًا، حاول التركيز على التفاصيل الصغيرة لتحسن أكثر.";
-  if(grade>=50) return "مقبول، من الأفضل مراجعة الدروس الأساسية.";
-  return "ضعيف، ينصح بعمل تمارين إضافية ومراجعة النقاط الأساسية.";
-}
-
-async function showGrades(civil){
-  const studentInfo = document.getElementById("studentInfo");
-  const gradesList = document.getElementById("gradesList");
-  const files = ["grade5.json","grade6.json","grade7.json","grade8.json","grade9.json"];
-  let student=null;
-  for(const f of files){
-    try{
-      const res = await fetch(f+"?time="+Date.now());
-      if(!res.ok) continue;
-      const data = await res.json();
-      const s = data.find(st=>st["رقم_مدني"].toString().trim()===civil);
-      if(s){ student=s; break; }
-    }catch{}
-  }
-  if(!student){ studentInfo.innerHTML="لم يتم العثور على الطالب"; gradesList.innerHTML=""; return; }
-  studentInfo.innerHTML=`الطالب: ${student["الاسم"]} --- الصف: ${student["الصف"]} - الشعبة: ${student["الشعبة"]}`;
-  let html="<table><tr><th>المادة</th><th>الدرجة</th><th>ملاحظة</th></tr>";
-  for(const key in student){
-    if(!["رقم_مدني","الاسم","الصف","الشعبة"].includes(key)){
-      const grade=parseFloat(student[key]);
-      let color = grade>=90 ? "#A8E6A3" : grade>=75 ? "#A3C9E6" : grade>=50 ? "#FFD9A3" : "#F7A8A8";
-      html+=`<tr style="background-color:${color}"><td>${key}</td><td>${grade}</td><td>${getFeedback(grade)}</td></tr>`;
-    }
-  }
-  html+="</table>";
-  gradesList.innerHTML=html;
-}
-
-if(civil) showGrades(civil);
-
-document.getElementById("printBtn").addEventListener("click", ()=>{
-    if(!civil){ alert("الرجاء عرض الدرجات أولاً"); return; }
-    const printWindow = window.open("", "", "width=800,height=700");
-    printWindow.document.write("<html><head><title>كشف الدرجات</title>");
-    printWindow.document.write("<style>body{text-align:center;font-family:Arial;}table{width:80%;margin:0 auto;border-collapse:collapse;direction:rtl;}th,td{border:1px solid #333;padding:8px;}th:first-child,td:first-child{text-align:right;}th:nth-child(2),td:nth-child(2){text-align:center;}th:last-child,td:last-child{text-align:left;}</style></head><body>");
-    printWindow.document.write(document.getElementById("studentInfo").outerHTML);
-    printWindow.document.write(document.getElementById("gradesList").outerHTML);
-    printWindow.document.write(`<p style="margin-top:20px;font-size:14px;color:#555;">© 2025 - جميع الحقوق محفوظة للأستاذ فيصل العريبي</p>`);
-    printWindow.document.write("</body></html>");
-    printWindow.document.close();
-    printWindow.print();
+menuBtn.addEventListener("click", () => {
+    sidebar.classList.add("active");
+    overlay.classList.add("active");
 });
+
+servicesBtn.addEventListener("click", () => {
+    servicesBtn.classList.toggle("active");
+});
+
+function closeSidebar() {
+    sidebar.classList.remove("active");
+    overlay.classList.remove("active");
+    servicesBtn.classList.remove("active");
+}
+
+overlay.addEventListener("click", closeSidebar);
 </script>
 
-<footer style="margin-top:20px;font-size:14px;color:#555;text-align:center;">© 2025 - جميع الحقوق محفوظة للأستاذ فيصل العريبي</footer>
 </body>
 </html>
