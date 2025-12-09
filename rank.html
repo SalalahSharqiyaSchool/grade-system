@@ -2,7 +2,7 @@
 <html lang="ar">
 <head>
 <meta charset="UTF-8">
-<title>عرض الترتيب - صلالة الشرقية</title>
+<title>ترتيب الطالب - صلالة الشرقية</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
@@ -11,17 +11,42 @@ body{ font-family:Arial; margin:0; padding:0; background:#f0f4f5; }
 table{ width:100%; border-collapse:collapse; direction:rtl; }
 th, td{ border:1px solid #00796b; padding:8px; text-align:center; }
 th{ background:#004d40; color:white; }
-.sidebar{ width:250px; background:linear-gradient(180deg,#00796b,#004d40); color:white; display:flex; flex-direction:column; position:fixed; right:0; top:0; bottom:0; box-shadow:-2px 0 5px rgba(0,0,0,0.2); transition:width 0.3s; z-index:1000; }
+.sidebar{ width:250px; background:linear-gradient(180deg,#00796b,#004d40); color:white; display:flex; flex-direction:column; position:fixed; right:0; top:0; bottom:0; box-shadow:-2px 0 5px rgba(0,0,0,0.2); transition:transform 0.3s; z-index:1000; }
 .sidebar button{ background:none; border:none; color:white; padding:15px; text-align:right; font-size:16px; cursor:pointer; display:flex; align-items:center; gap:10px; width:100%; transition: background 0.3s; }
 .sidebar button:hover{ background: linear-gradient(to right,#004d40,#00695c);}
 .sidebar button.active{ background:#00695c; font-weight:bold; }
-.sidebar .toggle-btn{ font-size:22px; text-align:center; padding:15px 0; cursor:pointer; border-bottom:1px solid rgba(255,255,255,0.2);}
+
+/* زر القائمة دائمًا ظاهر على الهاتف */
+#mobileToggle{
+  position:fixed;
+  top:15px;
+  right:15px;
+  z-index:2000;
+  background:#00796b;
+  color:white;
+  border:none;
+  padding:10px 15px;
+  border-radius:6px;
+  font-size:18px;
+  cursor:pointer;
+  display:none;
+}
+
+/* الشاشات الصغيرة */
+@media screen and (max-width:768px){
+  .sidebar{ transform: translateX(100%); }
+  .sidebar.show{ transform: translateX(0); }
+  #mobileToggle{ display:block; }
+  .container{ margin:20px auto; }
+}
 </style>
 </head>
 <body>
 
+<!-- زر القائمة على الهاتف -->
+<button id="mobileToggle">☰</button>
+
 <div class="sidebar" id="sidebar">
-  <div class="toggle-btn" id="toggleBtn"><i class="fas fa-bars"></i></div>
   <button id="navGrades"><i class="fas fa-graduation-cap"></i> <span>عرض الدرجات</span></button>
   <button id="navRank" class="active"><i class="fas fa-trophy"></i> <span>عرض الترتيب</span></button>
   <button id="navBack"><i class="fas fa-home"></i> <span>البوابة</span></button>
@@ -33,62 +58,78 @@ th{ background:#004d40; color:white; }
 
 <script>
 const sidebar = document.getElementById("sidebar");
-const toggleBtn = document.getElementById("toggleBtn");
-toggleBtn.addEventListener("click", ()=> sidebar.classList.toggle("collapsed"));
+const mobileToggle = document.getElementById("mobileToggle");
+
+mobileToggle.addEventListener("click", ()=>{
+    sidebar.classList.toggle("show");
+});
+
+// إخفاء الشريط عند الضغط على أي زر
+document.querySelectorAll(".sidebar button").forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+        sidebar.classList.remove("show");
+    });
+});
 
 const urlParams = new URLSearchParams(window.location.search);
 const civil = urlParams.get("civil");
 
-async function showRank(civil){
-  const rankResult = document.getElementById("rankResult");
-  const files = ["grade5.json","grade6.json","grade7.json","grade8.json","grade9.json"];
-  let student=null, fileName="";
-  for(const f of files){
-    try{
-      const res=await fetch(f+"?time="+Date.now());
-      if(!res.ok) continue;
-      const data=await res.json();
-      const s=data.find(st=>st["رقم_مدني"].toString().trim()===civil);
-      if(s){ student=s; fileName=f; break; }
-    }catch{}
-  }
-  if(!student){ rankResult.innerHTML="لم يتم العثور على الطالب"; return; }
-
-  try{
-    const res = await fetch(fileName+"?time="+Date.now());
-    const data = await res.json();
-    const studentsTotals = data.map(s=>{
-      let total=0,count=0;
-      for(const key in s){
-        if(!["رقم_مدني","الاسم","الصف","الشعبة"].includes(key)){
-          total+=parseFloat(s[key]); count++;
-        }
-      }
-      return {name:s["الاسم"], civil:s["رقم_مدني"], total, average: total/count};
-    });
-    studentsTotals.sort((a,b)=>b.total-a.total);
-    const top1=studentsTotals[0], top2=studentsTotals[1], top3=studentsTotals[2];
-    const myRank=studentsTotals.findIndex(s=>s.civil==civil)+1;
-
-    rankResult.innerHTML=`
-      <table>
-        <tr><th>المركز</th><th>اسم الطالب</th><th>مجموع الدرجات</th></tr>
-        <tr><td>الأول</td><td>${top1.name}</td><td>${top1.total}</td></tr>
-        <tr><td>الثاني</td><td>${top2.name}</td><td>${top2.total}</td></tr>
-        <tr><td>الثالث</td><td>${top3.name}</td><td>${top3.total}</td></tr>
-      </table>
-      <h3 style="margin-top:20px; text-align:center;">
-        ترتيبك في الصف: <span style="color:blue;">${myRank}</span> من أصل ${studentsTotals.length} طالب
-      </h3>
-    `;
-  }catch{ rankResult.innerHTML="حدث خطأ أثناء تحميل بيانات الصف"; }
+if(!civil){
+    document.getElementById("rankResult").innerHTML = "الرجاء الدخول من صفحة عرض الدرجات أولاً";
+} else {
+    showRank(civil);
 }
 
-if(civil) showRank(civil);
+async function showRank(civil){
+    const files = ["grade5.json","grade6.json","grade7.json","grade8.json","grade9.json"];
+    let currentStudent = null;
+    let allData = null;
 
-// أزرار القائمة الجانبية
+    for(const f of files){
+        try{
+            const res = await fetch(f+"?time="+Date.now());
+            if(!res.ok) continue;
+            const data = await res.json();
+            const s = data.find(st => st["رقم_مدني"].toString().trim() === civil);
+            if(s){ currentStudent = s; allData = data; break; }
+        }catch{}
+    }
+
+    if(!currentStudent){ document.getElementById("rankResult").innerHTML="لم يتم العثور على الطالب"; return; }
+
+    // حساب المجموع لكل طالب
+    const studentsTotals = allData.map(s=>{
+        let total=0, count=0;
+        for(const key in s){
+            if(!["رقم_مدني","الاسم","الصف","الشعبة"].includes(key)){
+                total += parseFloat(s[key]);
+                count++;
+            }
+        }
+        return { name:s["الاسم"], civil:s["رقم_مدني"], total, average: total/count };
+    });
+
+    studentsTotals.sort((a,b)=>b.total-a.total);
+
+    const top1 = studentsTotals[0];
+    const top2 = studentsTotals[1];
+    const top3 = studentsTotals[2];
+
+    const myRank = studentsTotals.findIndex(s=>s.civil==civil)+1;
+
+    document.getElementById("rankResult").innerHTML=`
+        <h3 style="margin-bottom:20px;">ترتيبك في الصف: <span style="color:blue;">${myRank}</span> من أصل ${studentsTotals.length} طالب</h3>
+        <table>
+            <tr><th>المركز</th><th>اسم الطالب</th><th>مجموع الدرجات</th></tr>
+            <tr><td>الأول</td><td>${top1.name}</td><td>${top1.total}</td></tr>
+            <tr><td>الثاني</td><td>${top2.name}</td><td>${top2.total}</td></tr>
+            <tr><td>الثالث</td><td>${top3.name}</td><td>${top3.total}</td></tr>
+        </table>
+    `;
+}
+
+// أزرار القائمة الجانبية للتنقل
 document.getElementById("navGrades").addEventListener("click", ()=> window.location=`grades.html?civil=${civil}`);
-document.getElementById("navRank").addEventListener("click", ()=> window.location=`rank.html?civil=${civil}`);
 document.getElementById("navBack").addEventListener("click", ()=> window.location="index.html");
 </script>
 
