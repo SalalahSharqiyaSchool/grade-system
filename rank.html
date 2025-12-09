@@ -11,10 +11,19 @@ body{ font-family:Arial; margin:0; padding:0; background:#f0f4f5; }
 table{ width:100%; border-collapse:collapse; direction:rtl; }
 th, td{ border:1px solid #00796b; padding:8px; text-align:center; }
 th{ background:#004d40; color:white; }
+
+/* الشريط الجانبي */
 .sidebar{ width:250px; background:linear-gradient(180deg,#00796b,#004d40); color:white; display:flex; flex-direction:column; position:fixed; right:0; top:0; bottom:0; box-shadow:-2px 0 5px rgba(0,0,0,0.2); transition:transform 0.3s; z-index:1000; }
 .sidebar button{ background:none; border:none; color:white; padding:15px; text-align:right; font-size:16px; cursor:pointer; display:flex; align-items:center; gap:10px; width:100%; transition: background 0.3s; }
 .sidebar button:hover{ background: linear-gradient(to right,#004d40,#00695c);}
 .sidebar button.active{ background:#00695c; font-weight:bold; }
+
+/* القائمة المنسدلة */
+#servicesMenu button{
+  padding-left:30px;
+  text-align:right;
+  font-size:15px;
+}
 
 /* زر القائمة دائمًا ظاهر على الهاتف */
 #mobileToggle{
@@ -43,13 +52,15 @@ th{ background:#004d40; color:white; }
 </head>
 <body>
 
-<!-- زر القائمة على الهاتف -->
 <button id="mobileToggle">☰</button>
 
 <div class="sidebar" id="sidebar">
-  <button id="navGrades"><i class="fas fa-graduation-cap"></i> <span>عرض الدرجات</span></button>
-  <button id="navRank" class="active"><i class="fas fa-trophy"></i> <span>عرض الترتيب</span></button>
-  <button id="navBack"><i class="fas fa-home"></i> <span>البوابة</span></button>
+  <button id="navHome"><i class="fas fa-home"></i> الصفحة الرئيسية</button>
+  <button id="servicesBtn"><i class="fas fa-school"></i> خدمات المدرسة <i class="fas fa-chevron-down" style="margin-left:auto;"></i></button>
+  <div id="servicesMenu" style="display:none; flex-direction:column; background:#00695c;">
+    <button id="navGrades"><i class="fas fa-graduation-cap"></i> عرض الدرجات</button>
+    <button id="navRank"><i class="fas fa-trophy"></i> عرض الترتيب</button>
+  </div>
 </div>
 
 <div class="container">
@@ -59,20 +70,21 @@ th{ background:#004d40; color:white; }
 <script>
 const sidebar = document.getElementById("sidebar");
 const mobileToggle = document.getElementById("mobileToggle");
+const servicesBtn = document.getElementById("servicesBtn");
+const servicesMenu = document.getElementById("servicesMenu");
 
-mobileToggle.addEventListener("click", ()=>{
-    sidebar.classList.toggle("show");
-});
+mobileToggle.addEventListener("click", ()=> sidebar.classList.toggle("show"));
+servicesBtn.addEventListener("click", ()=> servicesMenu.style.display = servicesMenu.style.display==="flex"?"none":"flex");
 
-// إخفاء الشريط عند الضغط على أي زر
-document.querySelectorAll(".sidebar button").forEach(btn=>{
-    btn.addEventListener("click", ()=>{
-        sidebar.classList.remove("show");
-    });
-});
+// إخفاء الشريط عند الضغط على أي زر داخل القائمة
+document.querySelectorAll(".sidebar button").forEach(btn=> btn.addEventListener("click", ()=> sidebar.classList.remove("show")));
 
 const urlParams = new URLSearchParams(window.location.search);
 const civil = urlParams.get("civil");
+
+document.getElementById("navHome").addEventListener("click", ()=> window.location="index.html");
+document.getElementById("navGrades").addEventListener("click", ()=> window.location=`grades.html?civil=${civil}`);
+document.getElementById("navRank").addEventListener("click", ()=> window.location=`rank.html?civil=${civil}`);
 
 if(!civil){
     document.getElementById("rankResult").innerHTML = "الرجاء الدخول من صفحة عرض الدرجات أولاً";
@@ -97,7 +109,6 @@ async function showRank(civil){
 
     if(!currentStudent){ document.getElementById("rankResult").innerHTML="لم يتم العثور على الطالب"; return; }
 
-    // حساب المجموع لكل طالب
     const studentsTotals = allData.map(s=>{
         let total=0, count=0;
         for(const key in s){
@@ -114,7 +125,6 @@ async function showRank(civil){
     const top1 = studentsTotals[0];
     const top2 = studentsTotals[1];
     const top3 = studentsTotals[2];
-
     const myRank = studentsTotals.findIndex(s=>s.civil==civil)+1;
 
     document.getElementById("rankResult").innerHTML=`
@@ -127,12 +137,8 @@ async function showRank(civil){
         </table>
     `;
 }
-
-// أزرار القائمة الجانبية للتنقل
-document.getElementById("navGrades").addEventListener("click", ()=> window.location=`grades.html?civil=${civil}`);
-document.getElementById("navBack").addEventListener("click", ()=> window.location="index.html");
 </script>
 
-<footer style="margin-top:20px; font-size:14px; color:#555; text-align:center;">© 2025 - جميع الحقوق محفوظة للأستاذ فيصل العريبي</footer>
+<footer style="margin-top:20px;font-size:14px;color:#555;text-align:center;">© 2025 - جميع الحقوق محفوظة للأستاذ فيصل العريبي</footer>
 </body>
 </html>
