@@ -22,4 +22,112 @@ th{ background:#004d40; color:white; }
 #servicesMenu button{ padding-left:30px; text-align:right; font-size:15px; }
 
 /* زر القائمة دائمًا ظاهر على الهاتف */
-#mobileToggle{ position:fixed; top:15px; right:15px; z-index:2000; background:#00796b; color:white; border:none; padding:10px 15px; border-radius:
+#mobileToggle{ position:fixed; top:15px; right:15px; z-index:2000; background:#00796b; color:white; border:none; padding:10px 15px; border-radius:6px; font-size:18px; cursor:pointer; display:none; }
+
+/* الشاشات الصغيرة */
+@media screen and (max-width:768px){
+  .sidebar{ transform: translateX(100%); }
+  .sidebar.show{ transform: translateX(0); }
+  #mobileToggle{ display:block; }
+  .container{ margin:20px auto; }
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+    <img src="logo.png" class="school-logo">
+    <div style="text-align:center;">
+        <h2 style="margin:0; color:#004d40;">صلالة الشرقية للتعليم الأساسي</h2>
+        <p style="margin:0; font-size:14px; color:#00796b;">الفصل الدراسي الأول 2025-2026</p>
+    </div>
+</header>
+
+<button id="mobileToggle">☰</button>
+
+<div class="sidebar" id="sidebar">
+  <button id="navHome"><i class="fas fa-home"></i> الصفحة الرئيسية</button>
+  <button id="servicesBtn"><i class="fas fa-school"></i> خدمات المدرسة <i class="fas fa-chevron-down" style="margin-left:auto;"></i></button>
+  <div id="servicesMenu" style="display:none; flex-direction:column; background:#00695c;">
+    <button id="navGrades"><i class="fas fa-graduation-cap"></i> عرض الدرجات</button>
+    <button id="navRank"><i class="fas fa-trophy"></i> عرض الترتيب</button>
+  </div>
+</div>
+
+<div class="container">
+  <div id="rankResult"></div>
+</div>
+
+<script>
+const sidebar = document.getElementById("sidebar");
+const mobileToggle = document.getElementById("mobileToggle");
+const servicesBtn = document.getElementById("servicesBtn");
+const servicesMenu = document.getElementById("servicesMenu");
+
+mobileToggle.addEventListener("click", ()=> sidebar.classList.toggle("show"));
+servicesBtn.addEventListener("click", ()=> servicesMenu.style.display = servicesMenu.style.display==="flex"?"none":"flex");
+document.querySelectorAll(".sidebar button").forEach(btn=> btn.addEventListener("click", ()=> sidebar.classList.remove("show")));
+
+const urlParams = new URLSearchParams(window.location.search);
+const civil = urlParams.get("civil");
+
+document.getElementById("navHome").addEventListener("click", ()=> window.location="index.html");
+document.getElementById("navGrades").addEventListener("click", ()=> window.location=`grades.html?civil=${civil}`);
+document.getElementById("navRank").addEventListener("click", ()=> window.location=`rank.html?civil=${civil}`);
+
+if(!civil){
+    document.getElementById("rankResult").innerHTML = "الرجاء الدخول من صفحة عرض الدرجات أولاً";
+} else {
+    showRank(civil);
+}
+
+async function showRank(civil){
+    const files = ["grade5.json","grade6.json","grade7.json","grade8.json","grade9.json"];
+    let currentStudent = null;
+    let allData = null;
+
+    for(const f of files){
+        try{
+            const res = await fetch(f+"?time="+Date.now());
+            if(!res.ok) continue;
+            const data = await res.json();
+            const s = data.find(st => st["رقم_مدني"].toString().trim() === civil);
+            if(s){ currentStudent = s; allData = data; break; }
+        }catch{}
+    }
+
+    if(!currentStudent){ document.getElementById("rankResult").innerHTML="لم يتم العثور على الطالب"; return; }
+
+    const studentsTotals = allData.map(s=>{
+        let total=0, count=0;
+        for(const key in s){
+            if(!["رقم_مدني","الاسم","الصف","الشعبة"].includes(key)){
+                total += parseFloat(s[key]);
+                count++;
+            }
+        }
+        return { name:s["الاسم"], civil:s["رقم_مدني"], total, average: total/count };
+    });
+
+    studentsTotals.sort((a,b)=>b.total-a.total);
+
+    const top1 = studentsTotals[0];
+    const top2 = studentsTotals[1];
+    const top3 = studentsTotals[2];
+    const myRank = studentsTotals.findIndex(s=>s.civil==civil)+1;
+
+    document.getElementById("rankResult").innerHTML=`
+        <h3 style="margin-bottom:20px;">ترتيبك في الصف: <span style="color:blue;">${myRank}</span> من أصل ${studentsTotals.length} طالب</h3>
+        <table>
+            <tr><th>المركز</th><th>اسم الطالب</th><th>مجموع الدرجات</th></tr>
+            <tr><td>الأول</td><td>${top1.name}</td><td>${top1.total}</td></tr>
+            <tr><td>الثاني</td><td>${top2.name}</td><td>${top2.total}</td></tr>
+            <tr><td>الثالث</td><td>${top3.name}</td><td>${top3.total}</td></tr>
+        </table>
+    `;
+}
+</script>
+
+<footer style="margin-top:20px;font-size:14px;color:#555;text-align:center;">© 2025 - جميع الحقوق محفوظة للأستاذ فيصل العريبي</footer>
+</body>
+</html>
