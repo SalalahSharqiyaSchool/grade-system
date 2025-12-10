@@ -7,55 +7,103 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
 body{ font-family:Arial; margin:0; padding:0; background:#f0f4f5; }
-.container{ margin:50px auto; padding:20px; max-width:700px; background:white; border-radius:12px; box-shadow:0 0 15px rgba(0,0,0,0.1); text-align:center; }
-table{ width:100%; border-collapse:collapse; direction:rtl; }
-th, td{ border:1px solid #00796b; padding:8px; text-align:center; }
-th{ background:#004d40; color:white; }
+
+/* الهيدر */
+.topbar{
+    position: fixed;
+    top:0;
+    right:0;
+    left:0;
+    height:70px;
+    background:white;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-bottom:2px solid #00796b;
+    z-index:1500;
+}
+.school-logo{ height:50px; }
+.menu-btn{
+    position:absolute;
+    right:15px;
+    background:#00796b;
+    color:white;
+    border:none;
+    padding:10px 15px;
+    border-radius:6px;
+    font-size:20px;
+    cursor:pointer;
+    z-index:2000;
+}
 
 /* الشريط الجانبي */
-.sidebar{ width:250px; background:linear-gradient(180deg,#00796b,#004d40); color:white; display:flex; flex-direction:column; position:fixed; right:0; top:0; bottom:0; box-shadow:-2px 0 5px rgba(0,0,0,0.2); transition:transform 0.3s; z-index:1000; }
-.sidebar button{ background:none; border:none; color:white; padding:15px; text-align:right; font-size:16px; cursor:pointer; display:flex; align-items:center; gap:10px; width:100%; transition: background 0.3s; }
-.sidebar button:hover{ background: linear-gradient(to right,#004d40,#00695c);}
+.sidebar{
+  width:250px;
+  background:linear-gradient(180deg,#00796b,#004d40);
+  color:white;
+  display:flex;
+  flex-direction:column;
+  position:fixed;
+  right:0;
+  top:0;
+  bottom:0;
+  box-shadow:-2px 0 5px rgba(0,0,0,0.2);
+  transition:transform 0.3s;
+  z-index:1000;
+}
+.sidebar button{
+  background:none;
+  border:none;
+  color:white;
+  padding:15px;
+  text-align:right;
+  font-size:16px;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  width:100%;
+}
+.sidebar button:hover{ background:#00695c; }
 .sidebar button.active{ background:#00695c; font-weight:bold; }
 
-/* القائمة المنسدلة */
 #servicesMenu button{
   padding-left:30px;
   text-align:right;
-  font-size:15px;
 }
 
-/* زر القائمة دائمًا ظاهر على الهاتف */
-#mobileToggle{
-  position:fixed;
-  top:15px;
-  right:15px;
-  z-index:2000;
-  background:#00796b;
-  color:white;
-  border:none;
-  padding:10px 15px;
-  border-radius:6px;
-  font-size:18px;
-  cursor:pointer;
-  display:none;
+/* container */
+.container{
+  margin:120px auto;
+  padding:20px;
+  max-width:700px;
+  background:white;
+  border-radius:12px;
+  box-shadow:0 0 15px rgba(0,0,0,0.1);
+  text-align:center;
 }
-
-/* الشاشات الصغيرة */
-@media screen and (max-width:768px){
-  .sidebar{ transform: translateX(100%); }
-  .sidebar.show{ transform: translateX(0); }
-  #mobileToggle{ display:block; }
-  .container{ margin:20px auto; }
-}
-
+table{ width:100%; border-collapse:collapse; direction:rtl; }
+th, td{ border:1px solid #00796b; padding:8px; text-align:center; }
+th{ background:#004d40; color:white; }
 button#printBtn{ margin-top:15px; background:#00796b; color:white; padding:10px 20px; border:none; border-radius:6px; cursor:pointer; }
 button#printBtn:hover{ background:#004d40; }
+
+/* الهاتف */
+@media screen and (max-width:768px){
+  .sidebar{ transform:translateX(100%); }
+  .sidebar.show{ transform:translateX(0); }
+  .menu-btn{ display:block; }
+  .container{ margin:100px 10px; }
+}
+@media(min-width:769px){ .menu-btn{ display:none; } }
 </style>
 </head>
 <body>
 
-<button id="mobileToggle">☰</button>
+<header class="topbar">
+    <img src="logo.png" class="school-logo">
+    <button id="mobileToggle" class="menu-btn">☰</button>
+</header>
 
 <div class="sidebar" id="sidebar">
   <button id="navHome"><i class="fas fa-home"></i> الصفحة الرئيسية</button>
@@ -80,8 +128,6 @@ const servicesMenu = document.getElementById("servicesMenu");
 
 mobileToggle.addEventListener("click", ()=> sidebar.classList.toggle("show"));
 servicesBtn.addEventListener("click", ()=> servicesMenu.style.display = servicesMenu.style.display==="flex"?"none":"flex");
-
-// إخفاء الشريط عند الضغط على أي زر من القائمة
 document.querySelectorAll(".sidebar button").forEach(btn=> btn.addEventListener("click", ()=> sidebar.classList.remove("show")));
 
 const urlParams = new URLSearchParams(window.location.search);
@@ -142,6 +188,8 @@ document.getElementById("printBtn").addEventListener("click", ()=>{
 });
 </script>
 
-<footer style="margin-top:20px;font-size:14px;color:#555;text-align:center;">© 2025 - جميع الحقوق محفوظة للأستاذ فيصل العريبي</footer>
+<footer style="margin-top:20px;font-size:14px;color:#555;text-align:center;">
+© 2025 - جميع الحقوق محفوظة للأستاذ فيصل العريبي
+</footer>
 </body>
 </html>
