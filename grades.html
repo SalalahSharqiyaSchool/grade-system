@@ -89,15 +89,17 @@ const servicesBtn = document.getElementById("servicesBtn");
 const servicesMenu = document.getElementById("servicesMenu");
 
 mobileToggle.addEventListener("click", ()=> sidebar.classList.toggle("show"));
-servicesBtn.addEventListener("click", ()=> servicesMenu.style.display = servicesMenu.style.display==="flex"?"none":"flex");
-document.querySelectorAll(".sidebar button").forEach(btn=> btn.addEventListener("click", ()=> sidebar.classList.remove("show")));
+servicesBtn.addEventListener("click", ()=> {
+    servicesMenu.style.display = servicesMenu.style.display==="flex"?"none":"flex";
+});
 
+// الروابط الفعلية تُخفي الشريط عند الضغط عليها
 const urlParams = new URLSearchParams(window.location.search);
 const civil = urlParams.get("civil");
 
-document.getElementById("navHome").addEventListener("click", ()=> window.location="index.html");
-document.getElementById("navGrades").addEventListener("click", ()=> window.location=`grades.html?civil=${civil}`);
-document.getElementById("navRank").addEventListener("click", ()=> window.location=`rank.html?civil=${civil}`);
+document.getElementById("navHome").addEventListener("click", ()=> { sidebar.classList.remove("show"); window.location="index.html"; });
+document.getElementById("navGrades").addEventListener("click", ()=> { sidebar.classList.remove("show"); window.location=`grades.html?civil=${civil}`; });
+document.getElementById("navRank").addEventListener("click", ()=> { sidebar.classList.remove("show"); window.location=`rank.html?civil=${civil}`; });
 
 function getFeedback(grade){
   if(grade>=90) return "أداء ممتاز! حافظ على هذا المستوى.";
