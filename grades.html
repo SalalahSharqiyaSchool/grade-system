@@ -140,16 +140,44 @@ if(civil) showGrades(civil);
 
 document.getElementById("printBtn").addEventListener("click", ()=>{
     if(!civil){ alert("الرجاء عرض الدرجات أولاً"); return; }
-    const printWindow = window.open("", "", "width=800,height=700");
-    printWindow.document.write("<html><head><title>كشف الدرجات</title>");
-    printWindow.document.write("<style>body{text-align:center;font-family:Arial;}table{width:80%;margin:0 auto;border-collapse:collapse;direction:rtl;}th,td{border:1px solid #333;padding:8px;}</style></head><body>");
-    printWindow.document.write(document.getElementById("studentInfo").outerHTML);
-    printWindow.document.write(document.getElementById("gradesList").outerHTML);
-    printWindow.document.write(`<p style="margin-top:20px;font-size:14px;color:#555;">© 2025 - جميع الحقوق محفوظة للأستاذ فيصل العريبي</p>`);
-    printWindow.document.write("</body></html>");
+
+    const studentInfoHTML = document.getElementById("studentInfo").outerHTML;
+    const gradesListHTML = document.getElementById("gradesList").outerHTML;
+
+    const printWindow = window.open("", "", "width=800,height=900");
+
+    printWindow.document.write(`
+        <html>
+        <head>
+            <title>كشف الدرجات</title>
+            <style>
+                body{ font-family:Arial; text-align:center; margin:20px; }
+                header{ display:flex; align-items:center; justify-content:center; flex-direction:column; margin-bottom:20px; }
+                header img{ height:50px; margin-bottom:10px; }
+                table{ width:80%; margin:0 auto; border-collapse:collapse; direction:rtl; }
+                th, td{ border:1px solid #333; padding:8px; text-align:center; }
+                th{ background:#004d40; color:white; }
+                h3{ margin-bottom:10px; }
+                p.footer{ margin-top:20px; font-size:14px; color:#555; }
+            </style>
+        </head>
+        <body>
+            <header>
+                <img src="logo.png" alt="شعار المدرسة">
+                <h2>صلالة الشرقية للتعليم الأساسي</h2>
+                <p>الفصل الدراسي الأول 2025-2026</p>
+            </header>
+            ${studentInfoHTML}
+            ${gradesListHTML}
+            <p class="footer">© 2025 - جميع الحقوق محفوظة للأستاذ فيصل العريبي</p>
+        </body>
+        </html>
+    `);
+
     printWindow.document.close();
     printWindow.print();
 });
+
 </script>
 
 <footer style="margin-top:20px;font-size:14px;color:#555;text-align:center;">© 2025 - جميع الحقوق محفوظة للأستاذ فيصل العريبي</footer>
