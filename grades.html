@@ -19,34 +19,41 @@ body{ font-family:Arial; margin:0; padding:0; background:#f0f4f5; }
 .topbar h2{margin:0; color:#004d40; font-size:18px;}
 .topbar p{margin:0; font-size:14px; color:#00796b;}
 
-/* الحاوية */
-.container{ margin:100px auto 50px; padding:20px; max-width:700px; background:white; border-radius:12px; box-shadow:0 0 15px rgba(0,0,0,0.1); text-align:center; }
+/* زر القائمة */
+#mobileToggle{
+  position:fixed; top:80px; right:15px; z-index:2000;
+  background:#00796b; color:white; border:none; padding:10px 15px;
+  border-radius:6px; font-size:18px; cursor:pointer; display:none;
+}
 
-/* الجدول */
+/* الشريط الجانبي */
+.sidebar{
+  width:250px; background:linear-gradient(180deg,#00796b,#004d40); color:white;
+  display:flex; flex-direction:column; position:fixed; right:0; top:70px; bottom:0;
+  box-shadow:-2px 0 5px rgba(0,0,0,0.2); transition:transform 0.3s; z-index:1002;
+}
+.sidebar button{ background:none; border:none; color:white; padding:15px;
+  text-align:right; font-size:16px; cursor:pointer; display:flex; align-items:center; gap:10px; width:100%; transition: background 0.3s; }
+.sidebar button:hover{ background: linear-gradient(to right,#004d40,#00695c);}
+#servicesMenu button{ padding-left:30px; text-align:right; font-size:15px; }
+
+/* الحاوية */
+.container{ margin:120px auto 50px; padding:20px; max-width:700px; background:white; border-radius:12px; box-shadow:0 0 15px rgba(0,0,0,0.1); text-align:center; }
+
 table{ width:100%; border-collapse:collapse; direction:rtl; }
 th, td{ border:1px solid #00796b; padding:8px; text-align:center; }
 th{ background:#004d40; color:white; }
 
-/* الشريط الجانبي */
-.sidebar{ width:250px; background:linear-gradient(180deg,#00796b,#004d40); color:white; display:flex; flex-direction:column; position:fixed; right:0; top:0; bottom:0; box-shadow:-2px 0 5px rgba(0,0,0,0.2); transition:transform 0.3s; z-index:1002; }
-.sidebar button{ background:none; border:none; color:white; padding:15px; text-align:right; font-size:16px; cursor:pointer; display:flex; align-items:center; gap:10px; width:100%; transition: background 0.3s; }
-.sidebar button:hover{ background: linear-gradient(to right,#004d40,#00695c);}
-.sidebar button.active{ background:#00695c; font-weight:bold; }
-#servicesMenu button{ padding-left:30px; text-align:right; font-size:15px; }
-
-/* زر القائمة للهاتف */
-#mobileToggle{ position:fixed; top:15px; right:15px; z-index:2000; background:#00796b; color:white; border:none; padding:10px 15px; border-radius:6px; font-size:18px; cursor:pointer; display:none; }
+button#printBtn{ margin-top:15px; background:#00796b; color:white; padding:10px 20px; border:none; border-radius:6px; cursor:pointer; }
+button#printBtn:hover{ background:#004d40; }
 
 /* الشاشات الصغيرة */
 @media screen and (max-width:768px){
   .sidebar{ transform: translateX(100%); }
   .sidebar.show{ transform: translateX(0); }
   #mobileToggle{ display:block; }
-  .container{ margin:120px 20px 50px; }
+  .container{ margin:150px 20px 50px; }
 }
-
-button#printBtn{ margin-top:15px; background:#00796b; color:white; padding:10px 20px; border:none; border-radius:6px; cursor:pointer; }
-button#printBtn:hover{ background:#004d40; }
 </style>
 </head>
 <body>
@@ -81,12 +88,14 @@ const sidebar = document.getElementById("sidebar");
 const mobileToggle = document.getElementById("mobileToggle");
 const servicesBtn = document.getElementById("servicesBtn");
 const servicesMenu = document.getElementById("servicesMenu");
+
 mobileToggle.addEventListener("click", ()=> sidebar.classList.toggle("show"));
 servicesBtn.addEventListener("click", ()=> servicesMenu.style.display = servicesMenu.style.display==="flex"?"none":"flex");
 document.querySelectorAll(".sidebar button").forEach(btn=> btn.addEventListener("click", ()=> sidebar.classList.remove("show")));
 
 const urlParams = new URLSearchParams(window.location.search);
 const civil = urlParams.get("civil");
+
 document.getElementById("navHome").addEventListener("click", ()=> window.location="index.html");
 document.getElementById("navGrades").addEventListener("click", ()=> window.location=`grades.html?civil=${civil}`);
 document.getElementById("navRank").addEventListener("click", ()=> window.location=`rank.html?civil=${civil}`);
@@ -132,7 +141,7 @@ document.getElementById("printBtn").addEventListener("click", ()=>{
     if(!civil){ alert("الرجاء عرض الدرجات أولاً"); return; }
     const printWindow = window.open("", "", "width=800,height=700");
     printWindow.document.write("<html><head><title>كشف الدرجات</title>");
-    printWindow.document.write("<style>body{text-align:center;font-family:Arial;}table{width:80%;margin:0 auto;border-collapse:collapse;direction:rtl;}th,td{border:1px solid #333;padding:8px;}th:first-child,td:first-child{text-align:right;}th:nth-child(2),td:nth-child(2){text-align:center;}th:last-child,td:last-child{text-align:left;}</style></head><body>");
+    printWindow.document.write("<style>body{text-align:center;font-family:Arial;}table{width:80%;margin:0 auto;border-collapse:collapse;direction:rtl;}th,td{border:1px solid #333;padding:8px;}</style></head><body>");
     printWindow.document.write(document.getElementById("studentInfo").outerHTML);
     printWindow.document.write(document.getElementById("gradesList").outerHTML);
     printWindow.document.write(`<p style="margin-top:20px;font-size:14px;color:#555;">© 2025 - جميع الحقوق محفوظة للأستاذ فيصل العريبي</p>`);
