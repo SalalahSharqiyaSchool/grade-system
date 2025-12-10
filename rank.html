@@ -12,6 +12,7 @@ body{ font-family:Arial; margin:0; padding:0; background:#f0f4f5; }
 header{
   display:flex; align-items:center; justify-content:center; padding:10px 20px;
   background:#e0f2f1; box-shadow:0 2px 5px rgba(0,0,0,0.1);
+  position:static; /* الغاء fixed */
 }
 header img{ height:50px; margin-left:10px; }
 header div{text-align:center;}
@@ -28,7 +29,7 @@ header p{margin:0; font-size:14px; color:#00796b;}
 /* الشريط الجانبي */
 .sidebar{
   width:250px; background:linear-gradient(180deg,#00796b,#004d40); color:white;
-  display:flex; flex-direction:column; position:fixed; right:0; top:70px; bottom:0;
+  display:flex; flex-direction:column; position:fixed; right:0; top:0; bottom:0;
   box-shadow:-2px 0 5px rgba(0,0,0,0.2); transition:transform 0.3s; z-index:1002;
 }
 .sidebar button{ background:none; border:none; color:white; padding:15px;
@@ -37,7 +38,15 @@ header p{margin:0; font-size:14px; color:#00796b;}
 #servicesMenu button{ padding-left:30px; text-align:right; font-size:15px; }
 
 /* الحاوية */
-.container{ margin:90px auto 50px; padding:20px; max-width:700px; background:white; border-radius:12px; box-shadow:0 0 15px rgba(0,0,0,0.1); text-align:center; }
+.container{
+  margin:20px auto; /* فراغ صغير فقط */
+  padding:20px;
+  max-width:700px;
+  background:white;
+  border-radius:12px;
+  box-shadow:0 0 15px rgba(0,0,0,0.1);
+  text-align:center;
+}
 
 table{ width:100%; border-collapse:collapse; direction:rtl; }
 th, td{ border:1px solid #00796b; padding:8px; text-align:center; }
@@ -45,10 +54,10 @@ th{ background:#004d40; color:white; }
 
 /* الشاشات الصغيرة */
 @media screen and (max-width:768px){
+  .container{ margin:20px 20px 50px; }
+  #mobileToggle{ display:block; }
   .sidebar{ transform: translateX(100%); }
   .sidebar.show{ transform: translateX(0); }
-  #mobileToggle{ display:block; }
-  .container{ margin:100px 20px 50px; }
 }
 </style>
 </head>
@@ -91,7 +100,6 @@ servicesBtn.addEventListener("click", ()=> {
 const urlParams = new URLSearchParams(window.location.search);
 const civil = urlParams.get("civil");
 
-// اختفاء الشريط فقط عند الضغط على روابط حقيقية
 document.getElementById("navHome").addEventListener("click", ()=> { sidebar.classList.remove("show"); window.location="index.html"; });
 document.getElementById("navGrades").addEventListener("click", ()=> { sidebar.classList.remove("show"); window.location=`grades.html?civil=${civil}`; });
 document.getElementById("navRank").addEventListener("click", ()=> { sidebar.classList.remove("show"); window.location=`rank.html?civil=${civil}`; });
