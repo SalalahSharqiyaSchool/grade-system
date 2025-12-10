@@ -9,17 +9,17 @@
 body{ font-family:Arial; margin:0; padding:0; background:#f0f4f5; }
 
 /* هيدر */
-.topbar{
+header{
   display:flex; align-items:center; justify-content:center; padding:10px 20px;
   background:#e0f2f1; box-shadow:0 2px 5px rgba(0,0,0,0.1);
   position:fixed; top:0; left:0; right:0; height:70px; z-index:1001;
 }
-.school-logo{ height:50px; margin-left:10px; }
-.topbar div{text-align:center;}
-.topbar h2{margin:0; color:#004d40; font-size:18px;}
-.topbar p{margin:0; font-size:14px; color:#00796b;}
+header img{ height:50px; margin-left:10px; }
+header div{text-align:center;}
+header h2{margin:0; color:#004d40; font-size:18px;}
+header p{margin:0; font-size:14px; color:#00796b;}
 
-/* زر القائمة */
+/* زر القائمة للهواتف */
 #mobileToggle{
   position:fixed; top:80px; right:15px; z-index:2000;
   background:#00796b; color:white; border:none; padding:10px 15px;
@@ -55,8 +55,8 @@ button:hover{ background:#004d40; }
 </head>
 <body>
 
-<header class="topbar">
-    <img src="logo.png" class="school-logo">
+<header>
+    <img src="logo.png" alt="شعار المدرسة">
     <div>
         <h2>صلالة الشرقية للتعليم الأساسي</h2>
         <p>الفصل الدراسي الأول 2025-2026</p>
