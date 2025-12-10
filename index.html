@@ -7,11 +7,8 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
 body{ font-family:Arial; margin:0; padding:0; background:#f0f4f5; text-align:center; }
-header.topbar{ display:flex; align-items:center; justify-content:space-between; padding:10px 20px; background:#e0f2f1; box-shadow:0 2px 5px rgba(0,0,0,0.1); position:relative; z-index:1500; }
-header.topbar .school-logo{ height:50px; }
-header.topbar h2{ margin:0; color:#004d40; font-size:20px; }
-header.topbar p{ margin:0; font-size:14px; color:#00796b; }
-
+.topbar{ display:flex; align-items:center; justify-content:center; padding:10px 20px; background:#e0f2f1; box-shadow:0 2px 5px rgba(0,0,0,0.1); position:relative; z-index:1500; }
+.school-logo{ height:50px; margin-left:10px; }
 .container{ margin:50px auto; padding:20px; max-width:400px; background:white; border-radius:12px; box-shadow:0 0 15px rgba(0,0,0,0.1); }
 input, button{ width:90%; max-width:350px; padding:12px; margin:10px 0; font-size:16px; border-radius:6px; border:1px solid #ccc; }
 button{ background:#00796b; color:white; border:none; cursor:pointer; }
@@ -27,20 +24,7 @@ button:hover{ background:#004d40; }
 #servicesMenu button{ padding-left:30px; text-align:right; font-size:15px; }
 
 /* زر القائمة دائمًا ظاهر على الهاتف */
-#mobileToggle{
-  position:fixed;
-  top:15px;
-  right:15px;
-  z-index:2000;
-  background:#00796b;
-  color:white;
-  border:none;
-  padding:10px 15px;
-  border-radius:6px;
-  font-size:18px;
-  cursor:pointer;
-  display:none;
-}
+#mobileToggle{ position:fixed; top:15px; right:15px; z-index:2000; background:#00796b; color:white; border:none; padding:10px 15px; border-radius:6px; font-size:18px; cursor:pointer; display:none; }
 
 /* الشاشات الصغيرة */
 @media screen and (max-width:768px){
@@ -55,12 +39,13 @@ button:hover{ background:#004d40; }
 
 <header class="topbar">
     <img src="logo.png" class="school-logo">
-    <div style="text-align:right; flex:1; margin-left:15px;">
-        <h2>صلالة الشرقية للتعليم الأساسي</h2>
-        <p>الفصل الدراسي الأول 2025-2026</p>
+    <div style="text-align:center;">
+        <h2 style="margin:0; color:#004d40;">صلالة الشرقية للتعليم الأساسي</h2>
+        <p style="margin:0; font-size:14px; color:#00796b;">الفصل الدراسي الأول 2025-2026</p>
     </div>
-    <button id="mobileToggle">☰</button>
 </header>
+
+<button id="mobileToggle">☰</button>
 
 <div class="sidebar" id="sidebar">
   <button id="navHome"><i class="fas fa-home"></i> الصفحة الرئيسية</button>
@@ -89,7 +74,6 @@ servicesBtn.addEventListener("click", ()=> {
     servicesMenu.style.display = servicesMenu.style.display==="flex"?"none":"flex";
 });
 
-// روابط القائمة
 document.getElementById("navHome").addEventListener("click", ()=> window.location="index.html");
 document.getElementById("navGrades").addEventListener("click", ()=> {
     const civil = document.getElementById("civil").value.trim();
@@ -102,7 +86,6 @@ document.getElementById("navRank").addEventListener("click", ()=> {
     window.location=`rank.html?civil=${civil}`;
 });
 
-// أزرار الصفحة الرئيسية
 document.getElementById("gradesBtn").addEventListener("click", ()=> {
     const civil = document.getElementById("civil").value.trim();
     if(!civil){ alert("الرجاء إدخال الرقم المدني"); return; }
@@ -114,7 +97,6 @@ document.getElementById("rankBtn").addEventListener("click", ()=> {
     window.location=`rank.html?civil=${civil}`;
 });
 
-// إخفاء الشريط عند الضغط على أي زر رابط داخلي داخل الشريط
 document.querySelectorAll(".sidebar button").forEach(btn=>{
     btn.addEventListener("click", ()=>{
         if(btn.id.startsWith("nav")) sidebar.classList.remove("show");
