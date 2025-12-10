@@ -90,6 +90,9 @@ const servicesMenu = document.getElementById("servicesMenu");
 mobileToggle.addEventListener("click", ()=> sidebar.classList.toggle("show"));
 servicesBtn.addEventListener("click", ()=> servicesMenu.style.display = servicesMenu.style.display==="flex"?"none":"flex");
 
+document.querySelectorAll(".sidebar button").forEach(btn=> btn.addEventListener("click", ()=> sidebar.classList.remove("show")));
+
+// روابط القائمة
 document.getElementById("navHome").addEventListener("click", ()=> window.location="index.html");
 document.getElementById("navGrades").addEventListener("click", ()=> {
     const civil = document.getElementById("civil").value.trim();
@@ -102,6 +105,7 @@ document.getElementById("navRank").addEventListener("click", ()=> {
     window.location=`rank.html?civil=${civil}`;
 });
 
+// أزرار الصفحة الرئيسية
 document.getElementById("gradesBtn").addEventListener("click", ()=> {
     const civil = document.getElementById("civil").value.trim();
     if(!civil){ alert("الرجاء إدخال الرقم المدني"); return; }
@@ -111,12 +115,6 @@ document.getElementById("rankBtn").addEventListener("click", ()=> {
     const civil = document.getElementById("civil").value.trim();
     if(!civil){ alert("الرجاء إدخال الرقم المدني"); return; }
     window.location=`rank.html?civil=${civil}`;
-});
-
-document.querySelectorAll(".sidebar button").forEach(btn=>{
-    btn.addEventListener("click", ()=>{
-        if(btn.id.startsWith("nav")) sidebar.classList.remove("show");
-    });
 });
 </script>
 
