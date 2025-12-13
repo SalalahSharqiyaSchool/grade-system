@@ -124,12 +124,20 @@ async function showGrades(civil){
 
 if(civil) showGrades(civil);
 
+// تعديل الطباعة لتصغير الشعار
 document.getElementById("printBtn").addEventListener("click", ()=>{
     if(!civil){ alert("الرجاء عرض الدرجات أولاً"); return; }
     const printWindow = window.open("", "", "width=800,height=700");
     printWindow.document.write("<html><head><title>كشف الدرجات</title>");
-    printWindow.document.write("<style>body{text-align:center;font-family:Arial;}table{width:80%;margin:0 auto;border-collapse:collapse;direction:rtl;}th,td{border:1px solid #333;padding:8px;}</style></head><body>");
-    printWindow.document.write(document.querySelector(".topbar").outerHTML); // شعار + عنوان
+    printWindow.document.write(`
+        <style>
+        body{text-align:center;font-family:Arial;}
+        table{width:80%;margin:0 auto;border-collapse:collapse;direction:rtl;}
+        th,td{border:1px solid #333;padding:8px;}
+        .topbar img{height:50px;} /* تصغير الشعار فقط عند الطباعة */
+        </style>
+    </head><body>`);
+    printWindow.document.write(document.querySelector(".topbar").outerHTML);
     printWindow.document.write(document.getElementById("studentInfo").outerHTML);
     printWindow.document.write(document.getElementById("gradesList").outerHTML);
     printWindow.document.write("<p style='margin-top:20px;font-size:14px;color:#555;'>© 2025 - جميع الحقوق محفوظة للأستاذ فيصل العريبي</p>");
