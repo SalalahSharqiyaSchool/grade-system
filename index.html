@@ -56,19 +56,18 @@ button:hover{ background:#004d40; }
 <script>
 const loginBtn = document.getElementById("loginBtn");
 
+// **الكود الأصلي كما هو** لتسجيل الدخول أو إنشاء حساب لأول مرة
 loginBtn.addEventListener("click", ()=>{
     const phone = document.getElementById("phone").value.trim();
     const password = document.getElementById("password").value.trim();
     if(!phone || !password){ alert("الرجاء إدخال جميع البيانات"); return; }
 
-    // تسجيل الدخول أو إنشاء حساب جديد إذا لم يكن موجود
     firebase.auth().signInWithEmailAndPassword(phone+"@salalah.com", password)
     .then(userCredential=>{
         window.location="home.html";
     })
     .catch(error=>{
         if(error.code === "auth/user-not-found"){
-            // إنشاء حساب جديد
             firebase.auth().createUserWithEmailAndPassword(phone+"@salalah.com", password)
             .then(userCredential=>{
                 window.location="home.html";
