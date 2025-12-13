@@ -4,29 +4,18 @@
 <meta charset="UTF-8">
 <title>بوابة الطلاب - صلالة الشرقية</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+<script src="firebase-config.js"></script>
 <style>
 body{ font-family:Arial; margin:0; padding:0; background:#f0f4f5; text-align:center; }
-
-/* الهيدر */
-header{
-  display:flex; align-items:center; justify-content:center; padding:10px 20px;
-  background:#e0f2f1; box-shadow:0 2px 5px rgba(0,0,0,0.1);
-}
+header{ display:flex; align-items:center; justify-content:center; padding:10px 20px; background:#e0f2f1; box-shadow:0 2px 5px rgba(0,0,0,0.1); }
 header img{ height:50px; margin-left:10px; }
 header div{text-align:center;}
 header h2{margin:0; color:#004d40; font-size:18px;}
 header p{margin:0; font-size:14px; color:#00796b;}
-
-/* الحاوية الرئيسية */
-.container{
-  margin:50px auto; padding:20px; max-width:400px; 
-  background:white; border-radius:12px; box-shadow:0 0 15px rgba(0,0,0,0.1); 
-  text-align:center;
-}
-
-input, button{
-  width:90%; max-width:350px; padding:12px; margin:10px 0; font-size:16px; border-radius:6px; border:1px solid #ccc;
-}
+.container{ margin:20px auto; padding:20px; max-width:400px; background:white; border-radius:12px; box-shadow:0 0 15px rgba(0,0,0,0.1); text-align:center; }
+input, button{ width:90%; max-width:350px; padding:12px; margin:10px 0; font-size:16px; border-radius:6px; border:1px solid #ccc; }
 button{ background:#00796b; color:white; border:none; cursor:pointer; }
 button:hover{ background:#004d40; }
 </style>
@@ -49,7 +38,10 @@ button:hover{ background:#004d40; }
 </div>
 
 <script>
-// أزرار الانتقال
+auth.onAuthStateChanged(user=>{
+    if(!user){ window.location="login.html"; }
+});
+
 document.getElementById("gradesBtn").addEventListener("click", ()=> {
     const civil = document.getElementById("civil").value.trim();
     if(!civil){ alert("الرجاء إدخال الرقم المدني"); return; }
@@ -62,9 +54,6 @@ document.getElementById("rankBtn").addEventListener("click", ()=> {
 });
 </script>
 
-<footer style="margin-top:20px;font-size:14px;color:#555;text-align:center;">
-© 2025 - جميع الحقوق محفوظة للأستاذ فيصل العريبي
-</footer>
-
+<footer style="margin-top:20px;font-size:14px;color:#555;text-align:center;">© 2025 - جميع الحقوق محفوظة للأستاذ فيصل العريبي</footer>
 </body>
 </html>
