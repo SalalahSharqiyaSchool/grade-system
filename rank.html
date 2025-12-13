@@ -61,16 +61,27 @@ th{ background:#004d40; color:white; }
 <script src="firebase-config.js"></script>
 
 <script>
+// Sidebar behavior
 const sidebar = document.getElementById("sidebar");
 const mobileToggle = document.getElementById("mobileToggle");
 const servicesBtn = document.getElementById("servicesBtn");
 const servicesMenu = document.getElementById("servicesMenu");
 
 mobileToggle.addEventListener("click", ()=> sidebar.classList.toggle("show"));
-servicesBtn.addEventListener("click", ()=> servicesMenu.style.display = servicesMenu.style.display==="flex"?"none":"flex");
-document.querySelectorAll(".sidebar button").forEach(btn=> btn.addEventListener("click", ()=> sidebar.classList.remove("show")));
+servicesBtn.addEventListener("click", ()=> {
+    servicesMenu.style.display = servicesMenu.style.display==="flex" ? "none" : "flex";
+});
 
-// التحقق من تسجيل الدخول
+document.querySelectorAll(".sidebar button").forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+        if(["servicesBtn"].includes(btn.id)) return; 
+        if(["navGrades","navRank","navHome","logoutBtn"].includes(btn.id)){
+            sidebar.classList.remove("show");
+        }
+    });
+});
+
+// تحقق تسجيل الدخول
 firebase.auth().onAuthStateChanged(user=>{
     if(!user) window.location="index.html";
 });
@@ -83,6 +94,7 @@ document.getElementById("navGrades").addEventListener("click", ()=> window.locat
 document.getElementById("navRank").addEventListener("click", ()=> window.location=`rank.html?civil=${civil}`);
 document.getElementById("logoutBtn").addEventListener("click", ()=> firebase.auth().signOut().then(()=> window.location="index.html"));
 
+// ترتيب الطلاب
 async function showRank(civil){
     const files = ["grade5.json","grade6.json","grade7.json","grade8.json","grade9.json"];
     let currentStudent = null;
