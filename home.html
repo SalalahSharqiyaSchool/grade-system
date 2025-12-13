@@ -15,7 +15,6 @@ header p{margin:0; font-size:14px; color:#00796b;}
 input, button{ width:90%; max-width:350px; padding:12px; margin:10px 0; font-size:16px; border-radius:6px; border:1px solid #ccc; }
 button{ background:#00796b; color:white; border:none; cursor:pointer; }
 button:hover{ background:#004d40; }
-#logoutBtn{ margin-top:20px; background:#d32f2f; }
 </style>
 </head>
 <body>
@@ -33,7 +32,6 @@ button:hover{ background:#004d40; }
     <input type="text" id="civil" placeholder="الرقم المدني">
     <button id="gradesBtn">عرض الدرجات</button>
     <button id="rankBtn">عرض الترتيب</button>
-    <button id="logoutBtn">تسجيل الخروج</button>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
@@ -56,9 +54,6 @@ document.getElementById("rankBtn").addEventListener("click", ()=>{
     const civil = document.getElementById("civil").value.trim();
     if(!civil){ alert("الرجاء إدخال الرقم المدني"); return; }
     window.location=`rank.html?civil=${civil}`;
-});
-document.getElementById("logoutBtn").addEventListener("click", ()=>{
-    firebase.auth().signOut().then(()=> window.location="index.html");
 });
 </script>
 </body>
