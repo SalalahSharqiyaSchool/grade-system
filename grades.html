@@ -65,16 +65,28 @@ button#printBtn:hover{ background:#004d40; }
 <script src="firebase-config.js"></script>
 
 <script>
+// Sidebar behavior
 const sidebar = document.getElementById("sidebar");
 const mobileToggle = document.getElementById("mobileToggle");
 const servicesBtn = document.getElementById("servicesBtn");
 const servicesMenu = document.getElementById("servicesMenu");
 
 mobileToggle.addEventListener("click", ()=> sidebar.classList.toggle("show"));
-servicesBtn.addEventListener("click", ()=> servicesMenu.style.display = servicesMenu.style.display==="flex"?"none":"flex");
-document.querySelectorAll(".sidebar button").forEach(btn=> btn.addEventListener("click", ()=> sidebar.classList.remove("show")));
+servicesBtn.addEventListener("click", ()=> {
+    servicesMenu.style.display = servicesMenu.style.display==="flex" ? "none" : "flex";
+});
 
-// التحقق من تسجيل الدخول
+// اغلاق الشريط فقط عند الضغط على هذه الأزرار
+document.querySelectorAll(".sidebar button").forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+        if(["servicesBtn"].includes(btn.id)) return; 
+        if(["navGrades","navRank","navHome","logoutBtn"].includes(btn.id)){
+            sidebar.classList.remove("show");
+        }
+    });
+});
+
+// تحقق تسجيل الدخول
 firebase.auth().onAuthStateChanged(user=>{
     if(!user) window.location="index.html";
 });
@@ -87,6 +99,7 @@ document.getElementById("navGrades").addEventListener("click", ()=> window.locat
 document.getElementById("navRank").addEventListener("click", ()=> window.location=`rank.html?civil=${civil}`);
 document.getElementById("logoutBtn").addEventListener("click", ()=> firebase.auth().signOut().then(()=> window.location="index.html"));
 
+// عرض الدرجات
 function getFeedback(grade){
   if(grade>=90) return "أداء ممتاز! حافظ على هذا المستوى.";
   if(grade>=75) return "جيد جدًا، حاول التركيز على التفاصيل الصغيرة لتحسن أكثر.";
@@ -124,19 +137,12 @@ async function showGrades(civil){
 
 if(civil) showGrades(civil);
 
-// تعديل الطباعة لتصغير الشعار
+// طباعة كشف الدرجات مع شعار أصغر
 document.getElementById("printBtn").addEventListener("click", ()=>{
     if(!civil){ alert("الرجاء عرض الدرجات أولاً"); return; }
     const printWindow = window.open("", "", "width=800,height=700");
     printWindow.document.write("<html><head><title>كشف الدرجات</title>");
-    printWindow.document.write(`
-        <style>
-        body{text-align:center;font-family:Arial;}
-        table{width:80%;margin:0 auto;border-collapse:collapse;direction:rtl;}
-        th,td{border:1px solid #333;padding:8px;}
-        .topbar img{height:50px;} /* تصغير الشعار فقط عند الطباعة */
-        </style>
-    </head><body>`);
+    printWindow.document.write("<style>body{text-align:center;font-family:Arial;}table{width:80%;margin:0 auto;border-collapse:collapse;direction:rtl;}th,td{border:1px solid #333;padding:8px;} .school-logo{height:40px;}</style></head><body>");
     printWindow.document.write(document.querySelector(".topbar").outerHTML);
     printWindow.document.write(document.getElementById("studentInfo").outerHTML);
     printWindow.document.write(document.getElementById("gradesList").outerHTML);
