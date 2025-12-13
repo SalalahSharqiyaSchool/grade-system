@@ -5,25 +5,62 @@
 <title>عرض الدرجات - صلالة الشرقية</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+<script src="firebase-config.js"></script>
 <style>
 body{ font-family:Arial; margin:0; padding:0; background:#f0f4f5; }
-.topbar{ display:flex; align-items:center; justify-content:center; padding:10px 20px; background:#e0f2f1; box-shadow:0 2px 5px rgba(0,0,0,0.1); }
+
+/* هيدر */
+.topbar{
+  display:flex; align-items:center; justify-content:center; padding:10px 20px;
+  background:#e0f2f1; box-shadow:0 2px 5px rgba(0,0,0,0.1);
+  position:fixed; top:0; left:0; right:0; height:70px; z-index:1001;
+}
 .school-logo{ height:50px; margin-left:10px; }
 .topbar div{text-align:center;}
 .topbar h2{margin:0; color:#004d40; font-size:18px;}
 .topbar p{margin:0; font-size:14px; color:#00796b;}
-#mobileToggle{ position:fixed; top:80px; right:15px; z-index:2000; background:#00796b; color:white; border:none; padding:10px 15px; border-radius:6px; font-size:18px; cursor:pointer; display:none; }
-.sidebar{ width:250px; background:linear-gradient(180deg,#00796b,#004d40); color:white; display:flex; flex-direction:column; position:fixed; right:0; top:70px; bottom:0; box-shadow:-2px 0 5px rgba(0,0,0,0.2); transition:transform 0.3s; z-index:1002; }
-.sidebar button{ background:none; border:none; color:white; padding:15px; text-align:right; font-size:16px; cursor:pointer; display:flex; align-items:center; gap:10px; width:100%; transition: background 0.3s; }
+
+/* زر القائمة */
+#mobileToggle{
+  position:fixed; top:80px; right:15px; z-index:2000;
+  background:#00796b; color:white; border:none; padding:10px 15px;
+  border-radius:6px; font-size:18px; cursor:pointer; display:none;
+}
+
+/* الشريط الجانبي */
+.sidebar{
+  width:250px; background:linear-gradient(180deg,#00796b,#004d40); color:white;
+  display:flex; flex-direction:column; position:fixed; right:0; top:70px; bottom:0;
+  box-shadow:-2px 0 5px rgba(0,0,0,0.2); transition:transform 0.3s; z-index:1002;
+}
+.sidebar button{ background:none; border:none; color:white; padding:15px;
+  text-align:right; font-size:16px; cursor:pointer; display:flex; align-items:center; gap:10px; width:100%; transition: background 0.3s; }
 .sidebar button:hover{ background: linear-gradient(to right,#004d40,#00695c);}
 #servicesMenu button{ padding-left:30px; text-align:right; font-size:15px; }
-.container{ margin:80px auto 50px; padding:20px; max-width:700px; background:white; border-radius:12px; box-shadow:0 0 15px rgba(0,0,0,0.1); text-align:center; }
+
+/* زر الخروج */
+#logoutBtn{ margin-top:auto; background:none; border:none; color:white; padding:15px; text-align:right; font-size:16px; cursor:pointer; display:flex; align-items:center; gap:10px; transition: background 0.3s;}
+#logoutBtn:hover{ background: linear-gradient(to right,#004d40,#00695c); }
+
+/* الحاوية */
+.container{ margin:100px auto 50px; padding:20px; max-width:700px; background:white; border-radius:12px; box-shadow:0 0 15px rgba(0,0,0,0.1); text-align:center; }
+
 table{ width:100%; border-collapse:collapse; direction:rtl; }
 th, td{ border:1px solid #00796b; padding:8px; text-align:center; }
 th{ background:#004d40; color:white; }
+
 button#printBtn{ margin-top:15px; background:#00796b; color:white; padding:10px 20px; border:none; border-radius:6px; cursor:pointer; }
 button#printBtn:hover{ background:#004d40; }
-@media screen and (max-width:768px){ .sidebar{ transform: translateX(100%); } .sidebar.show{ transform: translateX(0); } #mobileToggle{ display:block; } .container{ margin:120px 20px 50px; } }
+
+/* الشاشات الصغيرة */
+@media screen and (max-width:768px){
+  .sidebar{ transform: translateX(100%); }
+  .sidebar.show{ transform: translateX(0); }
+  #mobileToggle{ display:block; }
+  .container{ margin:150px 20px 50px; }
+}
 </style>
 </head>
 <body>
@@ -45,9 +82,7 @@ button#printBtn:hover{ background:#004d40; }
     <button id="navGrades"><i class="fas fa-graduation-cap"></i> عرض الدرجات</button>
     <button id="navRank"><i class="fas fa-trophy"></i> عرض الترتيب</button>
   </div>
-  <div style="margin-top:auto;">
-    <button id="logoutBtn" style="background:#c62828;"><i class="fas fa-sign-out-alt"></i> تسجيل الخروج</button>
-  </div>
+  <button id="logoutBtn"><i class="fas fa-sign-out-alt"></i> تسجيل الخروج</button>
 </div>
 
 <div class="container">
@@ -56,30 +91,9 @@ button#printBtn:hover{ background:#004d40; }
   <button id="printBtn">طباعة كشف الدرجات</button>
 </div>
 
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-
 <script>
-const firebaseConfig = {
-  apiKey: "API_KEY",
-  authDomain: "PROJECT_ID.firebaseapp.com",
-  projectId: "PROJECT_ID",
-  storageBucket: "PROJECT_ID.appspot.com",
-  messagingSenderId: "SENDER_ID",
-  appId: "APP_ID"
-};
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-
-// التحقق من تسجيل الدخول
-auth.onAuthStateChanged(user => {
-    const logoutBtn = document.getElementById("logoutBtn");
-    if(user){ logoutBtn.style.display="block"; }
-    else{ logoutBtn.style.display="none"; window.location="login.html"; }
-});
-
-document.getElementById("logoutBtn").addEventListener("click", ()=>{
-    auth.signOut().then(()=> window.location="login.html").catch(()=> alert("حدث خطأ أثناء تسجيل الخروج"));
+auth.onAuthStateChanged(user=>{
+    if(!user){ window.location="login.html"; }
 });
 
 const sidebar = document.getElementById("sidebar");
@@ -91,6 +105,10 @@ mobileToggle.addEventListener("click", ()=> sidebar.classList.toggle("show"));
 servicesBtn.addEventListener("click", ()=> servicesMenu.style.display = servicesMenu.style.display==="flex"?"none":"flex");
 
 document.querySelectorAll(".sidebar button").forEach(btn=> btn.addEventListener("click", ()=> sidebar.classList.remove("show")));
+
+document.getElementById("logoutBtn").addEventListener("click", ()=>{
+    auth.signOut().then(()=> window.location="login.html");
+});
 
 const urlParams = new URLSearchParams(window.location.search);
 const civil = urlParams.get("civil");
@@ -140,7 +158,8 @@ document.getElementById("printBtn").addEventListener("click", ()=>{
     if(!civil){ alert("الرجاء عرض الدرجات أولاً"); return; }
     const printWindow = window.open("", "", "width=800,height=700");
     printWindow.document.write("<html><head><title>كشف الدرجات</title>");
-    printWindow.document.write("<style>body{text-align:center;font-family:Arial;}table{width:80%;margin:0 auto;border-collapse:collapse;direction:rtl;}th,td{border:1px solid #333;padding:8px;}</style></head><body>");
+    printWindow.document.write("<style>body{text-align:center;font-family:Arial;}table{width:80%;margin:0 auto;border-collapse:collapse;direction:rtl;}th,td{border:1px solid #333;padding:8px;}h2,h3{margin:5px;}</style></head><body>");
+    printWindow.document.write(`<h2>صلالة الشرقية للتعليم الأساسي</h2><p>الفصل الدراسي الأول 2025-2026</p>`);
     printWindow.document.write(document.getElementById("studentInfo").outerHTML);
     printWindow.document.write(document.getElementById("gradesList").outerHTML);
     printWindow.document.write("<p style='margin-top:20px;font-size:14px;color:#555;'>© 2025 - جميع الحقوق محفوظة للأستاذ فيصل العريبي</p>");
