@@ -2,11 +2,8 @@
 <html lang="ar">
 <head>
 <meta charset="UTF-8">
-<title>بوابة الطلاب - صلالة الشرقية</title>
+<title>صفحة الطلاب - صلالة الشرقية</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-<script src="firebase-config.js"></script>
 <style>
 body{ font-family:Arial; margin:0; padding:0; background:#f0f4f5; text-align:center; }
 header{ display:flex; align-items:center; justify-content:center; padding:10px 20px; background:#e0f2f1; box-shadow:0 2px 5px rgba(0,0,0,0.1);}
@@ -14,13 +11,15 @@ header img{ height:50px; margin-left:10px; }
 header div{text-align:center;}
 header h2{margin:0; color:#004d40; font-size:18px;}
 header p{margin:0; font-size:14px; color:#00796b;}
-.container{ margin:50px auto; padding:20px; max-width:400px; background:white; border-radius:12px; box-shadow:0 0 15px rgba(0,0,0,0.1); text-align:center; }
+.container{ margin:20px auto; padding:20px; max-width:400px; background:white; border-radius:12px; box-shadow:0 0 15px rgba(0,0,0,0.1);}
 input, button{ width:90%; max-width:350px; padding:12px; margin:10px 0; font-size:16px; border-radius:6px; border:1px solid #ccc; }
 button{ background:#00796b; color:white; border:none; cursor:pointer; }
 button:hover{ background:#004d40; }
+#logoutBtn{ margin-top:20px; background:#d32f2f; }
 </style>
 </head>
 <body>
+
 <header>
     <img src="logo.png" alt="شعار المدرسة">
     <div>
@@ -37,23 +36,29 @@ button:hover{ background:#004d40; }
     <button id="logoutBtn">تسجيل الخروج</button>
 </div>
 
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+<script src="firebase-config.js"></script>
+
 <script>
-firebase.auth().onAuthStateChanged((user) => {
-  if(!user){ window.location = "login.html"; }
+// تحقق تسجيل الدخول
+firebase.auth().onAuthStateChanged(user=>{
+    if(!user) window.location="index.html";
 });
 
-document.getElementById("gradesBtn").addEventListener("click", ()=> {
+// أزرار الانتقال
+document.getElementById("gradesBtn").addEventListener("click", ()=>{
     const civil = document.getElementById("civil").value.trim();
     if(!civil){ alert("الرجاء إدخال الرقم المدني"); return; }
     window.location=`grades.html?civil=${civil}`;
 });
-document.getElementById("rankBtn").addEventListener("click", ()=> {
+document.getElementById("rankBtn").addEventListener("click", ()=>{
     const civil = document.getElementById("civil").value.trim();
     if(!civil){ alert("الرجاء إدخال الرقم المدني"); return; }
     window.location=`rank.html?civil=${civil}`;
 });
 document.getElementById("logoutBtn").addEventListener("click", ()=>{
-    auth.signOut().then(()=>{ window.location="login.html"; });
+    firebase.auth().signOut().then(()=> window.location="index.html");
 });
 </script>
 </body>
