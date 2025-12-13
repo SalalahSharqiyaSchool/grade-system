@@ -4,45 +4,84 @@
 <meta charset="UTF-8">
 <title>ترتيب الطالب - صلالة الشرقية</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-<script src="firebase-config.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
-body{ font-family:Arial; margin:0; padding:0; background:#f0f4f5; text-align:center;}
-header{ display:flex; align-items:center; justify-content:center; padding:10px 20px; background:#e0f2f1; box-shadow:0 2px 5px rgba(0,0,0,0.1);}
-header img{ height:50px; margin-left:10px; }
-header div{text-align:center;}
-header h2{margin:0; color:#004d40; font-size:18px;}
-header p{margin:0; font-size:14px; color:#00796b;}
-.container{ margin:20px auto; padding:20px; max-width:700px; background:white; border-radius:12px; box-shadow:0 0 15px rgba(0,0,0,0.1); text-align:center; }
+body{ font-family:Arial; margin:0; padding:0; background:#f0f4f5; }
+.topbar{ display:flex; align-items:center; justify-content:center; padding:10px 20px; background:#e0f2f1; box-shadow:0 2px 5px rgba(0,0,0,0.1);}
+.school-logo{ height:50px; margin-left:10px; }
+.topbar div{text-align:center;}
+.topbar h2{margin:0; color:#004d40; font-size:18px;}
+.topbar p{margin:0; font-size:14px; color:#00796b;}
+#mobileToggle{ position:fixed; top:80px; right:15px; z-index:2000; background:#00796b; color:white; border:none; padding:10px 15px; border-radius:6px; font-size:18px; cursor:pointer; display:none; }
+.sidebar{ width:250px; background:linear-gradient(180deg,#00796b,#004d40); color:white; display:flex; flex-direction:column; position:fixed; right:0; top:70px; bottom:0; box-shadow:-2px 0 5px rgba(0,0,0,0.2); transition:transform 0.3s; z-index:1002; }
+.sidebar button{ background:none; border:none; color:white; padding:15px; text-align:right; font-size:16px; cursor:pointer; display:flex; align-items:center; gap:10px; width:100%; transition: background 0.3s; }
+.sidebar button:hover{ background: linear-gradient(to right,#004d40,#00695c);}
+#servicesMenu button{ padding-left:30px; text-align:right; font-size:15px; }
+.container{ margin:100px auto 50px; padding:20px; max-width:700px; background:white; border-radius:12px; box-shadow:0 0 15px rgba(0,0,0,0.1); text-align:center; }
 table{ width:100%; border-collapse:collapse; direction:rtl; }
 th, td{ border:1px solid #00796b; padding:8px; text-align:center; }
 th{ background:#004d40; color:white; }
-button{ padding:10px 20px; border:none; border-radius:6px; background:#00796b; color:white; cursor:pointer; margin-top:15px; }
-button:hover{ background:#004d40; }
+#logoutBtn{ margin-top:auto; background:#d32f2f; }
+@media screen and (max-width:768px){
+  .sidebar{ transform: translateX(100%); }
+  .sidebar.show{ transform: translateX(0); }
+  #mobileToggle{ display:block; }
+  .container{ margin:130px 20px 50px; }
+}
 </style>
 </head>
 <body>
-<header>
-    <img src="logo.png" alt="شعار المدرسة">
+
+<header class="topbar">
+    <img src="logo.png" class="school-logo">
     <div>
         <h2>صلالة الشرقية للتعليم الأساسي</h2>
         <p>الفصل الدراسي الأول 2025-2026</p>
     </div>
 </header>
 
-<div class="container">
-  <div id="rankResult"></div>
-  <button id="logoutBtn">تسجيل الخروج</button>
+<button id="mobileToggle">☰</button>
+
+<div class="sidebar" id="sidebar">
+  <button id="navHome"><i class="fas fa-home"></i> الصفحة الرئيسية</button>
+  <button id="servicesBtn"><i class="fas fa-school"></i> خدمات المدرسة <i class="fas fa-chevron-down" style="margin-left:auto;"></i></button>
+  <div id="servicesMenu" style="display:none; flex-direction:column; background:#00695c;">
+    <button id="navGrades"><i class="fas fa-graduation-cap"></i> عرض الدرجات</button>
+    <button id="navRank"><i class="fas fa-trophy"></i> عرض الترتيب</button>
+  </div>
+  <button id="logoutBtn"><i class="fas fa-sign-out-alt"></i> تسجيل الخروج</button>
 </div>
 
+<div class="container">
+  <div id="rankResult"></div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+<script src="firebase-config.js"></script>
+
 <script>
-firebase.auth().onAuthStateChanged((user) => {
-  if(!user){ window.location="login.html"; }
+const sidebar = document.getElementById("sidebar");
+const mobileToggle = document.getElementById("mobileToggle");
+const servicesBtn = document.getElementById("servicesBtn");
+const servicesMenu = document.getElementById("servicesMenu");
+
+mobileToggle.addEventListener("click", ()=> sidebar.classList.toggle("show"));
+servicesBtn.addEventListener("click", ()=> servicesMenu.style.display = servicesMenu.style.display==="flex"?"none":"flex");
+document.querySelectorAll(".sidebar button").forEach(btn=> btn.addEventListener("click", ()=> sidebar.classList.remove("show")));
+
+// التحقق من تسجيل الدخول
+firebase.auth().onAuthStateChanged(user=>{
+    if(!user) window.location="index.html";
 });
 
 const urlParams = new URLSearchParams(window.location.search);
 const civil = urlParams.get("civil");
+
+document.getElementById("navHome").addEventListener("click", ()=> window.location="home.html");
+document.getElementById("navGrades").addEventListener("click", ()=> window.location=`grades.html?civil=${civil}`);
+document.getElementById("navRank").addEventListener("click", ()=> window.location=`rank.html?civil=${civil}`);
+document.getElementById("logoutBtn").addEventListener("click", ()=> firebase.auth().signOut().then(()=> window.location="index.html"));
 
 async function showRank(civil){
     const files = ["grade5.json","grade6.json","grade7.json","grade8.json","grade9.json"];
@@ -77,23 +116,19 @@ async function showRank(civil){
     const top1 = studentsTotals[0];
     const top2 = studentsTotals[1];
     const top3 = studentsTotals[2];
-    const studentRank = studentsTotals.findIndex(s=>s.civil===civil)+1;
+    const myRank = studentsTotals.findIndex(s=>s.civil==civil)+1;
 
-    let html=`<h3>ترتيب الطالب: ${currentStudent["الاسم"]}</h3>
-              <p>الصف: ${currentStudent["الصف"]} - الشعبة: ${currentStudent["الشعبة"]}</p>
-              <table>
-              <tr><th>المركز</th><th>اسم الطالب</th><th>المجموع</th></tr>
-              <tr style="background:#FFD700"><td>1</td><td>${top1.name}</td><td>${top1.total}</td></tr>
-              <tr style="background:#C0C0C0"><td>2</td><td>${top2.name}</td><td>${top2.total}</td></tr>
-              <tr style="background:#CD7F32"><td>3</td><td>${top3.name}</td><td>${top3.total}</td></tr>
-              </table>
-              <p style="margin-top:10px;">مركزك الشخصي: ${studentRank}</p>`;
-    document.getElementById("rankResult").innerHTML=html;
+    document.getElementById("rankResult").innerHTML=
+        `<h3 style="margin-bottom:20px;">ترتيبك في الصف: <span style="color:blue;">${myRank}</span> من أصل ${studentsTotals.length} طالب</h3>
+        <table>
+            <tr><th>المركز</th><th>اسم الطالب</th><th>مجموع الدرجات</th></tr>
+            <tr><td>الأول</td><td>${top1.name}</td><td>${top1.total}</td></tr>
+            <tr><td>الثاني</td><td>${top2.name}</td><td>${top2.total}</td></tr>
+            <tr><td>الثالث</td><td>${top3.name}</td><td>${top3.total}</td></tr>
+        </table>`;
 }
 
 if(civil) showRank(civil);
-
-document.getElementById("logoutBtn").addEventListener("click", ()=>{ auth.signOut().then(()=>window.location="login.html"); });
 </script>
 </body>
 </html>
