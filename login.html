@@ -2,91 +2,61 @@
 <html lang="ar">
 <head>
 <meta charset="UTF-8">
-<title>تسجيل دخول الطالب - صلالة الشرقية</title>
+<title>تسجيل الدخول - صلالة الشرقية</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+<script src="firebase-config.js"></script>
 <style>
-body{ font-family:Arial; margin:0; padding:0; background:#f0f4f5; text-align:center; }
-header{ display:flex; align-items:center; justify-content:center; padding:10px 20px; background:#e0f2f1; }
-header img{ height:50px; margin-left:10px; }
-header div{text-align:center;}
-header h2{margin:0; color:#004d40;}
-header p{margin:0; color:#00796b;}
-
-.container{ margin:50px auto; padding:20px; max-width:400px; background:white; border-radius:12px; box-shadow:0 0 15px rgba(0,0,0,0.1);}
-input, button{ width:90%; max-width:350px; padding:12px; margin:10px 0; font-size:16px; border-radius:6px; border:1px solid #ccc;}
-button{ background:#00796b; color:white; border:none; cursor:pointer;}
-button:hover{ background:#004d40;}
-.toggleLink{ color:#00796b; cursor:pointer; font-size:14px;}
+body{ font-family:Arial; text-align:center; background:#f0f4f5; }
+.container{ margin:50px auto; padding:20px; max-width:400px; background:white; border-radius:12px; box-shadow:0 0 15px rgba(0,0,0,0.1); }
+input, button{ width:90%; padding:12px; margin:10px 0; font-size:16px; border-radius:6px; }
+button{ background:#00796b; color:white; border:none; cursor:pointer; }
+button:hover{ background:#004d40; }
 </style>
 </head>
 <body>
 
-<header>
-    <img src="logo.png" alt="شعار المدرسة">
-    <div>
-        <h2>صلالة الشرقية للتعليم الأساسي</h2>
-        <p>الفصل الدراسي الأول 2025-2026</p>
-    </div>
-</header>
-
 <div class="container">
-    <h3 id="formTitle">تسجيل الدخول</h3>
-    <input type="text" id="phone" placeholder="رقم الهاتف">
-    <input type="password" id="password" placeholder="كلمة المرور">
-    <button id="submitBtn">دخول</button>
-    <p><span class="toggleLink" id="toggleForm">لست مسجل؟ تسجيل جديد</span></p>
-    <div id="message" style="color:red;"></div>
+<h2>تسجيل الدخول / التسجيل</h2>
+<input type="text" id="phone" placeholder="رقم الهاتف">
+<input type="password" id="password" placeholder="كلمة المرور">
+<button id="loginBtn">دخول</button>
+<button id="registerBtn">تسجيل لأول مرة</button>
+<p id="message" style="color:red;"></p>
 </div>
 
-<!-- Firebase -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-
 <script>
-// Firebase config
-const firebaseConfig = {
-  apiKey: "AIzaSyCAgMFuqobOQTOc5WmfVuZfNHAIdvJ4Vwo",
-  authDomain: "salalahschooldatabase.firebaseapp.com",
-  projectId: "salalahschooldatabase",
-  storageBucket: "salalahschooldatabase.firebasestorage.app",
-  messagingSenderId: "238841539748",
-  appId: "1:238841539748:web:211e56160881c8c0f48a31",
-  measurementId: "G-WTHY5MB9CF"
-};
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
+const loginBtn = document.getElementById("loginBtn");
+const registerBtn = document.getElementById("registerBtn");
+const message = document.getElementById("message");
 
-// Toggle تسجيل/دخول
-let isLogin = true;
-const toggleLink = document.getElementById("toggleForm");
-const formTitle = document.getElementById("formTitle");
-const submitBtn = document.getElementById("submitBtn");
-toggleLink.addEventListener("click", ()=>{
-    isLogin = !isLogin;
-    formTitle.textContent = isLogin ? "تسجيل الدخول" : "تسجيل جديد";
-    submitBtn.textContent = isLogin ? "دخول" : "تسجيل";
-    toggleLink.textContent = isLogin ? "لست مسجل؟ تسجيل جديد" : "لديك حساب؟ تسجيل الدخول";
-    document.getElementById("message").textContent="";
+auth.onAuthStateChanged(user=>{
+    if(user){ window.location="index.html"; }
 });
 
-// تسجيل/دخول
-submitBtn.addEventListener("click", ()=>{
+registerBtn.addEventListener("click", ()=>{
     const phone = document.getElementById("phone").value.trim();
     const password = document.getElementById("password").value.trim();
-    const msg = document.getElementById("message");
-    if(!phone || !password){ msg.textContent="الرجاء إدخال جميع الحقول"; return; }
+    if(!phone || !password){ message.textContent="الرجاء إدخال رقم الهاتف وكلمة المرور"; return; }
 
-    const email = phone+"@school.com"; // Email مؤقت من رقم الهاتف
+    auth.createUserWithEmailAndPassword(phone+"@dummy.com", password)
+    .then(userCredential=>{
+        auth.onAuthStateChanged(user=>{
+            if(user){ window.location="index.html"; }
+        });
+    })
+    .catch(error=> message.textContent=error.message);
+});
 
-    if(isLogin){
-        auth.signInWithEmailAndPassword(email,password)
-        .then(()=> { window.location="index.html"; })
-        .catch(err=>{ msg.textContent = "خطأ في رقم الهاتف أو كلمة المرور"; });
-    } else {
-        auth.createUserWithEmailAndPassword(email,password)
-        .then(()=> { window.location="index.html"; })
-        .catch(err=>{ msg.textContent = "حدث خطأ أثناء التسجيل"; });
-    }
+loginBtn.addEventListener("click", ()=>{
+    const phone = document.getElementById("phone").value.trim();
+    const password = document.getElementById("password").value.trim();
+    if(!phone || !password){ message.textContent="الرجاء إدخال رقم الهاتف وكلمة المرور"; return; }
+
+    auth.signInWithEmailAndPassword(phone+"@dummy.com", password)
+    .then(userCredential=> window.location="index.html")
+    .catch(error=> message.textContent=error.message);
 });
 </script>
 
