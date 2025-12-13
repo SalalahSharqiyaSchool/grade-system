@@ -4,124 +4,53 @@
 <meta charset="UTF-8">
 <title>عرض الدرجات - صلالة الشرقية</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
 <script src="firebase-config.js"></script>
 <style>
-body{ font-family:Arial; margin:0; padding:0; background:#f0f4f5; }
-
-/* هيدر */
-.topbar{
-  display:flex; align-items:center; justify-content:center; padding:10px 20px;
-  background:#e0f2f1; box-shadow:0 2px 5px rgba(0,0,0,0.1);
-  position:fixed; top:0; left:0; right:0; height:70px; z-index:1001;
-}
-.school-logo{ height:50px; margin-left:10px; }
-.topbar div{text-align:center;}
-.topbar h2{margin:0; color:#004d40; font-size:18px;}
-.topbar p{margin:0; font-size:14px; color:#00796b;}
-
-/* زر القائمة */
-#mobileToggle{
-  position:fixed; top:80px; right:15px; z-index:2000;
-  background:#00796b; color:white; border:none; padding:10px 15px;
-  border-radius:6px; font-size:18px; cursor:pointer; display:none;
-}
-
-/* الشريط الجانبي */
-.sidebar{
-  width:250px; background:linear-gradient(180deg,#00796b,#004d40); color:white;
-  display:flex; flex-direction:column; position:fixed; right:0; top:70px; bottom:0;
-  box-shadow:-2px 0 5px rgba(0,0,0,0.2); transition:transform 0.3s; z-index:1002;
-}
-.sidebar button{ background:none; border:none; color:white; padding:15px;
-  text-align:right; font-size:16px; cursor:pointer; display:flex; align-items:center; gap:10px; width:100%; transition: background 0.3s; }
-.sidebar button:hover{ background: linear-gradient(to right,#004d40,#00695c);}
-#servicesMenu button{ padding-left:30px; text-align:right; font-size:15px; }
-
-/* زر الخروج */
-#logoutBtn{ margin-top:auto; background:none; border:none; color:white; padding:15px; text-align:right; font-size:16px; cursor:pointer; display:flex; align-items:center; gap:10px; transition: background 0.3s;}
-#logoutBtn:hover{ background: linear-gradient(to right,#004d40,#00695c); }
-
-/* الحاوية */
-.container{ margin:100px auto 50px; padding:20px; max-width:700px; background:white; border-radius:12px; box-shadow:0 0 15px rgba(0,0,0,0.1); text-align:center; }
-
+body{ font-family:Arial; margin:0; padding:0; background:#f0f4f5; text-align:center;}
+header{ display:flex; align-items:center; justify-content:center; padding:10px 20px; background:#e0f2f1; box-shadow:0 2px 5px rgba(0,0,0,0.1);}
+header img{ height:50px; margin-left:10px; }
+header div{text-align:center;}
+header h2{margin:0; color:#004d40; font-size:18px;}
+header p{margin:0; font-size:14px; color:#00796b;}
+.container{ margin:20px auto; padding:20px; max-width:700px; background:white; border-radius:12px; box-shadow:0 0 15px rgba(0,0,0,0.1); text-align:center; }
 table{ width:100%; border-collapse:collapse; direction:rtl; }
 th, td{ border:1px solid #00796b; padding:8px; text-align:center; }
 th{ background:#004d40; color:white; }
-
-button#printBtn{ margin-top:15px; background:#00796b; color:white; padding:10px 20px; border:none; border-radius:6px; cursor:pointer; }
-button#printBtn:hover{ background:#004d40; }
-
-/* الشاشات الصغيرة */
-@media screen and (max-width:768px){
-  .sidebar{ transform: translateX(100%); }
-  .sidebar.show{ transform: translateX(0); }
-  #mobileToggle{ display:block; }
-  .container{ margin:150px 20px 50px; }
-}
+button{ padding:10px 20px; border:none; border-radius:6px; background:#00796b; color:white; cursor:pointer; margin-top:15px; }
+button:hover{ background:#004d40; }
 </style>
 </head>
 <body>
-
-<header class="topbar">
-    <img src="logo.png" class="school-logo">
+<header>
+    <img src="logo.png" alt="شعار المدرسة">
     <div>
         <h2>صلالة الشرقية للتعليم الأساسي</h2>
         <p>الفصل الدراسي الأول 2025-2026</p>
     </div>
 </header>
 
-<button id="mobileToggle">☰</button>
-
-<div class="sidebar" id="sidebar">
-  <button id="navHome"><i class="fas fa-home"></i> الصفحة الرئيسية</button>
-  <button id="servicesBtn"><i class="fas fa-school"></i> خدمات المدرسة <i class="fas fa-chevron-down" style="margin-left:auto;"></i></button>
-  <div id="servicesMenu" style="display:none; flex-direction:column; background:#00695c;">
-    <button id="navGrades"><i class="fas fa-graduation-cap"></i> عرض الدرجات</button>
-    <button id="navRank"><i class="fas fa-trophy"></i> عرض الترتيب</button>
-  </div>
-  <button id="logoutBtn"><i class="fas fa-sign-out-alt"></i> تسجيل الخروج</button>
-</div>
-
 <div class="container">
   <div id="studentInfo"></div>
   <div id="gradesList"></div>
   <button id="printBtn">طباعة كشف الدرجات</button>
+  <button id="logoutBtn">تسجيل الخروج</button>
 </div>
 
 <script>
-auth.onAuthStateChanged(user=>{
-    if(!user){ window.location="login.html"; }
-});
-
-const sidebar = document.getElementById("sidebar");
-const mobileToggle = document.getElementById("mobileToggle");
-const servicesBtn = document.getElementById("servicesBtn");
-const servicesMenu = document.getElementById("servicesMenu");
-
-mobileToggle.addEventListener("click", ()=> sidebar.classList.toggle("show"));
-servicesBtn.addEventListener("click", ()=> servicesMenu.style.display = servicesMenu.style.display==="flex"?"none":"flex");
-
-document.querySelectorAll(".sidebar button").forEach(btn=> btn.addEventListener("click", ()=> sidebar.classList.remove("show")));
-
-document.getElementById("logoutBtn").addEventListener("click", ()=>{
-    auth.signOut().then(()=> window.location="login.html");
+firebase.auth().onAuthStateChanged((user) => {
+  if(!user){ window.location="login.html"; }
 });
 
 const urlParams = new URLSearchParams(window.location.search);
 const civil = urlParams.get("civil");
 
-document.getElementById("navHome").addEventListener("click", ()=> window.location="index.html");
-document.getElementById("navGrades").addEventListener("click", ()=> window.location=`grades.html?civil=${civil}`);
-document.getElementById("navRank").addEventListener("click", ()=> window.location=`rank.html?civil=${civil}`);
-
 function getFeedback(grade){
-  if(grade>=90) return "أداء ممتاز! حافظ على هذا المستوى.";
-  if(grade>=75) return "جيد جدًا، حاول التركيز على التفاصيل الصغيرة لتحسن أكثر.";
-  if(grade>=50) return "مقبول، من الأفضل مراجعة الدروس الأساسية.";
-  return "ضعيف، ينصح بعمل تمارين إضافية ومراجعة النقاط الأساسية.";
+  if(grade>=90) return "أداء ممتاز!";
+  if(grade>=75) return "جيد جدًا";
+  if(grade>=50) return "مقبول";
+  return "ضعيف";
 }
 
 async function showGrades(civil){
@@ -144,8 +73,7 @@ async function showGrades(civil){
   for(const key in student){
     if(!["رقم_مدني","الاسم","الصف","الشعبة"].includes(key)){
       const grade=parseFloat(student[key]);
-      let color = grade>=90 ? "#A8E6A3" : grade>=75 ? "#A3C9E6" : grade>=50 ? "#FFD9A3" : "#F7A8A8";
-      html+=`<tr style="background-color:${color}"><td>${key}</td><td>${grade}</td><td>${getFeedback(grade)}</td></tr>`;
+      html+=`<tr><td>${key}</td><td>${grade}</td><td>${getFeedback(grade)}</td></tr>`;
     }
   }
   html+="</table>";
@@ -155,20 +83,9 @@ async function showGrades(civil){
 if(civil) showGrades(civil);
 
 document.getElementById("printBtn").addEventListener("click", ()=>{
-    if(!civil){ alert("الرجاء عرض الدرجات أولاً"); return; }
-    const printWindow = window.open("", "", "width=800,height=700");
-    printWindow.document.write("<html><head><title>كشف الدرجات</title>");
-    printWindow.document.write("<style>body{text-align:center;font-family:Arial;}table{width:80%;margin:0 auto;border-collapse:collapse;direction:rtl;}th,td{border:1px solid #333;padding:8px;}h2,h3{margin:5px;}</style></head><body>");
-    printWindow.document.write(`<h2>صلالة الشرقية للتعليم الأساسي</h2><p>الفصل الدراسي الأول 2025-2026</p>`);
-    printWindow.document.write(document.getElementById("studentInfo").outerHTML);
-    printWindow.document.write(document.getElementById("gradesList").outerHTML);
-    printWindow.document.write("<p style='margin-top:20px;font-size:14px;color:#555;'>© 2025 - جميع الحقوق محفوظة للأستاذ فيصل العريبي</p>");
-    printWindow.document.write("</body></html>");
-    printWindow.document.close();
-    printWindow.print();
+    window.print();
 });
+document.getElementById("logoutBtn").addEventListener("click", ()=>{ auth.signOut().then(()=>window.location="login.html"); });
 </script>
-
-<footer style="margin-top:20px;font-size:14px;color:#555;text-align:center;">© 2025 - جميع الحقوق محفوظة للأستاذ فيصل العريبي</footer>
 </body>
 </html>
