@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>تواصل معنا - مدرسة صلالة الشرقية</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+:root{
+  --main:#00796b;
+  --dark:#004d40;
+  --light:#f4f7fb;
+  --accent:#9ad0b3;
+}
+body{
+  margin:0;
+  font-family:'Cairo',Tahoma,Arial;
+  background:var(--light);
+  color:#222;
+}
+header{
+  background:linear-gradient(135deg,var(--dark),var(--main));
+  color:#fff;
+  text-align:center;
+  padding:25px 15px;
+}
+header h1{margin:0;font-size:28px;}
+.nav-links{
+  margin-top:15px;
+  display:flex;
+  justify-content:center;
+  gap:20px;
+  list-style:none;
+  padding:0;
+}
+.nav-links a{
+  color:#fff;
+  text-decoration:none;
+  font-weight:bold;
+}
+.container{max-width:800px;margin:auto;padding:20px;}
+form{
+  background:#fff;
+  padding:25px;
+  border-radius:15px;
+  box-shadow:0 8px 20px rgba(0,0,0,.06);
+  display:flex;
+  flex-direction:column;
+  gap:15px;
+}
+input, textarea{
+  padding:12px;
+  border-radius:8px;
+  border:1px solid #ccc;
+  width:100%;
+}
+button{
+  padding:12px;
+  background:var(--dark);
+  color:#fff;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+}
+button:hover{background:var(--main);}
+footer{text-align:center;padding:15px;font-size:13px;color:#666;background:#fff;margin-top:20px;}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>تواصل معنا</h1>
+  <ul class="nav-links">
+    <li><a href="index.html">الرئيسية</a></li>
+    <li><a href="about.html">عن المدرسة</a></li>
+    <li><a href="login.html">البوابات</a></li>
+    <li><a href="contact.html">تواصل معنا</a></li>
+  </ul>
+</header>
+
+<div class="container">
+  <form>
+    <input type="text" placeholder="الاسم" required>
+    <input type="email" placeholder="البريد الإلكتروني" required>
+    <input type="text" placeholder="الموضوع" required>
+    <textarea rows="5" placeholder="الرسالة" required></textarea>
+    <button type="submit">إرسال</button>
+  </form>
+</div>
+
+<footer>
+  © 2025 مدرسة صلالة الشرقية للتعليم الأساسي – جميع الحقوق محفوظة
+</footer>
+
+</body>
+</html>
