@@ -11,11 +11,11 @@
 
 <style>
 :root{
-  --primary:#30d5c8;      /* أخضر تيفاني فاتح */
-  --secondary:#007847;    /* الأخضر الغامق */
-  --accent:#e6c9a8;       /* بيج فاتح */
-  --bg:#ffffff;            
-  --text:#222;
+  --primary:#5a7d7c;
+  --secondary:#7aa6a4;
+  --accent:#d49a6a;
+  --bg:#f7f9fa;
+  --text:#333;
 }
 
 body{
@@ -45,9 +45,8 @@ header{
 }
 .logo-section{
   display:flex;
-  flex-direction:column;
   align-items:center;
-  gap:2px;
+  gap:10px;
 }
 .logo-section img{
   height:50px;
@@ -58,14 +57,19 @@ header{
   font-weight:700;
 }
 .logo-section p{
-  margin:0;
+  margin:2px 0 0;
   font-size:12px;
   font-weight:400;
+}
+.nav-bar{
+  position:relative;
 }
 .nav-links{
   display:flex;
   gap:15px;
-  flex-wrap:wrap;
+  list-style:none;
+  padding:0;
+  margin:0;
 }
 .nav-links a{
   color:#fff;
@@ -79,11 +83,18 @@ header{
   background:rgba(255,255,255,0.2);
 }
 
+/* Hamburger Menu */
+.hamburger{
+  display:none;
+  font-size:24px;
+  cursor:pointer;
+}
+
 /* ===== News Marquee ===== */
 .news-marquee{
   background:#fff;
-  margin:15px auto;
-  padding:10px 15px;
+  margin:20px auto 0;
+  padding:10px 0;
   overflow:hidden;
   white-space:nowrap;
   border-radius:10px;
@@ -146,14 +157,12 @@ h2.section-title{
   margin-bottom:25px;
   font-weight:700;
 }
-
 .card-section{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
   gap:25px;
-  padding:0 10px;
+  margin-bottom:50px;
 }
-
 .card{
   background:linear-gradient(135deg,var(--primary),var(--secondary));
   color:#fff;
@@ -189,14 +198,14 @@ h2.section-title{
   margin-top:15px;
   padding:10px 20px;
   background:var(--accent);
-  color:#222;
+  color:#fff;
   text-decoration:none;
   font-weight:600;
   border-radius:15px;
   transition:0.3s;
 }
 .card a:hover{
-  background:#b7d7d2;
+  background:#b87b4f;
 }
 
 /* ===== Footer ===== */
@@ -204,8 +213,8 @@ footer{
   text-align:center;
   padding:15px;
   font-size:13px;
-  color:#fff;
-  background:var(--primary);
+  color:#666;
+  background:#fff;
   margin-top:40px;
 }
 
@@ -213,11 +222,26 @@ footer{
 @media(max-width:768px){
   .header-container{
     flex-direction:column;
+    align-items:flex-start;
+  }
+  .hamburger{
+    display:block;
+    color:#fff;
+    margin-top:10px;
+  }
+  .nav-links{
+    display:none;
+    flex-direction:row;
     gap:10px;
+    flex-wrap:wrap;
+    width:100%;
+    justify-content:flex-start;
+    background:rgba(0,0,0,0.1);
+    margin-top:10px;
+    padding:10px;
+    border-radius:8px;
   }
-  .carousel-track img{
-    height:250px;
-  }
+  .carousel-track img{height:250px;}
 }
 </style>
 </head>
@@ -227,22 +251,29 @@ footer{
   <div class="header-container">
     <div class="logo-section">
       <img src="https://raw.githubusercontent.com/SalalahSharqiyaSchool/grade-system/main/logo.png" alt="شعار المدرسة">
-      <h1>مدرسة صلالة الشرقية للتعليم الأساسي</h1>
-      <p>منصة رقمية موحدة لخدمة الطالب والمعلم والإدارة المدرسية</p>
+      <div>
+        <h1>مدرسة صلالة الشرقية للتعليم الأساسي</h1>
+        <p>منصة رقمية موحدة لخدمة الطالب والمعلم والإدارة المدرسية</p>
+      </div>
     </div>
-    <nav class="nav-links">
-      <a href="index.html">الرئيسية</a>
-      <a href="about.html">عن المدرسة</a>
-      <a href="news.html">الأخبار</a>
-      <a href="contact.html">تواصل معنا</a>
-    </nav>
+    <div class="nav-bar">
+      <i class="fas fa-bars hamburger"></i>
+      <ul class="nav-links">
+        <li><a href="index.html">الرئيسية</a></li>
+        <li><a href="about.html">عن المدرسة</a></li>
+        <li><a href="news.html">الأخبار</a></li>
+        <li><a href="contact.html">تواصل معنا</a></li>
+      </ul>
+    </div>
   </div>
 </header>
 
+<!-- شريط الأخبار -->
 <div class="news-marquee">
   <span>📢 بدء اختبارات الفصل الدراسي الأول يوم الأحد — 🏫 الاجتماع التربوي الثاني يوم الأربعاء — 🎉 مدرسة صلالة الشرقية تقدم مبادرة فن التعامل مع الورقة الاختبارية</span>
 </div>
 
+<!-- Carousel -->
 <div class="carousel">
   <button class="carousel-button prev">&#10094;</button>
   <div class="carousel-track">
@@ -261,21 +292,19 @@ footer{
       <i class="fas fa-user-graduate"></i>
       <h3>بوابة الطالب</h3>
       <p>يمكن للطالب متابعة الدرجات والترتيب والأداء الدراسي بسهولة ويسر.</p>
-      <a href="https://salalahsharqiyaschool.github.io/grade-system/indexx.html">دخول الطالب</a>
+      <a href="#">دخول الطالب</a>
     </div>
-
     <div class="card">
       <i class="fas fa-chalkboard-teacher"></i>
       <h3>بوابة المعلم</h3>
       <p>إدارة الدرجات، متابعة الطلاب، وإضافة الملاحظات والتقارير الدراسية.</p>
-      <a href="https://salalahsharqiyaschool.github.io/SalalahSharqiya-School-Management">دخول المعلم</a>
+      <a href="#">دخول المعلم</a>
     </div>
-
     <div class="card">
       <i class="fas fa-user-tie"></i>
       <h3>بوابة المدير</h3>
       <p>الاطلاع على التقارير، الإشراف على المعلمين والطلاب، وتحليل الأداء العام.</p>
-      <a href="https://salalahsharqiyaschool.github.io/SalalahSharqiya-School-Management/admin.html">دخول المدير</a>
+      <a href="#">دخول المدير</a>
     </div>
   </div>
 </div>
@@ -285,6 +314,18 @@ footer{
 </footer>
 
 <script>
+// Toggle Hamburger Menu
+const hamburger = document.querySelector('.hamburger');
+const navLinks = document.querySelector('.nav-links');
+hamburger.addEventListener('click', ()=>{
+  if(navLinks.style.display === 'flex'){
+    navLinks.style.display = 'none';
+  } else {
+    navLinks.style.display = 'flex';
+  }
+});
+
+// Carousel functionality
 const track = document.querySelector('.carousel-track');
 const slides = Array.from(track.children);
 const prevBtn = document.querySelector('.carousel-button.prev');
@@ -305,7 +346,7 @@ nextBtn.addEventListener('click', ()=>{
   updateCarousel();
 });
 
-// Swipe على الهواتف
+// Swipe للهواتف
 let startX = 0;
 let isDragging = false;
 track.addEventListener('touchstart', e=>{
