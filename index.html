@@ -53,6 +53,7 @@
       padding:0;
       margin:20px 0 0 0;
       justify-content:center;
+      flex-wrap:wrap; /* يتيح السطر الواحد مع تقييد العرض */
     }
 
     .nav-links a{
@@ -173,18 +174,18 @@
     /* ===== Mobile ===== */
     @media(max-width:768px){
       .navbar{
-        flex-direction:column; /* الهيدر عمودي على الجوال */
+        flex-direction:column; /* الشعار فوق العنوان */
       }
       .logo{
-        margin-bottom:10px; /* الشعار فوق العنوان */
+        margin-bottom:10px;
       }
       header h1{
         font-size:24px;
       }
       .nav-links{
-        flex-direction:column;
+        flex-direction:row;  /* تبقى أفقية على الجوال */
+        justify-content:center;
         gap:10px;
-        margin-top:15px;
       }
     }
   </style>
@@ -249,29 +250,4 @@
       <i class="fas fa-user-graduate"></i>
       <h3>بوابة الطالب</h3>
       <p>عرض الدرجات والترتيب.</p>
-      <a href="https://salalahsharqiyaschool.github.io/grade-system/indexx.html">دخول الطالب</a>
-    </div>
-
-    <div class="card">
-      <i class="fas fa-chalkboard-teacher"></i>
-      <h3>بوابة المعلم</h3>
-      <p>إدارة الدرجات.</p>
-      <a href="https://salalahsharqiyaschool.github.io/SalalahSharqiya-School-Management/">دخول المعلم</a>
-    </div>
-
-    <div class="card">
-      <i class="fas fa-user-tie"></i>
-      <h3>بوابة الإدارة</h3>
-      <p>التقارير والإشراف.</p>
-      <a href="https://salalahsharqiyaschool.github.io/SalalahSharqiya-School-Management/admin.html">دخول الإدارة</a>
-    </div>
-  </section>
-
-</div>
-
-<footer>
-  © 2025 مدرسة صلالة الشرقية للتعليم الأساسي – جميع الحقوق محفوظة
-</footer>
-
-</body>
-</html>
+      <a href="https://salalahsharqiyaschool.github.io/grade-system/indexx.
