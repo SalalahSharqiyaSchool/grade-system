@@ -162,28 +162,8 @@ h2{
   position:relative;
 }
 
-.card::before{
-  content:'';
-  position:absolute;
-  inset:0;
-  border-radius:26px;
-  background:linear-gradient(135deg,var(--main),var(--dark));
-  opacity:0;
-  z-index:0;
-  transition:.35s;
-}
-
-.card:hover::before{
-  opacity:.08;
-}
-
 .card:hover{
   transform:translateY(-10px);
-}
-
-.card *{
-  position:relative;
-  z-index:1;
 }
 
 .card i{
@@ -245,10 +225,10 @@ footer{
 
   <p>منصة رقمية موحدة لخدمة الطالب والمعلم والإدارة المدرسية</p>
 
+  <!-- تم حذف زر البوابات -->
   <ul class="nav-links">
     <li><a href="about.html">عن المدرسة</a></li>
     <li><a href="news.html">الأخبار</a></li>
-    <li><a href="#roles">البوابات</a></li>
     <li><a href="contact.html">تواصل معنا</a></li>
   </ul>
 </header>
@@ -282,19 +262,19 @@ footer{
     <h2>أخبار وإعلانات مدرسية</h2>
     <div class="news-marquee">
       <span>
-        📢 بدء اختبارات الفصل الدراسي الأول قريبًا —
-        🏫 اجتماع تربوي للهيئة التدريسية —
+        📢 بدء اختبارات الفصل الدراسي الأول —
+        🏫 اجتماع تربوي —
         🎉 مبادرة فن التعامل مع الورقة الاختبارية
       </span>
     </div>
   </section>
 
-  <section class="roles" id="roles">
+  <section class="roles">
     <div class="card">
       <i class="fas fa-user-graduate"></i>
       <h3>بوابة الطالب</h3>
       <p>عرض الدرجات والترتيب الأكاديمي.</p>
-      <a href="https://salalahsharqiyaschool.github.io/grade-system/indexx.html">الدخول</a>
+      <a href="https://salalahsharqiyaschool.github.io/grade-system/">الدخول</a>
     </div>
 
     <div class="card">
@@ -315,7 +295,7 @@ footer{
 </div>
 
 <footer>
-  © 2025 مدرسة صلالة الشرقية للتعليم الأساسي – جميع الحقوق محفوظة
+  © 2025  جميع الحقوق محفوظة للاستاذ فيصل العريبي 
 </footer>
 
 </body>
