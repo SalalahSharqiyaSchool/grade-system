@@ -25,7 +25,7 @@ body{
   color:var(--text);
 }
 
-/* Header */
+/* ===== Header ===== */
 header{
   background:linear-gradient(135deg,var(--secondary),var(--primary));
   color:#fff;
@@ -67,7 +67,7 @@ header p{
   background:rgba(255,255,255,0.2);
 }
 
-/* News Marquee */
+/* ===== News Marquee ===== */
 .news-marquee{
   background:#fff;
   margin:20px auto 0;
@@ -88,51 +88,53 @@ header p{
   100%{transform:translateX(-100%);}
 }
 
-/* Container */
+/* ===== Container ===== */
 .container{
   max-width:1200px;
   margin:auto;
   padding:30px 20px;
 }
 
-/* Carousel */
-.carousel{
-  position:relative;
-  max-width:100%;
-  margin:30px auto;
-  overflow:hidden;
-  border-radius:18px;
-  box-shadow:0 10px 25px rgba(0,0,0,.1);
+/* ===== Carousel ===== */
+.carousel {
+  position: relative;
+  max-width: 100%;
+  margin: 30px auto;
+  overflow: hidden;
+  border-radius: 18px;
+  box-shadow: 0 10px 25px rgba(0,0,0,.1);
 }
-.carousel-track{
-  display:flex;
-  transition:transform 0.5s ease-in-out;
+.carousel-track-container {
+  overflow: hidden;
 }
-.carousel-track img{
-  width:100%;
-  flex-shrink:0;
-  object-fit:cover;
-  height:400px;
+.carousel-track {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+  width: calc(100% * 4); /* عدد الصور */
 }
-.carousel-button{
-  position:absolute;
-  top:50%;
-  transform:translateY(-50%);
-  background:rgba(0,0,0,0.3);
-  color:#fff;
-  border:none;
-  font-size:24px;
-  padding:10px 15px;
-  cursor:pointer;
-  border-radius:50%;
+.carousel-track img {
+  width: calc(100% / 4);
+  object-fit: cover;
+  height: 400px;
+  flex-shrink: 0;
 }
-.carousel-button:hover{
-  background:rgba(0,0,0,0.5);
+.carousel-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0,0,0,0.3);
+  color: #fff;
+  border: none;
+  font-size: 24px;
+  padding: 10px 15px;
+  cursor: pointer;
+  border-radius: 50%;
 }
-.carousel-button.prev{left:10px;}
-.carousel-button.next{right:10px;}
+.carousel-button.prev { left: 10px; }
+.carousel-button.next { right: 10px; }
+.carousel-button:hover { background: rgba(0,0,0,0.5); }
 
-/* Cards Section */
+/* ===== Cards Section ===== */
 h2.section-title{
   text-align:center;
   font-size:28px;
@@ -140,11 +142,13 @@ h2.section-title{
   margin-bottom:25px;
   font-weight:700;
 }
+
 .card-section{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
   gap:25px;
 }
+
 .card{
   background:linear-gradient(135deg,var(--primary),var(--secondary));
   color:#fff;
@@ -190,7 +194,6 @@ h2.section-title{
   background:#b87b4f;
 }
 
-/* Footer */
 footer{
   text-align:center;
   padding:15px;
@@ -202,7 +205,8 @@ footer{
 
 @media(max-width:768px){
   header h1{font-size:24px;}
-  .carousel-track img{height:250px;}
+  .carousel-track img{height:250px;width:100%;}
+  .carousel-track{width:400%;} /* تصحيح للهواتف */
 }
 </style>
 </head>
@@ -229,11 +233,13 @@ footer{
 <!-- Carousel -->
 <div class="carousel">
   <button class="carousel-button prev">&#10094;</button>
-  <div class="carousel-track">
-    <img src="https://raw.githubusercontent.com/SalalahSharqiyaSchool/grade-system/main/image1.jpg" alt="صورة 1">
-    <img src="https://raw.githubusercontent.com/SalalahSharqiyaSchool/grade-system/main/image2.jpg" alt="صورة 2">
-    <img src="https://raw.githubusercontent.com/SalalahSharqiyaSchool/grade-system/main/image3.jpg" alt="صورة 3">
-    <img src="https://raw.githubusercontent.com/SalalahSharqiyaSchool/grade-system/main/image4.jpg" alt="صورة 4">
+  <div class="carousel-track-container">
+    <div class="carousel-track">
+      <img src="https://raw.githubusercontent.com/SalalahSharqiyaSchool/grade-system/main/image1.jpg" alt="صورة 1">
+      <img src="https://raw.githubusercontent.com/SalalahSharqiyaSchool/grade-system/main/image2.jpg" alt="صورة 2">
+      <img src="https://raw.githubusercontent.com/SalalahSharqiyaSchool/grade-system/main/image3.jpg" alt="صورة 3">
+      <img src="https://raw.githubusercontent.com/SalalahSharqiyaSchool/grade-system/main/image4.jpg" alt="صورة 4">
+    </div>
   </div>
   <button class="carousel-button next">&#10095;</button>
 </div>
@@ -275,22 +281,20 @@ const prevBtn = document.querySelector('.carousel-button.prev');
 const nextBtn = document.querySelector('.carousel-button.next');
 let index = 0;
 
-// تحديث عرض الصورة الحالية
 function updateCarousel(){
-  track.style.transform = `translateX(-${index * 100}%)`;
+  track.style.transform = `translateX(-${index * (100 / slides.length)}%)`;
 }
 
-// الأزرار
 prevBtn.addEventListener('click', ()=>{
-  index = (index === 0) ? slides.length-1 : index-1;
+  index = (index === 0) ? slides.length - 1 : index - 1;
   updateCarousel();
 });
 nextBtn.addEventListener('click', ()=>{
-  index = (index === slides.length-1) ? 0 : index+1;
+  index = (index === slides.length - 1) ? 0 : index + 1;
   updateCarousel();
 });
 
-// لمس الهاتف
+// السحب على الهاتف
 let startX = 0;
 let isDragging = false;
 track.addEventListener('touchstart', e=>{
