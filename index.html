@@ -5,167 +5,234 @@
 <title>مدرسة صلالة الشرقية للتعليم الأساسي</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
 <style>
-  :root{
-    --main:#00796b;
-    --dark:#004d40;
-    --light:#f4f7fb;
-    --accent:#9ad0b3;
-  }
-
-  body{margin:0;font-family:'Cairo',Tahoma,Arial;background:var(--light);color:#222;}
-
-  header{
-    background:linear-gradient(135deg,var(--dark),var(--main));
-    color:#fff;
-    padding:20px 15px 60px;
-    text-align:center;
-  }
-
-  .navbar{
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    gap:15px;
-    flex-wrap:wrap;
-  }
-
-  .navbar h1{margin:0;font-size:30px;}
-  .logo{height:70px;}
-
-  .nav-links{
-    list-style:none;
-    display:flex;
-    gap:15px;
-    padding:0;
-    margin:15px 0 0 0;
-    justify-content:center;
-    flex-wrap:wrap;
-  }
-
-  .nav-links a{
-    color:#fff;
-    text-decoration:none;
-    font-size:14px;
-  }
-
-  .container{max-width:1200px;margin:auto;padding:20px;}
-  section{margin-bottom:35px;}
-  .about,.principal,.news,.roles{
-    background:#fff;
-    border-radius:18px;
-    padding:25px;
-    box-shadow:0 8px 20px rgba(0,0,0,.06);
-  }
-
-  h2{color:var(--main);margin-bottom:15px;border-right:5px solid var(--accent);padding-right:10px;}
-
-  .gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;}
-  .gallery div{height:160px;border-radius:16px;overflow:hidden;box-shadow:0 6px 15px rgba(0,0,0,.05);}
-  .gallery img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s;}
-  .gallery div:hover img{transform:scale(1.1);}
-
-  .news-marquee{overflow:hidden;white-space:nowrap;}
-  .news-marquee span{display:inline-block;padding-right:50px;animation:scroll 25s linear infinite;}
-  @keyframes scroll{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
-
-  .roles{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:22px;}
-  .card{
-    background:#fff;border-radius:22px;padding:30px 20px;text-align:center;
-    box-shadow:0 10px 25px rgba(0,0,0,.08);transition:.3s;
-  }
-  .card:hover{transform:translateY(-8px)}
-  .card i{font-size:48px;color:var(--main);margin-bottom:15px;}
-  .card h3{margin:10px 0;font-size:20px;}
-  .card p{font-size:14px;color:#555;}
-  .card a{
-    display:inline-block;margin-top:12px;text-decoration:none;color:#fff;
-    background:linear-gradient(135deg,var(--main),var(--dark));
-    padding:8px 18px;border-radius:20px;font-size:13px;
-  }
-
-  footer{text-align:center;padding:15px;font-size:13px;color:#666;background:#fff;}
-
-  /* Mobile */
-  @media(max-width:768px){
-    .navbar{flex-direction:column;}
-    .logo{margin-bottom:10px;}
-    header h1{font-size:24px;}
-    .nav-links{flex-direction:row;justify-content:center;gap:10px;}
-  }
+:root{
+  --main:#00796b;
+  --dark:#004d40;
+  --light:#f4f7fb;
+  --accent:#9ad0b3;
+}
+body{
+  margin:0;
+  font-family:'Cairo',Tahoma,Arial;
+  background:var(--light);
+  color:#222;
+  overflow-x:hidden;
+  scroll-behavior:smooth;
+}
+header{
+  background:linear-gradient(135deg,var(--dark),var(--main));
+  color:#fff;
+  text-align:center;
+  padding:25px 15px 60px;
+  position:relative;
+}
+header h1{margin:0;font-size:30px;}
+.nav-links{
+  margin-top:15px;
+  display:flex;
+  justify-content:center;
+  gap:20px;
+  list-style:none;
+  padding:0;
+  flex-wrap:wrap;
+}
+.nav-links a{
+  color:#fff;
+  text-decoration:none;
+  font-weight:bold;
+  transition:color .3s;
+}
+.nav-links a:hover{color:#9ad0b3;}
+.container{
+  max-width:1200px;
+  margin:auto;
+  padding:20px;
+  display:flex;
+  flex-direction:column;
+  gap:35px;
+}
+section{
+  opacity:0;
+  transform:translateY(30px);
+  transition:all 0.8s ease-out;
+}
+section.show{
+  opacity:1;
+  transform:translateY(0);
+}
+.about,.principal,.news{
+  background:#fff;
+  border-radius:18px;
+  padding:25px;
+  box-shadow:0 8px 20px rgba(0,0,0,.06);
+}
+.gallery{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:16px;
+}
+.gallery div{
+  height:160px;
+  border-radius:16px;
+  overflow:hidden;
+  box-shadow:0 6px 15px rgba(0,0,0,.05);
+  transition:transform .4s;
+}
+.gallery div:hover{
+  transform:scale(1.06);
+}
+.gallery img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+  transition:transform .4s;
+}
+.gallery div:hover img{
+  transform:scale(1.1) rotate(-1deg);
+}
+.roles{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:22px;
+}
+.card{
+  background:#fff;
+  border-radius:22px;
+  padding:30px 20px;
+  text-align:center;
+  box-shadow:0 10px 25px rgba(0,0,0,.08);
+  transition:.3s;
+}
+.card:hover{
+  transform:translateY(-8px) scale(1.02);
+  box-shadow:0 15px 30px rgba(0,0,0,.12);
+}
+.card i{
+  font-size:48px;
+  color:var(--main);
+  margin-bottom:15px;
+}
+.card h3{margin:10px 0;font-size:20px}
+.card p{font-size:14px;color:#555}
+.card a{
+  display:inline-block;
+  margin-top:12px;
+  text-decoration:none;
+  color:#fff;
+  background:linear-gradient(135deg,var(--main),var(--dark));
+  padding:10px 20px;
+  border-radius:20px;
+  font-size:14px;
+  transition:.3s;
+}
+.card a:hover{
+  background:linear-gradient(135deg,var(--dark),var(--main));
+}
+.news-marquee{overflow:hidden; white-space:nowrap; margin-top:10px;}
+.news-marquee span{
+  display:inline-block;
+  padding-right:50px;
+  animation:scroll 30s linear infinite;
+}
+@keyframes scroll{
+  0%{transform:translateX(-100%)}
+  100%{transform:translateX(100%)}
+}
+footer{text-align:center;padding:15px;font-size:13px;color:#666;background:#fff; margin-top:20px;}
+@media(max-width:768px){
+  header h1{font-size:24px;}
+  .gallery div{height:140px;}
+}
 </style>
 </head>
 <body>
 
-<!-- Header ثابت -->
 <header>
-  <div class="navbar">
-    <img src="https://raw.githubusercontent.com/SalalahSharqiyaSchool/grade-system/main/logo.png" class="logo" alt="شعار المدرسة">
-    <h1>مدرسة صلالة الشرقية للتعليم الأساسي</h1>
-  </div>
+  <nav>
+    <ul class="nav-links">
+      <li><a href="#about">عن المدرسة</a></li>
+      <li><a href="#news">الأخبار</a></li>
+      <li><a href="#roles">البوابات</a></li>
+    </ul>
+  </nav>
+  <h1>مدرسة صلالة الشرقية للتعليم الأساسي</h1>
   <p>منصة رقمية موحدة لخدمة الطالب والمعلم والإدارة المدرسية</p>
-
-  <ul class="nav-links">
-    <li><a href="about.html">عن المدرسة</a></li>
-    <li><a href="news.html">الأخبار</a></li>
-    <li><a href="roles.html">البوابات</a></li>
-    <li><a href="contact.html">تواصل معنا</a></li>
-  </ul>
 </header>
 
 <div class="container">
-  <section class="about">
+
+  <section class="about" id="about">
     <h2>نبذة عن المدرسة</h2>
-    <p>مدرسة صلالة الشرقية للتعليم الأساسي مؤسسة تعليمية تهدف إلى بناء جيل واعٍ ومبدع، وتسعى لتوظيف التقنية الحديثة في خدمة العملية التعليمية.</p>
+    <p>
+      مدرسة صلالة الشرقية للتعليم الأساسي مؤسسة تعليمية تهدف إلى بناء جيل واعٍ ومبدع،
+      وتسعى إلى توظيف التقنية الحديثة في خدمة العملية التعليمية وتعزيز التواصل بين
+      المدرسة والطلبة وأولياء الأمور.
+    </p>
   </section>
 
   <section class="gallery">
-    <div><img src="https://raw.githubusercontent.com/SalalahSharqiyaSchool/grade-system/main/image1.jpg"></div>
-    <div><img src="https://raw.githubusercontent.com/SalalahSharqiyaSchool/grade-system/main/image2.jpg"></div>
+    <div> <img src="https://raw.githubusercontent.com/SalalahSharqiyaSchool/grade-system/main/image1.jpg" ></div>
+    <div><img src="https://raw.githubusercontent.com/SalalahSharqiyaSchool/grade-system/main/image2.jpg" ></div>
     <div><img src="https://raw.githubusercontent.com/SalalahSharqiyaSchool/grade-system/main/image3.jpg"></div>
     <div><img src="https://raw.githubusercontent.com/SalalahSharqiyaSchool/grade-system/main/image4.jpg"></div>
   </section>
 
   <section class="principal">
     <h2>كلمة مدير المدرسة</h2>
-    <p>نرحب بكم في المنصة الإلكترونية لمدرسة صلالة الشرقية، ونسأل الله التوفيق والنجاح لجميع أبنائنا الطلبة.</p>
+    <p>
+      أبنائي الطلبة، زملائي المعلمين، نرحب بكم في المنصة الإلكترونية لمدرسة صلالة الشرقية،
+      والتي تهدف إلى تسهيل الوصول إلى الخدمات التعليمية وتعزيز الشفافية والمتابعة
+      الأكاديمية، متمنين للجميع التوفيق والنجاح.
+    </p>
   </section>
 
-  <section class="news">
+  <section class="news" id="news">
     <h2>أخبار وإعلانات مدرسية</h2>
     <div class="news-marquee">
-      <span>📢 بدء اختبارات الفصل الدراسي الأول يوم الأحد القادم — 🏫 الاجتماع التربوي الثاني يوم الأربعاء — 🎉 مدرسة صلالة الشرقية تقدم مبادرة فن التعامل مع الورقة الاختبارية بإشراف مدير المدرسة أ. بدر سويلم</span>
+      <span>📢 بدء الفصل الدراسي الجديد يوم الأحد القادم — 🏫 اجتماع أولياء الأمور يوم الخميس — 🎉 مسابقة القراءة الشهرية لجميع الطلاب.</span>
     </div>
   </section>
 
-  <section class="roles">
+  <section class="roles" id="roles">
     <div class="card">
       <i class="fas fa-user-graduate"></i>
       <h3>بوابة الطالب</h3>
-      <p>عرض الدرجات والترتيب.</p>
-      <a href="login.html">دخول الطالب</a>
+      <p>عرض الدرجات، الترتيب، والملاحظات الأكاديمية.</p>
+      <a href="https://salalahsharqiyaschool.github.io/grade-system/indexx.html">دخول الطالب</a>
     </div>
-
     <div class="card">
       <i class="fas fa-chalkboard-teacher"></i>
       <h3>بوابة المعلم</h3>
-      <p>إدارة الدرجات.</p>
-      <a href="login.html">دخول المعلم</a>
+      <p>إدارة الدرجات ومتابعة أداء الطلبة.</p>
+      <a href="https://salalahsharqiyaschool.github.io/SalalahSharqiya-School-Management/indexx.html">دخول المعلم</a>
     </div>
-
     <div class="card">
       <i class="fas fa-user-tie"></i>
       <h3>بوابة الإدارة</h3>
-      <p>التقارير والإشراف.</p>
-      <a href="login.html">دخول الإدارة</a>
+      <p>الإشراف العام والتقارير الإدارية.</p>
+      <a href="https://salalahsharqiyaschool.github.io/SalalahSharqiya-School-Management/admin.html">دخول الإدارة</a>
     </div>
   </section>
+
 </div>
 
 <footer>
   © 2025 مدرسة صلالة الشرقية للتعليم الأساسي – جميع الحقوق محفوظة
 </footer>
+
+<script>
+const sections = document.querySelectorAll('section');
+const observer = new IntersectionObserver(entries=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      entry.target.classList.add('show');
+    }
+  });
+},{threshold:0.2});
+sections.forEach(section => observer.observe(section));
+</script>
 
 </body>
 </html>
