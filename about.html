@@ -2,14 +2,15 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>من نحن / الرؤية / الرسالة - مدرسة صلالة الشرقية</title>
+<title>عن المدرسة - مدرسة صلالة الشرقية</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
 :root{
-  --main:#00796b;
-  --dark:#004d40;
-  --light:#f4f7fb;
-  --accent:#9ad0b3;
+  --main:#00796b;       /* أخضر متوسط */
+  --dark:#004d40;       /* أخضر داكن */
+  --light:#f4f7fb;      /* خلفية فاتحة */
+  --accent:#9ad0b3;     /* تزيين */
 }
 body{
   margin:0;
@@ -31,72 +32,72 @@ header h1{margin:0;font-size:28px;}
   gap:20px;
   list-style:none;
   padding:0;
-  flex-wrap:wrap;
 }
 .nav-links a{
   color:#fff;
   text-decoration:none;
   font-weight:bold;
 }
-.container{max-width:900px;margin:auto;padding:20px;display:flex;flex-direction:column;gap:25px;}
+.container{max-width:1200px;margin:auto;padding:20px;}
+h2{
+  color:var(--main);
+  margin-bottom:15px;
+  border-right:5px solid var(--accent);
+  padding-right:10px;
+}
+.cards{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:20px;
+}
 .card{
   background:#fff;
   border-radius:18px;
   padding:25px;
   box-shadow:0 8px 20px rgba(0,0,0,.06);
+  text-align:center;
+  transition:.3s;
 }
-.card h2{
-  color:var(--main);
-  margin-bottom:10px;
-  border-right:5px solid var(--accent);
-  padding-right:10px;
-}
-.card p{
-  line-height:1.8;
-}
-footer{text-align:center;padding:15px;font-size:13px;color:#666;background:#fff;margin-top:20px;}
+.card:hover{transform:translateY(-6px);}
+.card i{font-size:48px;color:var(--main);margin-bottom:15px;}
+.card h3{margin:10px 0;font-size:20px;}
+.card p{font-size:15px;color:#555;}
+footer{text-align:center;padding:15px;font-size:13px;color:#666;background:#fff;margin-top:30px;}
 @media(max-width:768px){
-  header h1{font-size:24px;}
-  .card{padding:20px;}
-  .nav-links{justify-content:center;}
+  .cards{grid-template-columns:1fr;}
 }
 </style>
 </head>
 <body>
 
 <header>
-  <h1>من نحن / الرؤية / الرسالة</h1>
+  <h1>مدرسة صلالة الشرقية للتعليم الأساسي</h1>
   <ul class="nav-links">
     <li><a href="index.html">الرئيسية</a></li>
     <li><a href="about.html">عن المدرسة</a></li>
-    <li><a href="roles.html">البوابات</a></li>
+    <li><a href="login.html">البوابات</a></li>
     <li><a href="contact.html">تواصل معنا</a></li>
   </ul>
 </header>
 
 <div class="container">
-  <div class="card">
-    <h2>من نحن</h2>
-    <p>
-      مدرسة صلالة الشرقية للتعليم الأساسي مؤسسة تعليمية رائدة تهدف إلى تنمية جيل واعٍ ومبدع،
-      من خلال تقديم تعليم نوعي يعتمد على القيم والمهارات الحديثة، وتعزيز روح التعاون والانتماء الوطني بين الطلبة.
-    </p>
-  </div>
-
-  <div class="card">
-    <h2>رؤية المدرسة</h2>
-    <p>
-      أن تكون مدرسة صلالة الشرقية نموذجًا متميزًا في التعليم الأساسي على مستوى السلطنة،
-      من خلال دمج التقنية الحديثة مع طرق تعليمية مبتكرة، مع التركيز على بناء شخصية متكاملة لدى الطالب.
-    </p>
-  </div>
-
-  <div class="card">
-    <h2>رسالة المدرسة</h2>
-    <p>
-      تقديم تعليم متميز وشامل للطلبة، تعزيز القيم الأخلاقية والوطنية، وتمكين الطلاب والمعلمين من الوصول لأعلى مستويات الكفاءة،
-      مع خلق بيئة تعليمية محفزة وآمنة تتيح لجميع أفراد المجتمع المدرسي النمو والتفوق.
-    </p>
+  <h2>من نحن</h2>
+  <div class="cards">
+    <div class="card">
+      <i class="fas fa-school"></i>
+      <h3>نبذة عن المدرسة</h3>
+      <p>مدرسة صلالة الشرقية مؤسسة تعليمية تسعى لبناء جيل واعٍ ومبدع باستخدام التقنية الحديثة في التعليم.</p>
+    </div>
+    <div class="card">
+      <i class="fas fa-eye"></i>
+      <h3>رؤية المدرسة</h3>
+      <p>تطوير بيئة تعليمية مبتكرة، وتعزيز الثقافة والمعرفة لدى جميع الطلاب.</p>
+    </div>
+    <div class="card">
+      <i class="fas fa-bullseye"></i>
+      <h3>رسالة المدرسة</h3>
+      <p>تمكين الطلاب والمعلمين من استخدام الأدوات التعليمية الحديثة لتحقيق التفوق والنجاح.</p>
+    </div>
   </div>
 </div>
 
