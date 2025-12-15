@@ -7,140 +7,131 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
     :root{
-      --main:#0b5ed7;
-      --dark:#083b8a;
+      --main:#1e7f4f;
+      --dark:#145c38;
       --light:#f4f7fb;
-      --accent:#ffc107;
+      --accent:#9ad0b3;
     }
     body{margin:0;font-family:'Cairo',Tahoma,Arial;background:var(--light);color:#222}
+
+    /* ===== Header & Navbar ===== */
     header{
       background:linear-gradient(135deg,var(--dark),var(--main));
       color:#fff;
-      padding:20px 20px 60px;
+      padding:20px 15px 60px;
       text-align:center;
       position:relative;
     }
-    header h1{margin:0;font-size:34px;font-weight:bold}
-    header p{margin-top:12px;font-size:18px;opacity:.95}
-    header img{position:absolute;top:10px;left:20px;height:60px;}
+    .navbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      flex-wrap:wrap;
+      margin-bottom:20px;
+    }
+    .nav-right{display:flex;align-items:center;gap:10px}
+    .logo{height:50px}
+    .school-name{font-size:16px;font-weight:bold}
+    .nav-links{list-style:none;display:flex;gap:15px;padding:0;margin:0}
+    .nav-links a{color:#fff;text-decoration:none;font-size:14px}
 
-    .container{max-width:1200px;margin:auto;padding:25px}
+    header h1{margin:10px 0 0;font-size:30px}
+    header p{margin-top:8px;font-size:16px;opacity:.95}
 
+    /* ===== Layout ===== */
+    .container{max-width:1200px;margin:auto;padding:20px}
     section{margin-bottom:35px}
 
-    .about,.principal{
+    .about,.principal,.contact{
       background:#fff;
       border-radius:18px;
-      padding:30px;
+      padding:25px;
       box-shadow:0 8px 20px rgba(0,0,0,.06)
     }
-    .about h2,.principal h2{
+    h2{
       color:var(--main);
       margin-bottom:15px;
       border-right:5px solid var(--accent);
       padding-right:10px
     }
 
+    /* ===== Gallery ===== */
     .gallery{
       display:grid;
       grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-      gap:18px;
+      gap:16px;
     }
     .gallery div{
-      background:linear-gradient(135deg,#dfe9f3,#ffffff);
-      height:160px;
-      border-radius:18px;
+      background:linear-gradient(135deg,#e8f3ee,#ffffff);
+      height:150px;
+      border-radius:16px;
       display:flex;
       align-items:center;
       justify-content:center;
       color:#555;
-      font-size:15px;
       box-shadow:0 6px 15px rgba(0,0,0,.05);
-      transition:transform .4s, box-shadow .4s;
-      cursor:pointer;
+      transition:.4s
     }
-    .gallery div:hover{
-      transform:scale(1.08);
-      box-shadow:0 12px 25px rgba(0,0,0,.12);
-    }
+    .gallery div:hover{transform:scale(1.06)}
 
-    .news{
-      background:#fff;
-      border-radius:18px;
-      padding:20px;
-      box-shadow:0 6px 15px rgba(0,0,0,.05);
-      margin-bottom:30px;
-    }
-    .news h2{
-      color:var(--main);
-      margin-bottom:15px;
-      border-right:5px solid var(--accent);
-      padding-right:10px
-    }
-    .news-marquee{
-      overflow:hidden;
-      white-space:nowrap;
-    }
-    .news-marquee span{
-      display:inline-block;
-      padding-right:50px;
-      animation:scroll 15s linear infinite;
-      font-size:16px;
-      color:#333;
-    }
-    @keyframes scroll{
-      0%{transform:translateX(100%)}
-      100%{transform:translateX(-100%)}
-    }
+    /* ===== News ===== */
+    .news{background:#fff;border-radius:18px;padding:20px;box-shadow:0 6px 15px rgba(0,0,0,.05)}
+    .news-marquee{overflow:hidden;white-space:nowrap}
+    .news-marquee span{display:inline-block;padding-right:50px;animation:scroll 15s linear infinite}
+    @keyframes scroll{0%{transform:translateX(100%)}100%{transform:translateX(-100%)}}
 
-    .roles{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
-      gap:25px
-    }
+    /* ===== Roles ===== */
+    .roles{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:22px}
     .card{
       background:#fff;
       border-radius:22px;
-      padding:35px 25px;
+      padding:30px 20px;
       text-align:center;
       box-shadow:0 10px 25px rgba(0,0,0,.08);
-      transition:.35s
+      transition:.3s
     }
-    .card:hover{transform:translateY(-10px)}
-    .card i{
-      font-size:52px;
-      color:var(--main);
-      margin-bottom:18px
-    }
-    .card h3{margin:12px 0;font-size:22px}
-    .card p{font-size:15px;color:#555}
+    .card:hover{transform:translateY(-8px)}
+    .card i{font-size:48px;color:var(--main);margin-bottom:15px}
+    .card h3{margin:10px 0;font-size:20px}
+    .card p{font-size:14px;color:#555}
     .card a{
-      display:inline-block;
-      margin-top:18px;
-      text-decoration:none;
-      color:#fff;
+      display:inline-block;margin-top:15px;
+      text-decoration:none;color:#fff;
       background:linear-gradient(135deg,var(--main),var(--dark));
-      padding:12px 30px;
-      border-radius:30px;
-      font-size:15px
+      padding:12px 26px;border-radius:30px;font-size:14px
     }
 
-    footer{
-      background:#fff;
-      text-align:center;
-      padding:18px;
-      font-size:14px;
-      color:#666;
-      box-shadow:0 -4px 10px rgba(0,0,0,.05)
+    /* ===== Contact ===== */
+    .contact p{font-size:15px;line-height:1.8}
+
+    footer{text-align:center;padding:15px;font-size:13px;color:#666;background:#fff}
+
+    /* ===== Mobile تحسين الجوال ===== */
+    @media(max-width:768px){
+      .nav-links{width:100%;justify-content:center;margin-top:10px}
+      header h1{font-size:24px}
+      header p{font-size:14px}
+      .card{padding:25px 15px}
+      .card a{width:100%}
     }
   </style>
 </head>
 <body>
 
 <header>
-  <img src="https://raw.githubusercontent.com/SalalahSharqiyaSchool/grade-system/e700865c67df88ba2eb2e29fba44a659d1307296/logo.png" alt="شعار المدرسة">
+  <nav class="navbar">
+    <div class="nav-right">
+      <img src="https://raw.githubusercontent.com/SalalahSharqiyaSchool/grade-system/e700865c67df88ba2eb2e29fba44a659d1307296/logo.png" alt="شعار المدرسة" class="logo">
+      <span class="school-name">مدرسة صلالة الشرقية</span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="#about">عن المدرسة</a></li>
+      <li><a href="#news">الأخبار</a></li>
+      <li><a href="#roles">البوابات</a></li>
+    </ul>
+  </nav>
   <h1>مدرسة صلالة الشرقية للتعليم الأساسي</h1>
-  <p>منصة رقمية لخدمة الطالب والمعلم والإدارة المدرسية</p>
+  <p>منصة رقمية موحدة لخدمة الطالب والمعلم والإدارة المدرسية</p>
 </header>
 
 <div class="container">
@@ -182,7 +173,7 @@
       <i class="fas fa-user-graduate"></i>
       <h3>بوابة الطالب</h3>
       <p>عرض الدرجات، الترتيب، والملاحظات الأكاديمية.</p>
-      <a href="https://salalahsharqiyaschool.github.io/grade-system/indexx.html">دخول الطالب</a>
+      <a href="https://salalahsharqiyaschool.github.io/grade-system/">دخول الطالب</a>
     </div>
 
     <div class="card">
