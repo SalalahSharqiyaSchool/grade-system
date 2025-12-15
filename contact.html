@@ -38,7 +38,21 @@ header h1{margin:0;font-size:28px;}
   text-decoration:none;
   font-weight:bold;
 }
-.container{max-width:800px;margin:auto;padding:20px;}
+.container{max-width:900px;margin:auto;padding:20px;display:flex;flex-direction:column;gap:25px;}
+.card{
+  background:#fff;
+  border-radius:18px;
+  padding:25px;
+  box-shadow:0 8px 20px rgba(0,0,0,.06);
+  text-align:center;
+}
+.card h2{
+  color:var(--main);
+  margin-bottom:10px;
+  border-right:5px solid var(--accent);
+  padding-right:10px;
+}
+.card p{line-height:1.8;}
 form{
   background:#fff;
   padding:25px;
@@ -65,7 +79,6 @@ button{
   font-size:15px;
 }
 button:hover{background:var(--main);}
-footer{text-align:center;padding:15px;font-size:13px;color:#666;background:#fff;margin-top:20px;}
 .success-message{
   display:none;
   padding:12px;
@@ -74,6 +87,12 @@ footer{text-align:center;padding:15px;font-size:13px;color:#666;background:#fff;
   border-radius:8px;
   margin-bottom:15px;
   text-align:center;
+}
+footer{text-align:center;padding:15px;font-size:13px;color:#666;background:#fff;margin-top:20px;}
+@media(max-width:768px){
+  header h1{font-size:24px;}
+  .card{padding:20px;}
+  .nav-links{justify-content:center;}
 }
 </style>
 </head>
@@ -90,16 +109,36 @@ footer{text-align:center;padding:15px;font-size:13px;color:#666;background:#fff;
 </header>
 
 <div class="container">
-  <div class="success-message" id="successMessage">تم إرسال الرسالة بنجاح، شكراً لتواصلكم!</div>
-  
+
+  <!-- بطاقات معلومات الاتصال -->
+  <div class="card">
+    <h2>العنوان</h2>
+    <p>صلالة الشرقية، محافظة ظفار، سلطنة عمان</p>
+  </div>
+
+  <div class="card">
+    <h2>البريد الإلكتروني</h2>
+    <p>school@salalahsharqiya.edu.om</p>
+  </div>
+
+  <div class="card">
+    <h2>الهاتف</h2>
+    <p>+968 1234 5678</p>
+  </div>
+
   <!-- نموذج Formspree -->
-  <form id="contactForm" action="https://formspree.io/f/mldqkber" method="POST">
-    <input type="text" name="name" placeholder="الاسم" required>
-    <input type="email" name="email" placeholder="البريد الإلكتروني" required>
-    <input type="text" name="subject" placeholder="الموضوع" required>
-    <textarea name="message" rows="5" placeholder="الرسالة" required></textarea>
-    <button type="submit">إرسال</button>
-  </form>
+  <div class="card">
+    <h2>أرسل رسالة</h2>
+    <div class="success-message" id="successMessage">تم إرسال الرسالة بنجاح، شكراً لتواصلكم!</div>
+    <form id="contactForm" action="https://formspree.io/f/mldqkber" method="POST">
+      <input type="text" name="name" placeholder="الاسم" required>
+      <input type="email" name="email" placeholder="البريد الإلكتروني" required>
+      <input type="text" name="subject" placeholder="الموضوع" required>
+      <textarea name="message" rows="5" placeholder="الرسالة" required></textarea>
+      <button type="submit">إرسال</button>
+    </form>
+  </div>
+
 </div>
 
 <footer>
