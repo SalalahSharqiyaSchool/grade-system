@@ -2,267 +2,146 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>مدرسة صلالة الشرقية للتعليم الأساسي</title>
+<title>البوابات - مدرسة صلالة الشرقية</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- خطوط عربية جذابة -->
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <style>
 :root{
-  --main:#00796b;
-  --dark:#004d40;
-  --light:#f4f7fb;
-  --accent:#9ad0b3;
+  --primary:#00796b;  /* أخضر عماني */
+  --secondary:#004d40; /* أخضر داكن */
+  --accent:#d49a6a;   /* بني عماني فاتح */
+  --bg:#f4f7fb;       /* خلفية فاتحة */
+  --text:#222;
 }
 
 body{
   margin:0;
-  font-family:'Cairo',Tahoma,Arial;
-  background:var(--light);
-  color:#222;
-  overflow-x:hidden;
+  font-family:'Cairo','Tajawal',Tahoma,Arial;
+  background:var(--bg);
+  color:var(--text);
 }
 
-/* ===== Header ===== */
-header{
-  background:linear-gradient(135deg,var(--dark),var(--main));
-  color:#fff;
-  text-align:center;
-  padding:25px 15px;
-}
-header h1{margin:10px 0;font-size:28px;}
-header p{margin:5px 0 15px;font-size:16px;}
-
-.nav-links{
-  display:flex;
-  justify-content:center;
-  gap:20px;
-  list-style:none;
-  padding:0;
-  flex-wrap:wrap;
-}
-.nav-links a{
-  color:#fff;
-  text-decoration:none;
-  font-weight:bold;
-  padding:8px 12px;
-  border-radius:6px;
-  transition:0.3s;
-}
-.nav-links a:hover{
-  background:rgba(255,255,255,0.2);
-}
-
-/* ===== Carousel ===== */
-.carousel-container{
-  position: relative;
-  width: 100%;
-  max-width: 100%;
+.container{
+  max-width:1200px;
   margin:auto;
-  overflow: hidden;
-  border-radius:18px;
-  margin-bottom:30px;
-}
-.carousel-track{
-  display:flex;
-  transition: transform 0.5s ease-in-out;
-}
-.carousel-slide{
-  min-width:100%;
-  overflow:hidden;
-}
-.carousel-slide img{
-  width:100%;
-  height:400px;
-  object-fit:cover;
-  display:block;
-  border-radius:18px;
-}
-.carousel-button{
-  position:absolute;
-  top:50%;
-  transform:translateY(-50%);
-  background:rgba(0,0,0,0.4);
-  color:#fff;
-  border:none;
-  padding:10px;
-  font-size:20px;
-  cursor:pointer;
-  border-radius:50%;
-  z-index:10;
-}
-.carousel-button.left{left:10px;}
-.carousel-button.right{right:10px;}
-
-/* ===== News Marquee ===== */
-.news-marquee{
-  overflow:hidden;
-  white-space:nowrap;
-  background:#fff;
-  padding:12px 0;
-  border-radius:18px;
-  margin-bottom:30px;
-  box-shadow:0 6px 15px rgba(0,0,0,.05);
-}
-.news-marquee span{
-  display:inline-block;
-  padding-left:50px;
-  animation:scroll 30s linear infinite;
-}
-@keyframes scroll{
-  0%{transform:translateX(100%)}
-  100%{transform:translateX(-100%)}
+  padding:30px 20px;
 }
 
-/* ===== Sections ===== */
-.container{max-width:1200px;margin:auto;padding:20px;}
-section{
-  margin-bottom:35px;
+h2{
+  text-align:center;
+  font-size:28px;
+  margin-bottom:30px;
+  font-weight:700;
+  color:var(--primary);
 }
+
 .card-section{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
   gap:25px;
 }
+
 .card{
-  background:#fff;
-  border-radius:18px;
-  padding:25px;
+  background:linear-gradient(135deg,var(--primary),var(--secondary));
+  color:#fff;
+  border-radius:22px;
+  padding:30px 20px;
   text-align:center;
   box-shadow:0 10px 25px rgba(0,0,0,.08);
-  transition:0.3s;
+  transition:0.4s;
+  cursor:pointer;
+  position:relative;
+  overflow:hidden;
 }
-.card:hover{transform:translateY(-8px);}
+
+.card:hover{
+  transform:translateY(-8px) scale(1.03);
+  box-shadow:0 15px 30px rgba(0,0,0,.15);
+}
+
 .card i{
-  font-size:48px;
-  color:var(--main);
-  margin-bottom:15px;
+  font-size:50px;
+  margin-bottom:20px;
+  display:block;
 }
-.card h3{margin:10px 0;font-size:20px;}
-.card p{font-size:15px;color:#555;}
+
+.card h3{
+  font-size:22px;
+  margin-bottom:12px;
+  font-weight:700;
+}
+
+.card p{
+  font-size:15px;
+  line-height:1.8;
+}
+
+/* زر دخول داخل البطاقة */
 .card a{
   display:inline-block;
-  margin-top:12px;
-  text-decoration:none;
-  color:#fff;
-  background:linear-gradient(135deg,var(--main),var(--dark));
+  margin-top:15px;
   padding:10px 20px;
-  border-radius:20px;
-  font-size:14px;
+  background:var(--accent);
+  color:#fff;
+  text-decoration:none;
+  font-weight:600;
+  border-radius:15px;
+  transition:0.3s;
+}
+.card a:hover{
+  background:#b87b4f;
 }
 
-/* ===== Footer ===== */
-footer{
-  text-align:center;
-  padding:15px;
-  font-size:13px;
-  color:#666;
-  background:#fff;
-  margin-top:30px;
+/* تأثير Overlay عند Hover */
+.card::before{
+  content:"";
+  position:absolute;
+  top:0;left:0;
+  width:100%;height:100%;
+  background:rgba(0,0,0,0.1);
+  opacity:0;
+  transition:0.4s;
+}
+.card:hover::before{
+  opacity:1;
 }
 
-/* ===== Responsive ===== */
 @media(max-width:768px){
-  .carousel-slide img{
-    height:220px;
-  }
-  header h1{font-size:24px;}
-  header p{font-size:14px;}
-  .nav-links{gap:10px;}
+  h2{font-size:24px;}
 }
 </style>
 </head>
 <body>
 
-<header>
-  <h1>مدرسة صلالة الشرقية للتعليم الأساسي</h1>
-  <p>منصة رقمية موحدة لخدمة الطالب والمعلم والإدارة المدرسية</p>
-  <ul class="nav-links">
-    <li><a href="index.html">الرئيسية</a></li>
-    <li><a href="about.html">عن المدرسة</a></li>
-    <li><a href="news.html">الأخبار</a></li>
-    <li><a href="contact.html">تواصل معنا</a></li>
-  </ul>
-</header>
-
-<!-- Carousel -->
-<div class="carousel-container">
-  <button class="carousel-button left">&#10094;</button>
-  <div class="carousel-track">
-    <div class="carousel-slide"><img src="https://raw.githubusercontent.com/SalalahSharqiyaSchool/grade-system/main/image1.jpg" alt="صورة 1"></div>
-    <div class="carousel-slide"><img src="https://raw.githubusercontent.com/SalalahSharqiyaSchool/grade-system/main/image2.jpg" alt="صورة 2"></div>
-    <div class="carousel-slide"><img src="https://raw.githubusercontent.com/SalalahSharqiyaSchool/grade-system/main/image3.jpg" alt="صورة 3"></div>
-    <div class="carousel-slide"><img src="https://raw.githubusercontent.com/SalalahSharqiyaSchool/grade-system/main/image4.jpg" alt="صورة 4"></div>
-  </div>
-  <button class="carousel-button right">&#10095;</button>
-</div>
-
-<!-- News Marquee -->
 <div class="container">
-  <div class="news-marquee">
-    <span>📢 بدء اختبارات الفصل الدراسي الأول يوم الأحد القادم — 🏫 الاجتماع التربوي الثاني يوم الأربعاء — 🎉 مسابقة القراءة الشهرية لجميع الطلاب — 🔔 إشعار مهم من الإدارة المدرسية</span>
+  <h2>البوابات الإلكترونية</h2>
+  <div class="card-section">
+    <div class="card">
+      <i class="fas fa-user-graduate"></i>
+      <h3>بوابة الطالب</h3>
+      <p>يمكن للطالب متابعة الدرجات والترتيب والأداء الدراسي بسهولة ويسر.</p>
+      <a href="login.html">دخول الطالب</a>
+    </div>
+
+    <div class="card">
+      <i class="fas fa-chalkboard-teacher"></i>
+      <h3>بوابة المعلم</h3>
+      <p>إدارة الدرجات، متابعة الطلاب، وإضافة الملاحظات والتقارير الدراسية.</p>
+      <a href="login.html">دخول المعلم</a>
+    </div>
+
+    <div class="card">
+      <i class="fas fa-user-tie"></i>
+      <h3>بوابة الإدارة</h3>
+      <p>الاطلاع على التقارير، الإشراف على المعلمين والطلاب، وتحليل الأداء العام.</p>
+      <a href="login.html">دخول الإدارة</a>
+    </div>
   </div>
 </div>
-
-<!-- About / Info Cards -->
-<div class="container">
-  <section class="card-section">
-    <div class="card">
-      <i class="fas fa-school"></i>
-      <h3>عن المدرسة</h3>
-      <p>مدرسة صلالة الشرقية مؤسسة تعليمية تسعى لبناء جيل واعٍ ومبدع باستخدام التقنية الحديثة في التعليم.</p>
-    </div>
-    <div class="card">
-      <i class="fas fa-eye"></i>
-      <h3>رؤية المدرسة</h3>
-      <p>تطوير بيئة تعليمية مبتكرة، وتعزيز الثقافة والمعرفة لدى جميع الطلاب.</p>
-    </div>
-    <div class="card">
-      <i class="fas fa-bullseye"></i>
-      <h3>رسالة المدرسة</h3>
-      <p>تمكين الطلاب والمعلمين من استخدام الأدوات التعليمية الحديثة لتحقيق التفوق والنجاح.</p>
-    </div>
-  </section>
-</div>
-
-<footer>
-  © 2025 مدرسة صلالة الشرقية للتعليم الأساسي – جميع الحقوق محفوظة
-</footer>
-
-<script>
-const track = document.querySelector('.carousel-track');
-const slides = Array.from(track.children);
-const nextButton = document.querySelector('.carousel-button.right');
-const prevButton = document.querySelector('.carousel-button.left');
-let currentIndex = 0;
-
-function updateCarousel(){
-  track.style.transform = 'translateX(-'+currentIndex*100+'%)';
-}
-
-nextButton.addEventListener('click', ()=>{
-  currentIndex = (currentIndex+1)%slides.length;
-  updateCarousel();
-});
-prevButton.addEventListener('click', ()=>{
-  currentIndex = (currentIndex-1+slides.length)%slides.length;
-  updateCarousel();
-});
-
-// Swipe Support for Mobile
-let startX=0;
-track.addEventListener('touchstart', e=>{
-  startX=e.touches[0].clientX;
-});
-track.addEventListener('touchend', e=>{
-  let endX=e.changedTouches[0].clientX;
-  if(endX-startX>50){ // swipe right
-    currentIndex = (currentIndex-1+slides.length)%slides.length;
-  }else if(startX-endX>50){ // swipe left
-    currentIndex = (currentIndex+1)%slides.length;
-  }
-  updateCarousel();
-});
-</script>
 
 </body>
 </html>
