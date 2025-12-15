@@ -100,25 +100,27 @@ header p{
   padding-right:12px;
 }
 
-/* ===== Carousel ===== */
-.carousel{
+/* ===== Carousel 3D ===== */
+.carousel-container{
   position:relative;
   width:100%;
   max-width:900px;
   margin:auto;
-  overflow:hidden;
-  border-radius:18px;
-  box-shadow:0 12px 25px rgba(0,0,0,.08);
+  perspective:1500px;
 }
 
 .carousel-track{
   display:flex;
-  transition:transform 0.5s ease;
+  transition:transform 0.6s ease;
+  transform-style:preserve-3d;
 }
 
 .carousel-slide{
   min-width:100%;
   overflow:hidden;
+  backface-visibility:hidden;
+  border-radius:18px;
+  box-shadow:0 12px 25px rgba(0,0,0,.08);
 }
 
 .carousel-slide img{
@@ -150,6 +152,25 @@ header p{
 .carousel-button.prev{left:15px;}
 .carousel-button.next{right:15px;}
 
+/* Pagination Dots */
+.carousel-dots{
+  text-align:center;
+  margin-top:15px;
+}
+.carousel-dot{
+  display:inline-block;
+  width:12px;
+  height:12px;
+  background:#ccc;
+  border-radius:50%;
+  margin:0 6px;
+  cursor:pointer;
+  transition:.3s;
+}
+.carousel-dot.active{
+  background:var(--primary);
+}
+
 /* ===== Portals Cards ===== */
 .portals{
   display:grid;
@@ -165,7 +186,6 @@ header p{
   text-align:center;
   box-shadow:0 12px 30px rgba(0,0,0,.08);
   transition:.35s;
-  position:relative;
 }
 
 .portal-card:hover{
@@ -271,7 +291,7 @@ footer{
   <!-- Carousel -->
   <section>
     <h2 class="section-title">معرض الصور</h2>
-    <div class="carousel">
+    <div class="carousel-container">
       <button class="carousel-button prev">&#10094;</button>
       <div class="carousel-track">
         <div class="carousel-slide"><img src="https://raw.githubusercontent.com/SalalahSharqiyaSchool/grade-system/main/image1.jpg" alt="صورة 1"></div>
@@ -280,6 +300,7 @@ footer{
         <div class="carousel-slide"><img src="https://raw.githubusercontent.com/SalalahSharqiyaSchool/grade-system/main/image4.jpg" alt="صورة 4"></div>
       </div>
       <button class="carousel-button next">&#10095;</button>
+      <div class="carousel-dots"></div>
     </div>
   </section>
 
@@ -291,19 +312,19 @@ footer{
         <i class="fas fa-user-graduate"></i>
         <h3>بوابة الطالب</h3>
         <p>عرض الدرجات، الترتيب، والتقارير الأكاديمية.</p>
-        <a href="https://salalahsharqiyaschool.github.io/grade-system/">دخول الطالب</a>
+        <a href="login.html">دخول الطالب</a>
       </div>
       <div class="portal-card">
         <i class="fas fa-chalkboard-teacher"></i>
         <h3>بوابة المعلم</h3>
         <p>إدارة الدرجات ومتابعة الطلبة.</p>
-        <a href="https://salalahsharqiyaschool.github.io/SalalahSharqiya-School-Management/">دخول المعلم</a>
+        <a href="login.html">دخول المعلم</a>
       </div>
       <div class="portal-card">
         <i class="fas fa-user-tie"></i>
         <h3>بوابة الإدارة</h3>
         <p>التقارير، الإشراف، والمتابعة.</p>
-        <a href="https://salalahsharqiyaschool.github.io/SalalahSharqiya-School-Management/admin.html">دخول الإدارة</a>
+        <a href="login.html">دخول الإدارة</a>
       </div>
     </div>
   </section>
@@ -327,34 +348,68 @@ const track = document.querySelector('.carousel-track');
 const slides = Array.from(track.children);
 const prevButton = document.querySelector('.carousel-button.prev');
 const nextButton = document.querySelector('.carousel-button.next');
+const dotsContainer = document.querySelector('.carousel-dots');
 
 let currentIndex = 0;
+let autoSlideInterval;
 
-function updateCarousel() {
-  track.style.transform = 'translateX(-' + currentIndex * 100 + '%)';
+// إنشاء نقاط pagination
+slides.forEach((_, index)=>{
+  const dot = document.createElement('span');
+  dot.classList.add('carousel-dot');
+  if(index===0) dot.classList.add('active');
+  dot.addEventListener('click', ()=>{
+    currentIndex = index;
+    updateCarousel();
+    resetAutoSlide();
+  });
+  dotsContainer.appendChild(dot);
+});
+
+const dots = Array.from(dotsContainer.children);
+
+function updateCarousel(){
+  track.style.transform = `translateX(-${currentIndex*100}%)`;
+  dots.forEach(dot=>dot.classList.remove('active'));
+  dots[currentIndex].classList.add('active');
 }
 
-prevButton.addEventListener('click', () => {
-  currentIndex = (currentIndex === 0) ? slides.length -1 : currentIndex -1;
+// أزرار السهم
+prevButton.addEventListener('click', ()=>{
+  currentIndex = (currentIndex===0) ? slides.length-1 : currentIndex-1;
   updateCarousel();
+  resetAutoSlide();
+});
+nextButton.addEventListener('click', ()=>{
+  currentIndex = (currentIndex===slides.length-1) ? 0 : currentIndex+1;
+  updateCarousel();
+  resetAutoSlide();
 });
 
-nextButton.addEventListener('click', () => {
-  currentIndex = (currentIndex === slides.length -1) ? 0 : currentIndex +1;
-  updateCarousel();
-});
+// Auto-slide
+function startAutoSlide(){
+  autoSlideInterval = setInterval(()=>{
+    currentIndex = (currentIndex===slides.length-1) ? 0 : currentIndex+1;
+    updateCarousel();
+  },5000);
+}
 
-// Swipe support for mobile
+function resetAutoSlide(){
+  clearInterval(autoSlideInterval);
+  startAutoSlide();
+}
+
+startAutoSlide();
+
+// Swipe support
 let startX = 0;
-track.addEventListener('touchstart', e => { startX = e.touches[0].clientX; });
-track.addEventListener('touchend', e => {
-  let diffX = e.changedTouches[0].clientX - startX;
-  if(diffX > 50){ // swipe right
-    currentIndex = (currentIndex === 0) ? slides.length -1 : currentIndex -1;
-  } else if(diffX < -50){ // swipe left
-    currentIndex = (currentIndex === slides.length -1) ? 0 : currentIndex +1;
-  }
+track.addEventListener('touchstart', e=>{ startX = e.touches[0].clientX; });
+track.addEventListener('touchend', e=>{
+  let diff = e.changedTouches[0].clientX - startX;
+  if(diff>50) currentIndex = (currentIndex===0) ? slides.length-1 : currentIndex-1;
+  else if(diff<-50) currentIndex = (currentIndex===slides.length-1) ? 0 : currentIndex+1;
   updateCarousel();
+  resetAutoSlide();
 });
 </script>
 
