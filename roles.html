@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>البوابات - مدرسة صلالة الشرقية</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{
+  --main:#00796b;
+  --dark:#004d40;
+  --light:#f4f7fb;
+  --accent:#9ad0b3;
+}
+body{
+  margin:0;
+  font-family:'Cairo',Tahoma,Arial;
+  background:var(--light);
+  color:#222;
+}
+header{
+  background:linear-gradient(135deg,var(--dark),var(--main));
+  color:#fff;
+  text-align:center;
+  padding:25px 15px;
+}
+header h1{margin:0;font-size:28px;}
+.nav-links{
+  margin-top:15px;
+  display:flex;
+  justify-content:center;
+  gap:20px;
+  list-style:none;
+  padding:0;
+}
+.nav-links a{
+  color:#fff;
+  text-decoration:none;
+  font-weight:bold;
+}
+.container{max-width:1200px;margin:auto;padding:20px;}
+h2{
+  color:var(--main);
+  margin-bottom:20px;
+  border-right:5px solid var(--accent);
+  padding-right:10px;
+}
+.cards{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:20px;
+}
+.card{
+  background:#fff;
+  border-radius:18px;
+  padding:25px;
+  box-shadow:0 8px 20px rgba(0,0,0,.06);
+  text-align:center;
+  transition:.3s;
+}
+.card:hover{transform:translateY(-6px);}
+.card i{font-size:50px;color:var(--main);margin-bottom:15px;}
+.card h3{margin:10px 0;font-size:20px;}
+.card p{font-size:15px;color:#555;}
+.card a{
+  display:inline-block;
+  margin-top:12px;
+  text-decoration:none;
+  color:#fff;
+  background:linear-gradient(135deg,var(--main),var(--dark));
+  padding:10px 20px;
+  border-radius:20px;
+}
+footer{text-align:center;padding:15px;font-size:13px;color:#666;background:#fff;margin-top:30px;}
+@media(max-width:768px){
+  .cards{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>البوابات</h1>
+  <ul class="nav-links">
+    <li><a href="index.html">الرئيسية</a></li>
+    <li><a href="about.html">عن المدرسة</a></li>
+    <li><a href="login.html">البوابات</a></li>
+    <li><a href="contact.html">تواصل معنا</a></li>
+  </ul>
+</header>
+
+<div class="container">
+  <h2>بوابات المدرسة</h2>
+  <div class="cards">
+    <div class="card">
+      <i class="fas fa-user-graduate"></i>
+      <h3>بوابة الطالب</h3>
+      <p>عرض الدرجات، الترتيب، والملاحظات الأكاديمية.</p>
+      <a href="login.html">دخول الطالب</a>
+    </div>
+    <div class="card">
+      <i class="fas fa-chalkboard-teacher"></i>
+      <h3>بوابة المعلم</h3>
+      <p>إدارة الدرجات ومتابعة أداء الطلبة.</p>
+      <a href="login.html">دخول المعلم</a>
+    </div>
+    <div class="card">
+      <i class="fas fa-user-tie"></i>
+      <h3>بوابة الإدارة</h3>
+      <p>الإشراف العام والتقارير الإدارية.</p>
+      <a href="login.html">دخول الإدارة</a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  © 2025 مدرسة صلالة الشرقية للتعليم الأساسي – جميع الحقوق محفوظة
+</footer>
+
+</body>
+</html>
