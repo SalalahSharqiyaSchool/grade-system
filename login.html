@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>تسجيل الدخول - مدرسة صلالة الشرقية</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  body{
+    font-family:'Cairo',Tahoma,Arial;
+    margin:0;
+    padding:0;
+    background:#f4f7fb;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+  }
+  form{
+    background:#fff;
+    padding:30px;
+    border-radius:15px;
+    box-shadow:0 5px 15px rgba(0,0,0,.1);
+    width:320px;
+  }
+  h1{
+    text-align:center;
+    color:#004d40;
+    margin-bottom:20px;
+  }
+  select, input{
+    width:100%;
+    padding:12px;
+    margin:10px 0;
+    border-radius:8px;
+    border:1px solid #ccc;
+  }
+  button{
+    background:#004d40;
+    color:#fff;
+    padding:12px;
+    border:none;
+    border-radius:8px;
+    width:100%;
+    cursor:pointer;
+  }
+  button:hover{
+    background:#00796b;
+  }
+</style>
+</head>
+<body>
+
+<form id="loginForm">
+  <h1>تسجيل الدخول</h1>
+
+  <select name="role" required>
+    <option value="">اختر نوع الحساب</option>
+    <option value="student">طالب</option>
+    <option value="teacher">معلم</option>
+    <option value="admin">إدارة</option>
+  </select>
+
+  <input type="email" name="email" placeholder="البريد الإلكتروني" required>
+  <input type="password" name="password" placeholder="كلمة المرور" required>
+
+  <button type="submit">دخول</button>
+</form>
+
+<script>
+  const form = document.getElementById('loginForm');
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    const role = form.role.value;
+
+    if(role === 'student'){
+      location.href = 'https://salalahsharqiyachool.github.io/grade-system/indexx.html';
+    }
+    else if(role === 'teacher'){
+      location.href = 'https://salalahsharqiyachool.github.io/SalalahSharqiya-School-Management/';
+    }
+    else if(role === 'admin'){
+      location.href = 'https://salalahsharqiyachool.github.io/SalalahSharqiya-School-Management/admin.html';
+    }
+    else{
+      alert('اختر نوع الحساب!');
+    }
+  });
+</script>
+
+</body>
+</html>
