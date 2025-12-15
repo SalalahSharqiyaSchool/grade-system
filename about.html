@@ -2,9 +2,8 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>عن المدرسة | مدرسة صلالة الشرقية للتعليم الأساسي</title>
+<title>عن المدرسة - مدرسة صلالة الشرقية</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <style>
@@ -22,22 +21,20 @@ body{
   color:#222;
 }
 
-/* ===== HEADER ===== */
 header{
   background:linear-gradient(135deg,var(--dark),var(--main));
   color:#fff;
   text-align:center;
-  padding:30px 15px;
+  padding:25px 15px;
 }
 
 header h1{
   margin:0;
   font-size:28px;
-  font-weight:bold;
 }
 
 .nav-links{
-  margin-top:18px;
+  margin-top:15px;
   display:flex;
   justify-content:center;
   gap:18px;
@@ -49,6 +46,7 @@ header h1{
 .nav-links a{
   color:#fff;
   text-decoration:none;
+  font-weight:bold;
   font-size:14px;
   padding:6px 14px;
   border-radius:20px;
@@ -59,11 +57,10 @@ header h1{
   background:rgba(255,255,255,.2);
 }
 
-/* ===== CONTENT ===== */
 .container{
   max-width:1200px;
   margin:auto;
-  padding:25px;
+  padding:20px;
 }
 
 h2{
@@ -75,27 +72,27 @@ h2{
 
 .cards{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
   gap:22px;
 }
 
 .card{
   background:#fff;
-  border-radius:22px;
-  padding:30px 25px;
-  box-shadow:0 10px 25px rgba(0,0,0,.08);
+  border-radius:20px;
+  padding:25px;
+  box-shadow:0 8px 20px rgba(0,0,0,.06);
   text-align:center;
-  transition:.35s;
+  transition:.3s;
 }
 
 .card:hover{
-  transform:translateY(-8px);
+  transform:translateY(-6px);
 }
 
 .card i{
-  font-size:52px;
+  font-size:46px;
   color:var(--main);
-  margin-bottom:18px;
+  margin-bottom:15px;
 }
 
 .card h3{
@@ -106,22 +103,16 @@ h2{
 .card p{
   font-size:15px;
   color:#555;
-  line-height:1.7;
+  line-height:1.8;
 }
 
-/* ===== FOOTER ===== */
 footer{
   text-align:center;
-  padding:18px;
+  padding:15px;
   font-size:13px;
   color:#666;
   background:#fff;
-  margin-top:40px;
-}
-
-/* ===== MOBILE ===== */
-@media(max-width:768px){
-  header h1{font-size:24px}
+  margin-top:35px;
 }
 </style>
 </head>
@@ -131,26 +122,25 @@ footer{
 <header>
   <h1>مدرسة صلالة الشرقية للتعليم الأساسي</h1>
 
-  <!-- تم حذف زر البوابات -->
+  <!-- الهيدر الموحد -->
   <ul class="nav-links">
     <li><a href="index.html">الرئيسية</a></li>
     <li><a href="about.html">عن المدرسة</a></li>
+    <li><a href="news.html">الأخبار</a></li>
     <li><a href="contact.html">تواصل معنا</a></li>
   </ul>
 </header>
 
 <div class="container">
-
   <h2>من نحن</h2>
 
   <div class="cards">
-
     <div class="card">
       <i class="fas fa-school"></i>
       <h3>نبذة عن المدرسة</h3>
       <p>
-        مدرسة صلالة الشرقية للتعليم الأساسي مؤسسة تعليمية تسعى إلى إعداد جيل
-        واعٍ ومبدع، مع توظيف التقنية الحديثة في خدمة العملية التعليمية.
+        مدرسة صلالة الشرقية مؤسسة تعليمية تسعى لبناء جيل واعٍ ومبدع
+        باستخدام التقنية الحديثة في التعليم.
       </p>
     </div>
 
@@ -158,8 +148,8 @@ footer{
       <i class="fas fa-eye"></i>
       <h3>رؤية المدرسة</h3>
       <p>
-        بناء بيئة تعليمية مبتكرة ومحفزة، تعزز القيم، وتنمي القدرات،
-        وتواكب متطلبات المستقبل.
+        توفير بيئة تعليمية مبتكرة، وتعزيز القيم والمعرفة
+        لدى الطلبة.
       </p>
     </div>
 
@@ -167,13 +157,11 @@ footer{
       <i class="fas fa-bullseye"></i>
       <h3>رسالة المدرسة</h3>
       <p>
-        تمكين الطلبة والمعلمين من استخدام الوسائل التعليمية الحديثة
-        لتحقيق التميز الأكاديمي وبناء الشخصية المتكاملة.
+        تمكين الطلبة والمعلمين من استخدام الأدوات التعليمية
+        لتحقيق التميز والنجاح.
       </p>
     </div>
-
   </div>
-
 </div>
 
 <footer>
