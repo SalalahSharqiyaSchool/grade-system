@@ -4,62 +4,105 @@
 <meta charset="UTF-8">
 <title>مدرسة صلالة الشرقية للتعليم الأساسي</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- خطوط عربية جذابة -->
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
 <style>
 :root{
-  --main:#00796b;
-  --dark:#004d40;
-  --light:#f4f7fb;
-  --accent:#9ad0b3;
-  --btn:#009688;
+  --primary:#00796b;
+  --secondary:#004d40;
+  --accent:#d49a6a;
+  --bg:#f4f7fb;
+  --text:#222;
 }
 
 body{
   margin:0;
-  font-family:'Cairo', 'Tajawal', sans-serif;
-  background:var(--light);
-  color:#222;
+  font-family:'Cairo','Tajawal',Tahoma,Arial;
+  background:var(--bg);
+  color:var(--text);
 }
 
 /* Header */
 header{
-  background:linear-gradient(135deg,var(--dark),var(--main));
+  background:linear-gradient(135deg,var(--secondary),var(--primary));
   color:#fff;
   text-align:center;
-  padding:20px 15px 50px;
+  padding:20px 15px 40px;
+}
+header .logo{
+  height:70px;
+  display:block;
+  margin:0 auto 10px;
 }
 header h1{
-  margin:10px 0 5px;
-  font-size:30px;
+  margin:0;
+  font-size:28px;
+  font-weight:700;
 }
 header p{
-  margin:0 0 15px;
+  margin-top:8px;
   font-size:16px;
 }
 .nav-links{
+  margin-top:15px;
   display:flex;
   justify-content:center;
-  gap:15px;
-  flex-wrap:wrap;
+  gap:20px;
   list-style:none;
   padding:0;
+  flex-wrap:wrap;
 }
 .nav-links a{
   color:#fff;
   text-decoration:none;
-  font-weight:bold;
-  font-size:14px;
+  font-weight:700;
+  padding:6px 12px;
+  border-radius:8px;
+  transition:0.3s;
+}
+.nav-links a:hover{
+  background:rgba(255,255,255,0.2);
+}
+
+/* News Marquee */
+.news-marquee{
+  background:#fff;
+  margin:20px auto 0;
+  padding:10px 0;
+  overflow:hidden;
+  white-space:nowrap;
+  border-radius:10px;
+  max-width:1200px;
+  box-shadow:0 6px 15px rgba(0,0,0,.05);
+}
+.news-marquee span{
+  display:inline-block;
+  padding-right:50px;
+  animation:scroll 25s linear infinite;
+}
+@keyframes scroll{
+  0%{transform:translateX(100%);}
+  100%{transform:translateX(-100%);}
+}
+
+/* Container */
+.container{
+  max-width:1200px;
+  margin:auto;
+  padding:30px 20px;
 }
 
 /* Carousel */
-.carousel-container{
+.carousel{
   position:relative;
-  max-width:1000px;
-  margin:20px auto;
+  max-width:100%;
+  margin:30px auto;
   overflow:hidden;
-  border-radius:20px;
-  box-shadow:0 10px 25px rgba(0,0,0,.08);
+  border-radius:18px;
+  box-shadow:0 10px 25px rgba(0,0,0,.1);
 }
 .carousel-track{
   display:flex;
@@ -67,96 +110,84 @@ header p{
 }
 .carousel-track img{
   width:100%;
-  flex:0 0 100%;
+  flex-shrink:0;
   object-fit:cover;
   height:400px;
 }
-.carousel-btn{
+.carousel-button{
   position:absolute;
   top:50%;
   transform:translateY(-50%);
-  background:rgba(0,0,0,0.5);
+  background:rgba(0,0,0,0.3);
   color:#fff;
   border:none;
   font-size:24px;
-  padding:10px;
+  padding:10px 15px;
   cursor:pointer;
   border-radius:50%;
 }
-.carousel-btn.left{left:15px;}
-.carousel-btn.right{right:15px;}
+.carousel-button:hover{
+  background:rgba(0,0,0,0.5);
+}
+.carousel-button.prev{left:10px;}
+.carousel-button.next{right:10px;}
 
-/* About Section */
-.container{
-  max-width:1200px;
-  margin:auto;
-  padding:20px;
+/* Cards Section */
+h2.section-title{
+  text-align:center;
+  font-size:28px;
+  color:var(--primary);
+  margin-bottom:25px;
+  font-weight:700;
 }
-section{
-  margin-bottom:35px;
-}
-.about{
-  background:#fff;
-  border-radius:18px;
-  padding:25px;
-  box-shadow:0 8px 20px rgba(0,0,0,.06);
-}
-h2{
-  color:var(--main);
-  margin-bottom:15px;
-  border-right:5px solid var(--accent);
-  padding-right:10px;
-}
-
-/* Roles Cards */
-.roles{
+.card-section{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
-  gap:22px;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:25px;
 }
 .card{
-  background:#fff;
+  background:linear-gradient(135deg,var(--primary),var(--secondary));
+  color:#fff;
   border-radius:22px;
   padding:30px 20px;
   text-align:center;
   box-shadow:0 10px 25px rgba(0,0,0,.08);
-  transition:.3s;
+  transition:0.4s;
+  cursor:pointer;
+  position:relative;
+  overflow:hidden;
 }
-.card:hover{transform:translateY(-8px);}
-.card i{font-size:48px;color:var(--main);margin-bottom:15px;}
-.card h3{margin:10px 0;font-size:20px;}
-.card p{font-size:14px;color:#555;}
+.card:hover{
+  transform:translateY(-8px) scale(1.03);
+  box-shadow:0 15px 30px rgba(0,0,0,.15);
+}
+.card i{
+  font-size:50px;
+  margin-bottom:20px;
+  display:block;
+}
+.card h3{
+  font-size:22px;
+  margin-bottom:12px;
+  font-weight:700;
+}
+.card p{
+  font-size:15px;
+  line-height:1.8;
+}
 .card a{
   display:inline-block;
-  margin-top:12px;
-  text-decoration:none;
-  color:#fff;
-  background:var(--btn);
+  margin-top:15px;
   padding:10px 20px;
-  border-radius:25px;
-  font-size:14px;
-  transition:.3s;
-}
-.card a:hover{opacity:.85;}
-
-/* News Marquee */
-.news-marquee{
-  overflow:hidden;
-  white-space:nowrap;
-  background:#fff;
-  padding:15px;
+  background:var(--accent);
+  color:#fff;
+  text-decoration:none;
+  font-weight:600;
   border-radius:15px;
-  box-shadow:0 8px 20px rgba(0,0,0,.06);
+  transition:0.3s;
 }
-.news-marquee span{
-  display:inline-block;
-  padding-left:50px;
-  animation:scroll 25s linear infinite;
-  font-size:14px;
-}
-@keyframes scroll{
-  0%{transform:translateX(100%)}
-  100%{transform:translateX(-100%)}
+.card a:hover{
+  background:#b87b4f;
 }
 
 /* Footer */
@@ -166,21 +197,22 @@ footer{
   font-size:13px;
   color:#666;
   background:#fff;
+  margin-top:40px;
 }
 
-/* Mobile */
 @media(max-width:768px){
   header h1{font-size:24px;}
   .carousel-track img{height:250px;}
-  .card{padding:20px;}
 }
 </style>
 </head>
 <body>
 
 <header>
+  <img src="https://raw.githubusercontent.com/SalalahSharqiyaSchool/grade-system/main/logo.png" class="logo" alt="شعار المدرسة">
   <h1>مدرسة صلالة الشرقية للتعليم الأساسي</h1>
   <p>منصة رقمية موحدة لخدمة الطالب والمعلم والإدارة المدرسية</p>
+
   <ul class="nav-links">
     <li><a href="index.html">الرئيسية</a></li>
     <li><a href="about.html">عن المدرسة</a></li>
@@ -189,50 +221,47 @@ footer{
   </ul>
 </header>
 
+<!-- شريط الأخبار -->
+<div class="news-marquee">
+  <span>📢 بدء اختبارات الفصل الدراسي الأول يوم الأحد — 🏫 الاجتماع التربوي الثاني يوم الأربعاء — 🎉 مدرسة صلالة الشرقية تقدم مبادرة فن التعامل مع الورقة الاختبارية</span>
+</div>
+
 <!-- Carousel -->
-<div class="carousel-container">
-  <button class="carousel-btn left">&#10094;</button>
+<div class="carousel">
+  <button class="carousel-button prev">&#10094;</button>
   <div class="carousel-track">
-    <img src="https://raw.githubusercontent.com/SalalahSharqiyaSchool/grade-system/main/image1.jpg" alt="">
-    <img src="https://raw.githubusercontent.com/SalalahSharqiyaSchool/grade-system/main/image2.jpg" alt="">
-    <img src="https://raw.githubusercontent.com/SalalahSharqiyaSchool/grade-system/main/image3.jpg" alt="">
-    <img src="https://raw.githubusercontent.com/SalalahSharqiyaSchool/grade-system/main/image4.jpg" alt="">
+    <img src="https://raw.githubusercontent.com/SalalahSharqiyaSchool/grade-system/main/image1.jpg" alt="صورة 1">
+    <img src="https://raw.githubusercontent.com/SalalahSharqiyaSchool/grade-system/main/image2.jpg" alt="صورة 2">
+    <img src="https://raw.githubusercontent.com/SalalahSharqiyaSchool/grade-system/main/image3.jpg" alt="صورة 3">
+    <img src="https://raw.githubusercontent.com/SalalahSharqiyaSchool/grade-system/main/image4.jpg" alt="صورة 4">
   </div>
-  <button class="carousel-btn right">&#10095;</button>
+  <button class="carousel-button next">&#10095;</button>
 </div>
 
 <div class="container">
-  <section class="about">
-    <h2>نبذة عن المدرسة</h2>
-    <p>مدرسة صلالة الشرقية للتعليم الأساسي مؤسسة تعليمية تهدف إلى بناء جيل واعٍ ومبدع، وتسعى لتوظيف التقنية الحديثة في خدمة العملية التعليمية.</p>
-  </section>
-
-  <section class="news-marquee">
-    <span>📢 بدء اختبارات الفصل الدراسي الأول يوم الأحد القادم — 🏫 الاجتماع التربوي الثاني يوم الأربعاء — 🎉 مسابقة فن التعامل مع الورقة الاختبارية بإشراف مدير المدرسة أ. بدر سويلم</span>
-  </section>
-
-  <section class="roles">
+  <h2 class="section-title">البوابات الإلكترونية</h2>
+  <div class="card-section">
     <div class="card">
       <i class="fas fa-user-graduate"></i>
       <h3>بوابة الطالب</h3>
-      <p>عرض الدرجات والترتيب.</p>
+      <p>يمكن للطالب متابعة الدرجات والترتيب والأداء الدراسي بسهولة ويسر.</p>
       <a href="login.html">دخول الطالب</a>
     </div>
 
     <div class="card">
       <i class="fas fa-chalkboard-teacher"></i>
       <h3>بوابة المعلم</h3>
-      <p>إدارة الدرجات.</p>
+      <p>إدارة الدرجات، متابعة الطلاب، وإضافة الملاحظات والتقارير الدراسية.</p>
       <a href="login.html">دخول المعلم</a>
     </div>
 
     <div class="card">
       <i class="fas fa-user-tie"></i>
       <h3>بوابة الإدارة</h3>
-      <p>التقارير والإشراف.</p>
+      <p>الاطلاع على التقارير، الإشراف على المعلمين والطلاب، وتحليل الأداء العام.</p>
       <a href="login.html">دخول الإدارة</a>
     </div>
-  </section>
+  </div>
 </div>
 
 <footer>
@@ -242,22 +271,22 @@ footer{
 <script>
 const track = document.querySelector('.carousel-track');
 const slides = Array.from(track.children);
-const nextButton = document.querySelector('.carousel-btn.right');
-const prevButton = document.querySelector('.carousel-btn.left');
-let currentIndex = 0;
+const prevBtn = document.querySelector('.carousel-button.prev');
+const nextBtn = document.querySelector('.carousel-button.next');
+let index = 0;
 
+// تحديث عرض الصورة الحالية
 function updateCarousel(){
-  const width = slides[0].getBoundingClientRect().width;
-  track.style.transform = 'translateX(' + (-width * currentIndex) + 'px)';
+  track.style.transform = `translateX(-${index * 100}%)`;
 }
 
-nextButton.addEventListener('click', ()=>{
-  currentIndex = (currentIndex + 1) % slides.length;
+// الأزرار
+prevBtn.addEventListener('click', ()=>{
+  index = (index === 0) ? slides.length-1 : index-1;
   updateCarousel();
 });
-
-prevButton.addEventListener('click', ()=>{
-  currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+nextBtn.addEventListener('click', ()=>{
+  index = (index === slides.length-1) ? 0 : index+1;
   updateCarousel();
 });
 
@@ -271,8 +300,8 @@ track.addEventListener('touchstart', e=>{
 track.addEventListener('touchmove', e=>{
   if(!isDragging) return;
   const diff = e.touches[0].clientX - startX;
-  if(diff > 50){ prevButton.click(); isDragging=false;}
-  else if(diff < -50){ nextButton.click(); isDragging=false;}
+  if(diff > 50){ prevBtn.click(); isDragging=false;}
+  else if(diff < -50){ nextBtn.click(); isDragging=false;}
 });
 track.addEventListener('touchend', ()=>{isDragging=false;});
 </script>
