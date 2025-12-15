@@ -33,21 +33,17 @@
       display:flex;
       justify-content:center;
       align-items:center;
-      position:relative;
+      gap:15px;
       margin-bottom:20px;
     }
 
     .navbar h1{
       margin:0;
       font-size:30px;
-      display:inline-block;
-      vertical-align:middle;
     }
 
     .logo{
       height:70px;
-      margin-left:15px;
-      vertical-align:middle;
     }
 
     .nav-links{
@@ -177,10 +173,10 @@
     /* ===== Mobile ===== */
     @media(max-width:768px){
       .navbar{
-        flex-direction:column;
+        flex-direction:column; /* الهيدر عمودي على الجوال */
       }
       .logo{
-        margin:0 0 10px 0;
+        margin-bottom:10px; /* الشعار فوق العنوان */
       }
       header h1{
         font-size:24px;
@@ -193,8 +189,8 @@
 
 <header>
   <div class="navbar">
-    <h1>مدرسة صلالة الشرقية للتعليم الأساسي</h1>
     <img src="https://raw.githubusercontent.com/SalalahSharqiyaSchool/grade-system/main/logo.png" class="logo" alt="شعار المدرسة">
+    <h1>مدرسة صلالة الشرقية للتعليم الأساسي</h1>
   </div>
 
   <ul class="nav-links">
@@ -268,7 +264,7 @@
 </div>
 
 <footer>
-  مدرسة صلالة الشرقية للتعليم الأساسي  © 2025 – جميع الحقوق محفوظة
+ مدرسة صلالة الشرقية للتعليم الأساسي –  © 2025 جميع الحقوق محفوظة
 </footer>
 
 </body>
