@@ -24,7 +24,7 @@ body{
   font-family:'Cairo','Tajawal',Arial;
   background:var(--light);
   color:#222;
-  line-height:1.8;
+  line-height:1.7;
 }
 
 /* ===== Header ===== */
@@ -33,7 +33,6 @@ header{
   color:#fff;
   padding:30px 15px 60px;
   text-align:center;
-  position:relative;
 }
 
 .header-top{
@@ -101,13 +100,33 @@ header p{
   padding-right:12px;
 }
 
-/* ===== About ===== */
-.about{
-  background:#fff;
-  border-radius:22px;
-  padding:30px;
-  box-shadow:0 10px 25px rgba(0,0,0,.06);
+/* ===== Gallery ===== */
+.gallery{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:16px;
   margin-bottom:40px;
+}
+
+.gallery div{
+  position:relative;
+  height:180px;
+  border-radius:18px;
+  overflow:hidden;
+  box-shadow:0 8px 20px rgba(0,0,0,.06);
+  transition:transform .4s;
+}
+
+.gallery img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+  transition:transform .5s;
+}
+
+.gallery div:hover img{
+  transform:scale(1.1);
 }
 
 /* ===== Portals Cards ===== */
@@ -128,21 +147,8 @@ header p{
   position:relative;
 }
 
-.portal-card::after{
-  content:"";
-  position:absolute;
-  inset:0;
-  border-radius:26px;
-  border:2px solid transparent;
-  transition:.35s;
-}
-
 .portal-card:hover{
   transform:translateY(-10px);
-}
-
-.portal-card:hover::after{
-  border-color:var(--gold);
 }
 
 .portal-card i{
@@ -173,22 +179,27 @@ header p{
   font-weight:600;
 }
 
-/* ===== News ===== */
-.news{
+/* ===== News Marquee ===== */
+.news-marquee{
+  overflow:hidden;
+  white-space:nowrap;
   background:#fff;
-  border-radius:22px;
-  padding:30px;
+  border-radius:18px;
+  padding:18px 10px;
   box-shadow:0 10px 25px rgba(0,0,0,.06);
-}
-
-.news-item{
-  border-bottom:1px solid #eee;
-  padding:12px 0;
+  margin-bottom:40px;
   font-size:15px;
 }
 
-.news-item:last-child{
-  border:none;
+.news-marquee span{
+  display:inline-block;
+  padding-right:50px;
+  animation:scroll 30s linear infinite;
+}
+
+@keyframes scroll{
+  0%{transform:translateX(100%)}
+  100%{transform:translateX(-100%)}
 }
 
 /* ===== Footer ===== */
@@ -209,6 +220,9 @@ footer{
   .header-top h1{
     font-size:24px;
     text-align:center;
+  }
+  .gallery div{
+    height:140px;
   }
 }
 </style>
@@ -234,20 +248,20 @@ footer{
 
 <div class="container">
 
-  <!-- About -->
-  <section class="about">
-    <h2 class="section-title">عن المدرسة</h2>
-    <p>
-      مدرسة صلالة الشرقية للتعليم الأساسي مؤسسة تعليمية رائدة تسعى إلى
-      بناء جيل واعٍ، متمكن علميًا، ومعتز بهويته العمانية، من خلال
-      توظيف التقنيات الحديثة في التعليم.
-    </p>
+  <!-- Gallery Section -->
+  <section>
+    <h2 class="section-title">معرض الصور</h2>
+    <div class="gallery">
+      <div><img src="https://raw.githubusercontent.com/SalalahSharqiyaSchool/grade-system/main/image1.jpg" alt="صورة المدرسة"></div>
+      <div><img src="https://raw.githubusercontent.com/SalalahSharqiyaSchool/grade-system/main/image2.jpg" alt="نشاط تعليمي"></div>
+      <div><img src="https://raw.githubusercontent.com/SalalahSharqiyaSchool/grade-system/main/image3.jpg" alt="طلاب المدرسة"></div>
+      <div><img src="https://raw.githubusercontent.com/SalalahSharqiyaSchool/grade-system/main/image4.jpg" alt="أنشطة مدرسية"></div>
+    </div>
   </section>
 
-  <!-- Portals -->
+  <!-- Portals Section -->
   <section>
     <h2 class="section-title">بوابات الدخول</h2>
-
     <div class="portals">
       <div class="portal-card">
         <i class="fas fa-user-graduate"></i>
@@ -255,14 +269,12 @@ footer{
         <p>عرض الدرجات، الترتيب، والتقارير الأكاديمية.</p>
         <a href="https://salalahsharqiyaschool.github.io/grade-system/">دخول الطالب</a>
       </div>
-
       <div class="portal-card">
         <i class="fas fa-chalkboard-teacher"></i>
         <h3>بوابة المعلم</h3>
         <p>إدارة الدرجات ومتابعة الطلبة.</p>
         <a href="https://salalahsharqiyaschool.github.io/SalalahSharqiya-School-Management/">دخول المعلم</a>
       </div>
-
       <div class="portal-card">
         <i class="fas fa-user-tie"></i>
         <h3>بوابة الإدارة</h3>
@@ -272,13 +284,12 @@ footer{
     </div>
   </section>
 
-  <!-- News -->
-  <section class="news">
+  <!-- News Section -->
+  <section>
     <h2 class="section-title">آخر الأخبار</h2>
-
-    <div class="news-item">📢 بدء اختبارات الفصل الدراسي الأول الأسبوع القادم</div>
-    <div class="news-item">🏫 اجتماع أولياء الأمور يوم الأربعاء</div>
-    <div class="news-item">🎉 مبادرة تعليمية جديدة لطلبة الصفوف العليا</div>
+    <div class="news-marquee">
+      <span>📢 بدء اختبارات الفصل الدراسي الأول — 🏫 اجتماع أولياء الأمور يوم الأربعاء — 🎉 مسابقة القراءة الشهرية لجميع الطلاب</span>
+    </div>
   </section>
 
 </div>
