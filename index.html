@@ -5,29 +5,35 @@
 <title>مدرسة صلالة الشرقية للتعليم الأساسي</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+
+<!-- Icons -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <style>
 :root{
-  --main:#00796b;
+  --primary:#00796b;
   --dark:#004d40;
-  --light:#f4f7fb;
-  --accent:#9ad0b3;
+  --gold:#c9a24d;
+  --light:#f5f7f8;
 }
 
 body{
   margin:0;
-  font-family:'Cairo',Tahoma,Arial;
+  font-family:'Cairo','Tajawal',Arial;
   background:var(--light);
   color:#222;
+  line-height:1.8;
 }
 
-/* ===== HEADER ===== */
+/* ===== Header ===== */
 header{
-  background:linear-gradient(135deg,var(--dark),var(--main));
+  background:linear-gradient(135deg,var(--dark),var(--primary));
   color:#fff;
-  padding:25px 15px 55px;
+  padding:30px 15px 60px;
   text-align:center;
+  position:relative;
 }
 
 .header-top{
@@ -42,10 +48,10 @@ header{
   height:75px;
 }
 
-header h1{
+.header-top h1{
   margin:0;
   font-size:30px;
-  font-weight:bold;
+  font-weight:700;
 }
 
 header p{
@@ -54,22 +60,23 @@ header p{
   opacity:.95;
 }
 
-/* ===== NAV ===== */
+/* ===== Navigation ===== */
 .nav-links{
   list-style:none;
   display:flex;
   justify-content:center;
-  gap:18px;
+  gap:20px;
   padding:0;
-  margin:18px 0 0;
+  margin-top:25px;
   flex-wrap:wrap;
 }
 
 .nav-links a{
   color:#fff;
   text-decoration:none;
+  font-weight:600;
   font-size:14px;
-  padding:6px 14px;
+  padding:6px 16px;
   border-radius:20px;
   transition:.3s;
 }
@@ -78,139 +85,131 @@ header p{
   background:rgba(255,255,255,.2);
 }
 
-/* ===== CONTENT ===== */
+/* ===== Container ===== */
 .container{
   max-width:1200px;
   margin:auto;
-  padding:20px;
+  padding:30px 20px;
 }
 
-section{
-  margin-bottom:35px;
+/* ===== Section Titles ===== */
+.section-title{
+  font-size:22px;
+  color:var(--primary);
+  margin-bottom:20px;
+  border-right:6px solid var(--gold);
+  padding-right:12px;
 }
 
-.box{
+/* ===== About ===== */
+.about{
   background:#fff;
-  border-radius:20px;
-  padding:25px;
-  box-shadow:0 10px 25px rgba(0,0,0,.07);
+  border-radius:22px;
+  padding:30px;
+  box-shadow:0 10px 25px rgba(0,0,0,.06);
+  margin-bottom:40px;
 }
 
-h2{
-  color:var(--main);
-  margin-bottom:15px;
-  border-right:5px solid var(--accent);
-  padding-right:10px;
-}
-
-/* ===== GALLERY ===== */
-.gallery{
+/* ===== Portals Cards ===== */
+.portals{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:16px;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:25px;
+  margin-bottom:40px;
 }
 
-.gallery div{
-  height:170px;
-  border-radius:18px;
-  overflow:hidden;
-  box-shadow:0 6px 18px rgba(0,0,0,.08);
-}
-
-.gallery img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  transition:.4s;
-}
-
-.gallery div:hover img{
-  transform:scale(1.1);
-}
-
-/* ===== NEWS ===== */
-.news-marquee{
-  overflow:hidden;
-  white-space:nowrap;
-}
-
-.news-marquee span{
-  display:inline-block;
-  padding-right:60px;
-  animation:scroll 28s linear infinite;
-}
-
-@keyframes scroll{
-  from{transform:translateX(-100%)}
-  to{transform:translateX(100%)}
-}
-
-/* ===== ROLES ===== */
-.roles{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-  gap:24px;
-}
-
-.card{
+.portal-card{
   background:#fff;
   border-radius:26px;
   padding:35px 25px;
   text-align:center;
-  box-shadow:0 15px 30px rgba(0,0,0,.1);
+  box-shadow:0 12px 30px rgba(0,0,0,.08);
   transition:.35s;
   position:relative;
 }
 
-.card:hover{
+.portal-card::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:26px;
+  border:2px solid transparent;
+  transition:.35s;
+}
+
+.portal-card:hover{
   transform:translateY(-10px);
 }
 
-.card i{
+.portal-card:hover::after{
+  border-color:var(--gold);
+}
+
+.portal-card i{
   font-size:52px;
-  color:var(--main);
+  color:var(--primary);
   margin-bottom:18px;
 }
 
-.card h3{
+.portal-card h3{
   margin:10px 0;
-  font-size:21px;
+  font-size:20px;
 }
 
-.card p{
+.portal-card p{
   font-size:14px;
   color:#555;
 }
 
-.card a{
+.portal-card a{
   display:inline-block;
-  margin-top:15px;
-  padding:10px 22px;
-  border-radius:25px;
-  background:linear-gradient(135deg,var(--main),var(--dark));
+  margin-top:18px;
+  background:linear-gradient(135deg,var(--primary),var(--dark));
   color:#fff;
   text-decoration:none;
+  padding:10px 26px;
+  border-radius:30px;
   font-size:14px;
-  transition:.3s;
+  font-weight:600;
 }
 
-.card a:hover{
-  opacity:.9;
+/* ===== News ===== */
+.news{
+  background:#fff;
+  border-radius:22px;
+  padding:30px;
+  box-shadow:0 10px 25px rgba(0,0,0,.06);
 }
 
-/* ===== FOOTER ===== */
+.news-item{
+  border-bottom:1px solid #eee;
+  padding:12px 0;
+  font-size:15px;
+}
+
+.news-item:last-child{
+  border:none;
+}
+
+/* ===== Footer ===== */
 footer{
   text-align:center;
   padding:18px;
   font-size:13px;
   color:#666;
   background:#fff;
+  margin-top:40px;
 }
 
-/* ===== MOBILE ===== */
+/* ===== Mobile ===== */
 @media(max-width:768px){
-  header h1{font-size:24px}
-  header p{font-size:14px}
+  .header-top{
+    flex-direction:column;
+  }
+  .header-top h1{
+    font-size:24px;
+    text-align:center;
+  }
 }
 </style>
 </head>
@@ -223,10 +222,10 @@ footer{
     <h1>مدرسة صلالة الشرقية للتعليم الأساسي</h1>
   </div>
 
-  <p>منصة رقمية موحدة لخدمة الطالب والمعلم والإدارة المدرسية</p>
+  <p>منصة تعليمية رقمية بمعايير حديثة لخدمة المجتمع المدرسي</p>
 
-  <!-- تم حذف زر البوابات -->
   <ul class="nav-links">
+    <li><a href="index.html">الرئيسية</a></li>
     <li><a href="about.html">عن المدرسة</a></li>
     <li><a href="news.html">الأخبار</a></li>
     <li><a href="contact.html">تواصل معنا</a></li>
@@ -235,67 +234,57 @@ footer{
 
 <div class="container">
 
-  <section class="box">
-    <h2>نبذة عن المدرسة</h2>
+  <!-- About -->
+  <section class="about">
+    <h2 class="section-title">عن المدرسة</h2>
     <p>
-      مدرسة صلالة الشرقية للتعليم الأساسي مؤسسة تعليمية تسعى إلى إعداد جيل واعٍ،
-      مبدع، ومتمكن من مهارات العصر، مع تعزيز القيم والانتماء الوطني.
+      مدرسة صلالة الشرقية للتعليم الأساسي مؤسسة تعليمية رائدة تسعى إلى
+      بناء جيل واعٍ، متمكن علميًا، ومعتز بهويته العمانية، من خلال
+      توظيف التقنيات الحديثة في التعليم.
     </p>
   </section>
 
-  <section class="gallery">
-    <div><img src="https://raw.githubusercontent.com/SalalahSharqiyaSchool/grade-system/main/image1.jpg"></div>
-    <div><img src="https://raw.githubusercontent.com/SalalahSharqiyaSchool/grade-system/main/image2.jpg"></div>
-    <div><img src="https://raw.githubusercontent.com/SalalahSharqiyaSchool/grade-system/main/image3.jpg"></div>
-    <div><img src="https://raw.githubusercontent.com/SalalahSharqiyaSchool/grade-system/main/image4.jpg"></div>
-  </section>
+  <!-- Portals -->
+  <section>
+    <h2 class="section-title">بوابات الدخول</h2>
 
-  <section class="box">
-    <h2>كلمة مدير المدرسة</h2>
-    <p>
-      نرحب بكم في المنصة الإلكترونية لمدرسة صلالة الشرقية،
-      ونتطلع إلى شراكة فاعلة مع أولياء الأمور لتحقيق التميز لأبنائنا الطلبة.
-    </p>
-  </section>
+    <div class="portals">
+      <div class="portal-card">
+        <i class="fas fa-user-graduate"></i>
+        <h3>بوابة الطالب</h3>
+        <p>عرض الدرجات، الترتيب، والتقارير الأكاديمية.</p>
+        <a href="https://salalahsharqiyaschool.github.io/grade-system/">دخول الطالب</a>
+      </div>
 
-  <section class="box">
-    <h2>أخبار وإعلانات مدرسية</h2>
-    <div class="news-marquee">
-      <span>
-        📢 بدء اختبارات الفصل الدراسي الأول —
-        🏫 اجتماع تربوي —
-        🎉 مبادرة فن التعامل مع الورقة الاختبارية
-      </span>
+      <div class="portal-card">
+        <i class="fas fa-chalkboard-teacher"></i>
+        <h3>بوابة المعلم</h3>
+        <p>إدارة الدرجات ومتابعة الطلبة.</p>
+        <a href="https://salalahsharqiyaschool.github.io/SalalahSharqiya-School-Management/">دخول المعلم</a>
+      </div>
+
+      <div class="portal-card">
+        <i class="fas fa-user-tie"></i>
+        <h3>بوابة الإدارة</h3>
+        <p>التقارير، الإشراف، والمتابعة.</p>
+        <a href="https://salalahsharqiyaschool.github.io/SalalahSharqiya-School-Management/admin.html">دخول الإدارة</a>
+      </div>
     </div>
   </section>
 
-  <section class="roles">
-    <div class="card">
-      <i class="fas fa-user-graduate"></i>
-      <h3>بوابة الطالب</h3>
-      <p>عرض الدرجات والترتيب الأكاديمي.</p>
-      <a href="https://salalahsharqiyaschool.github.io/grade-system/">الدخول</a>
-    </div>
+  <!-- News -->
+  <section class="news">
+    <h2 class="section-title">آخر الأخبار</h2>
 
-    <div class="card">
-      <i class="fas fa-chalkboard-teacher"></i>
-      <h3>بوابة المعلم</h3>
-      <p>إدارة الدرجات والطلاب.</p>
-      <a href="https://salalahsharqiyaschool.github.io/SalalahSharqiya-School-Management/">الدخول</a>
-    </div>
-
-    <div class="card">
-      <i class="fas fa-user-tie"></i>
-      <h3>بوابة الإدارة</h3>
-      <p>التقارير والإشراف العام.</p>
-      <a href="https://salalahsharqiyaschool.github.io/SalalahSharqiya-School-Management/admin.html">الدخول</a>
-    </div>
+    <div class="news-item">📢 بدء اختبارات الفصل الدراسي الأول الأسبوع القادم</div>
+    <div class="news-item">🏫 اجتماع أولياء الأمور يوم الأربعاء</div>
+    <div class="news-item">🎉 مبادرة تعليمية جديدة لطلبة الصفوف العليا</div>
   </section>
 
 </div>
 
 <footer>
-  © 2025  جميع الحقوق محفوظة للاستاذ فيصل العريبي 
+  © 2025 مدرسة صلالة الشرقية للتعليم الأساسي – جميع الحقوق محفوظة
 </footer>
 
 </body>
