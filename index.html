@@ -21,7 +21,6 @@
       color:#222;
     }
 
-    /* ===== Header ===== */
     header{
       background:linear-gradient(135deg,var(--dark),var(--main));
       color:#fff;
@@ -44,7 +43,6 @@
     }
 
     .logo{height:70px}
-    .school-name{font-size:18px;font-weight:bold}
 
     .nav-links{
       list-style:none;
@@ -60,8 +58,17 @@
       font-size:14px;
     }
 
-    header h1{margin:10px 0 0;font-size:30px}
-    header p{margin-top:8px;font-size:16px}
+    header h1{
+      margin:0;
+      font-size:30px;
+      display:inline-block;
+      vertical-align:middle;
+    }
+
+    /* إخفاء اسم المدرسة بجانب الشعار على الحاسوب */
+    .school-name{
+      display:none;
+    }
 
     /* ===== Layout ===== */
     .container{
@@ -72,7 +79,7 @@
 
     section{margin-bottom:35px}
 
-    .about,.principal,.news{
+    .about,.principal,.news,.roles{
       background:#fff;
       border-radius:18px;
       padding:25px;
@@ -86,7 +93,6 @@
       padding-right:10px;
     }
 
-    /* ===== Gallery ===== */
     .gallery{
       display:grid;
       grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
@@ -112,7 +118,6 @@
       transform:scale(1.1);
     }
 
-    /* ===== News ===== */
     .news-marquee{
       overflow:hidden;
       white-space:nowrap;
@@ -129,7 +134,6 @@
       100%{transform:translateX(100%)}
     }
 
-    /* ===== Roles ===== */
     .roles{
       display:grid;
       grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
@@ -178,7 +182,7 @@
     /* ===== Mobile ===== */
     @media(max-width:768px){
       .navbar{justify-content:center}
-      .school-name{display:none}
+      .school-name{display:inline-block;}
       .logo{height:85px;margin-bottom:10px}
       header h1{font-size:24px}
       header p{font-size:14px}
@@ -191,7 +195,8 @@
 <header>
   <nav class="navbar">
     <div class="nav-right">
-      <img src="https://raw.githubusercontent.com/SalalahSharqiyaSchool/grade-system/main/logo.png" class="logo">
+      <h1>مدرسة صلالة الشرقية للتعليم الأساسي</h1>
+      <img src="https://raw.githubusercontent.com/SalalahSharqiyaSchool/grade-system/main/logo.png" class="logo" alt="شعار المدرسة">
       <span class="school-name">مدرسة صلالة الشرقية</span>
     </div>
     <ul class="nav-links">
@@ -200,8 +205,6 @@
       <li><a href="#roles">البوابات</a></li>
     </ul>
   </nav>
-
-  <h1>مدرسة صلالة الشرقية للتعليم الأساسي</h1>
   <p>منصة رقمية موحدة لخدمة الطالب والمعلم والإدارة المدرسية</p>
 </header>
 
@@ -234,8 +237,8 @@
     <h2>أخبار وإعلانات مدرسية</h2>
     <div class="news-marquee">
       <span>
-        📢 بدء اختبارات الفصل الدراسي الاول يوم  الأحد القادم —
-        🏫17/12/2025 الاجتماع التربوي الثاني يوم الاربعاء  الموافق ل —
+        📢 بدء اختبارات الفصل الدراسي الاول يوم الأحد القادم —
+        🏫17/12/2025 الاجتماع التربوي الثاني يوم الاربعاء —
         🎉 مدرسة صلالة الشرقية تقدم مبادرة فن التعامل مع الورقة الاختبارية بإشراف مدير المدرسة أ. بدر سويلم
       </span>
     </div>
