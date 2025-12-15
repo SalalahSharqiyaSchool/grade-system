@@ -26,48 +26,43 @@
       color:#fff;
       padding:20px 15px 60px;
       text-align:center;
+      position:relative;
     }
 
     .navbar{
       display:flex;
-      justify-content:space-between;
+      justify-content:center;
       align-items:center;
-      flex-wrap:wrap;
+      position:relative;
       margin-bottom:20px;
     }
 
-    .nav-right{
-      display:flex;
-      align-items:center;
-      gap:10px;
-    }
-
-    .logo{height:70px}
-
-    .nav-links{
-      list-style:none;
-      display:flex;
-      gap:15px;
-      padding:0;
-      margin:0;
-    }
-
-    .nav-links a{
-      color:#fff;
-      text-decoration:none;
-      font-size:14px;
-    }
-
-    header h1{
+    .navbar h1{
       margin:0;
       font-size:30px;
       display:inline-block;
       vertical-align:middle;
     }
 
-    /* إخفاء اسم المدرسة بجانب الشعار على الحاسوب */
-    .school-name{
-      display:none;
+    .logo{
+      height:70px;
+      margin-left:15px;
+      vertical-align:middle;
+    }
+
+    .nav-links{
+      list-style:none;
+      display:flex;
+      gap:15px;
+      padding:0;
+      margin-top:15px;
+      justify-content:center;
+    }
+
+    .nav-links a{
+      color:#fff;
+      text-decoration:none;
+      font-size:14px;
     }
 
     /* ===== Layout ===== */
@@ -181,11 +176,15 @@
 
     /* ===== Mobile ===== */
     @media(max-width:768px){
-      .navbar{justify-content:center}
-      .school-name{display:inline-block;}
-      .logo{height:85px;margin-bottom:10px}
-      header h1{font-size:24px}
-      header p{font-size:14px}
+      .navbar{
+        flex-direction:column;
+      }
+      .logo{
+        margin:10px 0 0 0;
+      }
+      header h1{
+        font-size:24px;
+      }
     }
   </style>
 </head>
@@ -193,18 +192,17 @@
 <body>
 
 <header>
-  <nav class="navbar">
-    <div class="nav-right">
-      <h1>مدرسة صلالة الشرقية للتعليم الأساسي</h1>
-      <img src="https://raw.githubusercontent.com/SalalahSharqiyaSchool/grade-system/main/logo.png" class="logo" alt="شعار المدرسة">
-      <span class="school-name">مدرسة صلالة الشرقية</span>
-    </div>
-    <ul class="nav-links">
-      <li><a href="#about">عن المدرسة</a></li>
-      <li><a href="#news">الأخبار</a></li>
-      <li><a href="#roles">البوابات</a></li>
-    </ul>
-  </nav>
+  <div class="navbar">
+    <h1>مدرسة صلالة الشرقية للتعليم الأساسي</h1>
+    <img src="https://raw.githubusercontent.com/SalalahSharqiyaSchool/grade-system/main/logo.png" class="logo" alt="شعار المدرسة">
+  </div>
+
+  <ul class="nav-links">
+    <li><a href="#about">عن المدرسة</a></li>
+    <li><a href="#news">الأخبار</a></li>
+    <li><a href="#roles">البوابات</a></li>
+  </ul>
+
   <p>منصة رقمية موحدة لخدمة الطالب والمعلم والإدارة المدرسية</p>
 </header>
 
