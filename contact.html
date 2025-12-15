@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <title>تواصل معنا - مدرسة صلالة الشرقية</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
 <style>
 :root{
   --main:#00796b;
@@ -24,6 +26,7 @@ header{
   padding:25px 15px;
 }
 header h1{margin:0;font-size:28px;}
+
 .nav-links{
   margin-top:15px;
   display:flex;
@@ -38,26 +41,62 @@ header h1{margin:0;font-size:28px;}
   text-decoration:none;
   font-weight:bold;
 }
-.container{max-width:900px;margin:auto;padding:20px;display:flex;flex-direction:column;gap:25px;}
-.card{
-  background:#fff;
-  border-radius:18px;
+
+.container{
+  max-width:1000px;
+  margin:auto;
   padding:25px;
-  box-shadow:0 8px 20px rgba(0,0,0,.06);
-  text-align:center;
 }
-.card h2{
+
+/* ===== بطاقات التواصل ===== */
+.contact-cards{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:25px;
+  margin-bottom:35px;
+}
+
+.contact-card{
+  background:#fff;
+  border-radius:20px;
+  padding:30px 20px;
+  text-align:center;
+  box-shadow:0 10px 25px rgba(0,0,0,.08);
+  transition:.3s;
+}
+.contact-card:hover{
+  transform:translateY(-8px);
+}
+.contact-card i{
+  font-size:46px;
   color:var(--main);
-  margin-bottom:10px;
+  margin-bottom:15px;
+}
+.contact-card h3{
+  margin:10px 0;
+  color:var(--dark);
+}
+.contact-card p{
+  font-size:15px;
+  color:#555;
+  line-height:1.8;
+}
+
+/* ===== نموذج التواصل ===== */
+.form-card{
+  background:#fff;
+  border-radius:20px;
+  padding:30px;
+  box-shadow:0 10px 25px rgba(0,0,0,.08);
+}
+.form-card h2{
+  color:var(--main);
   border-right:5px solid var(--accent);
   padding-right:10px;
+  margin-bottom:20px;
 }
-.card p{line-height:1.8;}
+
 form{
-  background:#fff;
-  padding:25px;
-  border-radius:15px;
-  box-shadow:0 8px 20px rgba(0,0,0,.06);
   display:flex;
   flex-direction:column;
   gap:15px;
@@ -66,36 +105,44 @@ input, textarea{
   padding:12px;
   border-radius:8px;
   border:1px solid #ccc;
-  width:100%;
   font-size:14px;
 }
 button{
-  padding:12px;
-  background:var(--dark);
+  background:linear-gradient(135deg,var(--main),var(--dark));
   color:#fff;
   border:none;
-  border-radius:8px;
-  cursor:pointer;
+  padding:12px;
+  border-radius:10px;
   font-size:15px;
+  cursor:pointer;
 }
-button:hover{background:var(--main);}
+button:hover{opacity:.9}
+
 .success-message{
   display:none;
+  background:#e0f2f1;
+  color:#004d40;
   padding:12px;
-  background:#c8e6c9;
-  color:#256029;
-  border-radius:8px;
+  border-radius:10px;
   margin-bottom:15px;
   text-align:center;
 }
-footer{text-align:center;padding:15px;font-size:13px;color:#666;background:#fff;margin-top:20px;}
+
+footer{
+  text-align:center;
+  padding:15px;
+  font-size:13px;
+  color:#666;
+  background:#fff;
+  margin-top:30px;
+}
+
 @media(max-width:768px){
   header h1{font-size:24px;}
-  .card{padding:20px;}
-  .nav-links{justify-content:center;}
 }
 </style>
 </head>
+
 <body>
 
 <header>
@@ -103,39 +150,48 @@ footer{text-align:center;padding:15px;font-size:13px;color:#666;background:#fff;
   <ul class="nav-links">
     <li><a href="index.html">الرئيسية</a></li>
     <li><a href="about.html">عن المدرسة</a></li>
-    <li><a href="roles.html">البوابات</a></li>
     <li><a href="contact.html">تواصل معنا</a></li>
   </ul>
 </header>
 
 <div class="container">
 
-  <!-- بطاقات معلومات الاتصال -->
-  <div class="card">
-    <h2>العنوان</h2>
-    <p>صلالة الشرقية، محافظة ظفار، سلطنة عمان</p>
+  <!-- بطاقات معلومات التواصل -->
+  <div class="contact-cards">
+
+    <div class="contact-card">
+      <i class="fas fa-location-dot"></i>
+      <h3>موقع المدرسة</h3>
+      <p>صلالة الشرقية<br>محافظة ظفار<br>سلطنة عمان</p>
+    </div>
+
+    <div class="contact-card">
+      <i class="fas fa-envelope"></i>
+      <h3>البريد الإلكتروني</h3>
+      <p>school@salalahsharqiya.edu.om</p>
+    </div>
+
+    <div class="contact-card">
+      <i class="fas fa-phone"></i>
+      <h3>الهاتف</h3>
+      <p>+968 1234 5678</p>
+    </div>
+
   </div>
 
-  <div class="card">
-    <h2> X  موقع المدرسة على منصة </h2>
-    <p>https://x.com/sal_sharkia </p>
-  </div>
-
-  <div class="card">
-    <h2>الهاتف</h2>
-    <p>93939393</p>
-  </div>
-
-  <!-- نموذج Formspree -->
-  <div class="card">
+  <!-- نموذج الإرسال -->
+  <div class="form-card">
     <h2>أرسل رسالة</h2>
-    <div class="success-message" id="successMessage">تم إرسال الرسالة بنجاح، شكراً لتواصلكم!</div>
+    <div class="success-message" id="successMessage">
+      تم إرسال الرسالة بنجاح، نشكركم على تواصلكم 🌿
+    </div>
+
     <form id="contactForm" action="https://formspree.io/f/mldqkber" method="POST">
       <input type="text" name="name" placeholder="الاسم" required>
       <input type="email" name="email" placeholder="البريد الإلكتروني" required>
       <input type="text" name="subject" placeholder="الموضوع" required>
-      <textarea name="message" rows="5" placeholder="الرسالة" required></textarea>
-      <button type="submit">إرسال</button>
+      <textarea name="message" rows="5" placeholder="اكتب رسالتك هنا..." required></textarea>
+      <button type="submit">إرسال الرسالة</button>
     </form>
   </div>
 
@@ -153,7 +209,7 @@ form.addEventListener('submit', function(e){
   e.preventDefault();
   const data = new FormData(form);
   fetch(form.action, {
-    method: form.method,
+    method: 'POST',
     body: data,
     headers: { 'Accept': 'application/json' }
   }).then(response => {
@@ -161,10 +217,8 @@ form.addEventListener('submit', function(e){
       successMessage.style.display = 'block';
       form.reset();
     } else {
-      alert('حدث خطأ، يرجى المحاولة لاحقاً.');
+      alert('حدث خطأ أثناء الإرسال.');
     }
-  }).catch(error => {
-    alert('حدث خطأ، يرجى المحاولة لاحقاً.');
   });
 });
 </script>
