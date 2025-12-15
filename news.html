@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>الأخبار - مدرسة صلالة الشرقية</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+:root{
+  --main:#00796b;
+  --dark:#004d40;
+  --light:#f4f7fb;
+  --accent:#9ad0b3;
+}
+body{
+  margin:0;
+  font-family:'Cairo',Tahoma,Arial;
+  background:var(--light);
+  color:#222;
+}
+header{
+  background:linear-gradient(135deg,var(--dark),var(--main));
+  color:#fff;
+  text-align:center;
+  padding:25px 15px;
+}
+header h1{margin:0;font-size:28px;}
+.nav-links{
+  margin-top:15px;
+  display:flex;
+  justify-content:center;
+  gap:20px;
+  list-style:none;
+  padding:0;
+}
+.nav-links a{
+  color:#fff;
+  text-decoration:none;
+  font-weight:bold;
+}
+.container{max-width:1200px;margin:auto;padding:20px;}
+h2{
+  color:var(--main);
+  margin-bottom:20px;
+  border-right:5px solid var(--accent);
+  padding-right:10px;
+}
+.news-cards{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+  gap:20px;
+}
+.news-card{
+  background:#fff;
+  border-radius:18px;
+  padding:20px;
+  box-shadow:0 8px 20px rgba(0,0,0,.06);
+  transition:.3s;
+}
+.news-card:hover{transform:translateY(-5px);}
+.news-card h3{color:var(--dark);margin-bottom:10px;}
+.news-card p{font-size:15px;color:#555;}
+.news-card span{font-size:13px;color:#888;}
+footer{text-align:center;padding:15px;font-size:13px;color:#666;background:#fff;margin-top:30px;}
+@media(max-width:768px){
+  .news-cards{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>أخبار المدرسة</h1>
+  <ul class="nav-links">
+    <li><a href="index.html">الرئيسية</a></li>
+    <li><a href="about.html">عن المدرسة</a></li>
+    <li><a href="login.html">البوابات</a></li>
+    <li><a href="contact.html">تواصل معنا</a></li>
+  </ul>
+</header>
+
+<div class="container">
+  <h2>أحدث الأخبار</h2>
+  <div class="news-cards">
+    <div class="news-card">
+      <h3>📢 بدء الفصل الدراسي الجديد</h3>
+      <span>15/12/2025</span>
+      <p>يبدأ الفصل الدراسي الجديد يوم الأحد القادم لجميع الطلاب.</p>
+    </div>
+    <div class="news-card">
+      <h3>🏫 اجتماع أولياء الأمور</h3>
+      <span>17/12/2025</span>
+      <p>اجتماع أولياء الأمور يوم الأربعاء القادم الساعة 4 مساءً.</p>
+    </div>
+    <div class="news-card">
+      <h3>🎉 مسابقة القراءة الشهرية</h3>
+      <span>10/12/2025</span>
+      <p>تنظم المدرسة مسابقة القراءة الشهرية لجميع الطلاب بمشاركة المعلمين.</p>
+    </div>
+  </div>
+</div>
+
+<footer>
+  © 2025 مدرسة صلالة الشرقية للتعليم الأساسي – جميع الحقوق محفوظة
+</footer>
+
+</body>
+</html>
