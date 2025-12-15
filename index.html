@@ -29,37 +29,53 @@ body{
 header{
   background:linear-gradient(135deg,var(--secondary),var(--primary));
   color:#fff;
-  text-align:center;
-  padding:20px 15px 40px;
+  position:sticky;
+  top:0;
+  z-index:1000;
+  box-shadow:0 4px 15px rgba(0,0,0,0.1);
 }
-header .logo{
+.header-container{
+  max-width:1200px;
+  margin:auto;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  flex-wrap:wrap;
+  padding:15px 20px;
+}
+.logo-section{
+  display:flex;
+  align-items:center;
+  gap:15px;
+}
+.logo-section img{
   height:70px;
-  display:block;
-  margin:0 auto 10px;
 }
-header h1{
+.logo-section h1{
   margin:0;
-  font-size:28px;
+  font-size:24px;
   font-weight:700;
 }
-header p{
-  margin-top:8px;
-  font-size:16px;
+.logo-section p{
+  margin:2px 0 0;
+  font-size:14px;
+  font-weight:400;
+}
+.nav-bar{
+  margin-top:10px;
 }
 .nav-links{
-  margin-top:15px;
   display:flex;
-  justify-content:center;
-  gap:20px;
+  gap:15px;
   list-style:none;
   padding:0;
-  flex-wrap:wrap;
+  margin:0;
 }
 .nav-links a{
   color:#fff;
   text-decoration:none;
-  font-weight:700;
-  padding:6px 12px;
+  font-weight:600;
+  padding:8px 16px;
   border-radius:8px;
   transition:0.3s;
 }
@@ -88,14 +104,7 @@ header p{
   100%{transform:translateX(-100%);}
 }
 
-/* ===== Container ===== */
-.container{
-  max-width:1200px;
-  margin:auto;
-  padding:30px 20px;
-}
-
-/* ===== Image Carousel ===== */
+/* ===== Carousel ===== */
 .carousel{
   position:relative;
   max-width:100%;
@@ -141,13 +150,12 @@ h2.section-title{
   margin-bottom:25px;
   font-weight:700;
 }
-
 .card-section{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
   gap:25px;
+  margin-bottom:50px;
 }
-
 .card{
   background:linear-gradient(135deg,var(--primary),var(--secondary));
   color:#fff;
@@ -205,7 +213,16 @@ footer{
 
 /* ===== Responsive ===== */
 @media(max-width:768px){
-  header h1{font-size:24px;}
+  .header-container{
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+  }
+  .nav-links{
+    flex-direction:column;
+    gap:10px;
+    margin-top:10px;
+  }
   .carousel-track img{height:250px;}
 }
 </style>
@@ -213,16 +230,23 @@ footer{
 <body>
 
 <header>
-  <img src="https://raw.githubusercontent.com/SalalahSharqiyaSchool/grade-system/main/logo.png" class="logo" alt="شعار المدرسة">
-  <h1>مدرسة صلالة الشرقية للتعليم الأساسي</h1>
-  <p>منصة رقمية موحدة لخدمة الطالب والمعلم والإدارة المدرسية</p>
-
-  <ul class="nav-links">
-    <li><a href="index.html">الرئيسية</a></li>
-    <li><a href="about.html">عن المدرسة</a></li>
-    <li><a href="news.html">الأخبار</a></li>
-    <li><a href="contact.html">تواصل معنا</a></li>
-  </ul>
+  <div class="header-container">
+    <div class="logo-section">
+      <img src="https://raw.githubusercontent.com/SalalahSharqiyaSchool/grade-system/main/logo.png" alt="شعار المدرسة">
+      <div>
+        <h1>مدرسة صلالة الشرقية للتعليم الأساسي</h1>
+        <p>منصة رقمية موحدة لخدمة الطالب والمعلم والإدارة المدرسية</p>
+      </div>
+    </div>
+    <nav class="nav-bar">
+      <ul class="nav-links">
+        <li><a href="index.html">الرئيسية</a></li>
+        <li><a href="about.html">عن المدرسة</a></li>
+        <li><a href="news.html">الأخبار</a></li>
+        <li><a href="contact.html">تواصل معنا</a></li>
+      </ul>
+    </nav>
+  </div>
 </header>
 
 <!-- شريط الأخبار -->
@@ -251,14 +275,12 @@ footer{
       <p>يمكن للطالب متابعة الدرجات والترتيب والأداء الدراسي بسهولة ويسر.</p>
       <a href="https://salalahsharqiyaschool.github.io/grade-system/indexx.html">دخول الطالب</a>
     </div>
-
     <div class="card">
       <i class="fas fa-chalkboard-teacher"></i>
       <h3>بوابة المعلم</h3>
       <p>إدارة الدرجات، متابعة الطلاب، وإضافة الملاحظات والتقارير الدراسية.</p>
       <a href="https://salalahsharqiyaschool.github.io/SalalahSharqiya-School-Management">دخول المعلم</a>
     </div>
-
     <div class="card">
       <i class="fas fa-user-tie"></i>
       <h3>بوابة المدير</h3>
