@@ -2,21 +2,22 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>منصة الطالب | مدرسة صلالة الشرقية</title>
+    <title>المنصة الذكية | مدرسة صلالة الشرقية</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <style>
         :root {
             --primary: #00796b;
             --primary-dark: #004d40;
-            --accent: #00bfa5;
-            --bg-color: #f0f4f7;
+            --accent: #ffab00;
+            --bg-color: #f4f7f9;
             --white: #ffffff;
-            --shadow: 0 10px 30px rgba(0,0,0,0.08);
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --shadow: 0 10px 30px rgba(0,0,0,0.1);
+            --transition: all 0.3s ease;
         }
 
         body {
@@ -24,10 +25,10 @@
             margin: 0;
             background-color: var(--bg-color);
             color: #333;
-            overflow-x: hidden;
+            scroll-behavior: smooth;
         }
 
-        /* --- الهيدر (Header) --- */
+        /* --- الهيدر --- */
         header {
             background: var(--white);
             padding: 10px 5%;
@@ -39,12 +40,11 @@
             top: 0;
             z-index: 1000;
         }
-        .school-brand { display: flex; align-items: center; gap: 15px; }
-        .school-brand img { height: 55px; }
-        .school-brand h1 { font-size: 1.1rem; margin: 0; color: var(--primary-dark); }
-        .school-brand p { font-size: 0.8rem; margin: 0; color: var(--primary); }
+        .brand { display: flex; align-items: center; gap: 12px; }
+        .brand img { height: 50px; }
+        .brand h1 { font-size: 1.1rem; margin: 0; color: var(--primary-dark); }
 
-        /* --- القائمة الجانبية (Sidebar) --- */
+        /* --- القائمة الجانبية --- */
         .sidebar {
             position: fixed;
             right: -280px;
@@ -56,204 +56,166 @@
             transition: var(--transition);
             z-index: 2000;
             padding-top: 80px;
-            box-shadow: -5px 0 20px rgba(0,0,0,0.2);
         }
         .sidebar.active { right: 0; }
         .sidebar button {
-            width: 100%;
-            padding: 15px 25px;
-            background: none;
-            border: none;
-            color: white;
-            text-align: right;
-            font-size: 1rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            transition: 0.2s;
+            width: 100%; padding: 15px 25px; background: none; border: none;
+            color: white; text-align: right; font-size: 1rem; cursor: pointer;
+            display: flex; align-items: center; gap: 15px;
         }
         .sidebar button:hover { background: rgba(255,255,255,0.1); }
-        .sidebar .logout-btn { background: #d32f2f; margin-top: 20px; }
 
-        #menuBtn {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1.2rem;
-        }
+        #menuBtn { background: var(--primary); color: white; border: none; padding: 10px; border-radius: 8px; cursor: pointer; }
 
-        /* --- الحاوية الرئيسية (Main Content) --- */
-        .main-container {
-            max-width: 900px;
-            margin: 40px auto;
-            padding: 0 20px;
-        }
-
-        /* قسم البحث (Search Section) */
-        .view-section { display: none; animation: fadeIn 0.5s ease; }
+        /* --- الحاوية الرئيسية --- */
+        .main-content { max-width: 1000px; margin: 30px auto; padding: 0 20px; }
+        .view-section { display: none; animation: slideUp 0.5s ease; }
         .view-section.active { display: block; }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .card {
+        /* --- بطاقة البحث --- */
+        .search-card {
             background: var(--white);
-            padding: 40px;
+            padding: 50px 20px;
             border-radius: 20px;
             box-shadow: var(--shadow);
             text-align: center;
         }
-
-        .search-icon { font-size: 4rem; color: var(--primary); margin-bottom: 20px; }
-        
-        .input-group {
-            position: relative;
-            max-width: 400px;
-            margin: 0 auto 25px;
+        .input-wrapper { position: relative; max-width: 400px; margin: 30px auto; }
+        .input-wrapper input {
+            width: 100%; padding: 15px 45px 15px 15px; border: 2px solid #ddd;
+            border-radius: 12px; font-size: 1rem; outline: none; box-sizing: border-box;
         }
-        .input-group input {
-            width: 100%;
-            padding: 15px 45px 15px 15px;
-            border: 2px solid #eee;
-            border-radius: 12px;
-            font-size: 1rem;
-            outline: none;
-            box-sizing: border-box;
-            font-family: inherit;
-            transition: 0.3s;
-        }
-        .input-group input:focus { border-color: var(--primary); }
-        .input-group i { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: #888; }
+        .input-wrapper i { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: var(--primary); }
 
-        .btn-main {
-            background: var(--primary);
-            color: white;
-            padding: 14px 30px;
-            border: none;
-            border-radius: 12px;
-            font-weight: bold;
-            cursor: pointer;
-            width: 100%;
-            max-width: 400px;
-            transition: var(--transition);
-            margin-bottom: 10px;
+        .btn-action {
+            background: var(--primary); color: white; border: none; padding: 15px 30px;
+            border-radius: 12px; font-weight: bold; cursor: pointer; transition: var(--transition);
+            margin: 5px; min-width: 180px;
         }
-        .btn-main:hover { background: var(--primary-dark); transform: translateY(-2px); }
-        .btn-outline { background: white; color: var(--primary); border: 2px solid var(--primary); }
+        .btn-action:hover { background: var(--primary-dark); transform: translateY(-2px); }
 
-        /* --- جدول الدرجات (Grades Table) --- */
-        .student-header {
-            background: var(--primary-dark);
-            color: white;
-            padding: 20px;
-            border-radius: 15px 15px 0 0;
+        /* --- لوحة النتائج (Dashboard) --- */
+        .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            text-align: right;
+            gap: 20px; margin-bottom: 25px;
+        }
+        .stat-card {
+            background: white; padding: 20px; border-radius: 15px; text-align: center;
+            box-shadow: var(--shadow); border-bottom: 4px solid var(--primary);
+        }
+        .stat-card i { font-size: 2rem; color: var(--primary); margin-bottom: 10px; }
+        .stat-card h4 { margin: 5px 0; color: #666; }
+        .stat-card div { font-size: 1.5rem; font-weight: bold; color: var(--primary-dark); }
+
+        .chart-container {
+            background: white; padding: 20px; border-radius: 15px;
+            box-shadow: var(--shadow); margin-bottom: 25px;
         }
 
-        .table-responsive {
-            background: white;
-            border-radius: 0 0 15px 15px;
-            overflow: hidden;
-            box-shadow: var(--shadow);
+        .table-card {
+            background: white; border-radius: 15px; overflow: hidden; box-shadow: var(--shadow);
         }
-
         table { width: 100%; border-collapse: collapse; }
-        th { background: #f8f9fa; padding: 15px; color: var(--primary-dark); border-bottom: 2px solid #eee; }
-        td { padding: 15px; text-align: center; border-bottom: 1px solid #eee; }
+        th { background: #f8f9fa; padding: 15px; text-align: center; }
+        td { padding: 15px; text-align: center; border-top: 1px solid #eee; }
 
-        .badge {
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: bold;
-        }
+        .badge { padding: 5px 12px; border-radius: 15px; font-size: 0.85rem; font-weight: bold; }
 
-        /* تصميم الطباعة */
+        /* الطباعة */
         @media print {
-            .sidebar, #menuBtn, .btn-main, header { display: none !important; }
-            .main-container { width: 100%; margin: 0; }
-            .card { box-shadow: none; border: 1px solid #eee; }
+            header, .sidebar, .btn-action, #menuBtn { display: none !important; }
+            body { background: white; }
+            .main-content { width: 100%; margin: 0; }
         }
 
-        /* هواتف المحمول */
         @media (max-width: 600px) {
-            .school-brand h1 { font-size: 0.9rem; }
-            .card { padding: 25px 15px; }
+            .stats-grid { grid-template-columns: 1fr 1fr; }
         }
     </style>
 </head>
 <body>
 
 <header>
-    <div class="school-brand">
-        <img src="logo.png" alt="شعار مدرسة صلالة الشرقية">
-        <div>
-            <h1>مدرسة صلالة الشرقية للتعليم الأساسي</h1>
-            <p>نظام النتائج الإلكتروني 2025-2026</p>
-        </div>
+    <div class="brand">
+        <img src="logo.png" alt="Logo">
+        <h1>مدرسة صلالة الشرقية</h1>
     </div>
     <button id="menuBtn"><i class="fas fa-bars"></i></button>
 </header>
 
 <nav class="sidebar" id="sidebar">
-    <button onclick="showSection('homeView')"><i class="fas fa-search"></i> بحث جديد</button>
-    <button onclick="window.print()"><i class="fas fa-print"></i> طباعة النتيجة</button>
-    <button class="logout-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> تسجيل الخروج</button>
+    <button onclick="showSection('searchView')"><i class="fas fa-search"></i> بحث جديد</button>
+    <button onclick="window.print()"><i class="fas fa-print"></i> طباعة الشهادة</button>
+    <button id="logoutBtn" style="background:#c62828; margin-top:20px;"><i class="fas fa-sign-out-alt"></i> خروج</button>
 </nav>
 
-<main class="main-container">
+<main class="main-content">
     
-    <section id="homeView" class="view-section active">
-        <div class="card">
-            <i class="fas fa-user-graduate search-icon"></i>
-            <h2>استعلام عن نتائج الطلاب</h2>
-            <p>يرجى إدخال الرقم المدني الخاص بالطالب لعرض الدرجات</p>
+    <section id="searchView" class="view-section active">
+        <div class="search-card">
+            <i class="fas fa-graduation-cap" style="font-size: 4rem; color: var(--primary);"></i>
+            <h2>بوابة نتائج الطلاب</h2>
+            <p>أدخل الرقم المدني لعرض النتائج والتحليل البياني</p>
             
-            <div class="input-group">
+            <div class="input-wrapper">
                 <i class="fas fa-id-card"></i>
-                <input type="text" id="civilInput" placeholder="أدخل الرقم المدني">
+                <input type="text" id="civilInput" placeholder="الرقم المدني للطالب">
             </div>
             
-            <button class="btn-main" onclick="loadStudentData('grades')">
-                <i class="fas fa-file-invoice"></i> عرض كشف الدرجات
-            </button>
-            <button class="btn-main btn-outline" onclick="loadStudentData('rank')">
-                <i class="fas fa-trophy"></i> عرض الترتيب
+            <button class="btn-action" onclick="processStudentData()">
+                <i class="fas fa-chart-pie"></i> عرض النتائج والترتيب
             </button>
         </div>
     </section>
 
-    <section id="resultsView" class="view-section">
-        <div id="studentCardHeader" class="student-header">
+    <section id="resultView" class="view-section">
+        <div id="studentInfoBanner" style="margin-bottom:20px; font-weight:bold; color:var(--primary-dark);"></div>
+        
+        <div class="stats-grid">
+            <div class="stat-card">
+                <i class="fas fa-star"></i>
+                <h4>المعدل</h4>
+                <div id="statAvg">0%</div>
             </div>
-        <div class="table-responsive">
-            <table id="gradesTable">
+            <div class="stat-card">
+                <i class="fas fa-trophy"></i>
+                <h4>الترتيب</h4>
+                <div id="statRank">0</div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-calculator"></i>
+                <h4>المجموع</h4>
+                <div id="statTotal">0</div>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <canvas id="myChart"></canvas>
+        </div>
+
+        <div class="table-card">
+            <table>
                 <thead>
                     <tr>
-                        <th>المادة الدراسية</th>
+                        <th>المادة</th>
                         <th>الدرجة</th>
                         <th>التقدير</th>
-                        <th>ملاحظات الأداء</th>
                     </tr>
                 </thead>
-                <tbody id="gradesBody">
-                    </tbody>
+                <tbody id="gradesBody"></tbody>
             </table>
         </div>
-        <div style="margin-top: 20px; text-align: center;">
-            <button class="btn-main" onclick="showSection('homeView')">رجوع للبحث</button>
+
+        <div style="text-align:center; margin-top:30px;">
+            <button class="btn-action" style="background:#666;" onclick="showSection('searchView')">رجوع</button>
         </div>
     </section>
-
 </main>
 
 <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
@@ -261,92 +223,125 @@
 <script src="firebase-config.js"></script>
 
 <script>
-    // التحكم في القائمة والتبديل بين الصفحات
-    const sidebar = document.getElementById('sidebar');
-    const menuBtn = document.getElementById('menuBtn');
+    let myChartInstance = null;
 
-    menuBtn.addEventListener('click', () => sidebar.classList.toggle('active'));
-
-    function showSection(sectionId) {
+    // التنقل بين الأقسام
+    function showSection(id) {
         document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
-        document.getElementById(sectionId).classList.add('active');
-        sidebar.classList.remove('active');
+        document.getElementById(id).classList.add('active');
+        document.getElementById('sidebar').classList.remove('active');
     }
 
-    // منطق جلب البيانات
-    async function loadStudentData(type) {
+    document.getElementById('menuBtn').addEventListener('click', () => {
+        document.getElementById('sidebar').classList.toggle('active');
+    });
+
+    // معالجة البيانات
+    async function processStudentData() {
         const civil = document.getElementById('civilInput').value.trim();
-        if (!civil) {
-            alert("فضلاً أدخل الرقم المدني");
-            return;
-        }
+        if(!civil) return alert("يرجى إدخال الرقم المدني");
 
         const files = ["grade5.json", "grade6.json", "grade7.json", "grade8.json", "grade9.json"];
-        let student = null;
+        let student = null, classMates = [];
 
-        // إظهار مؤشر تحميل (اختياري)
         for (const file of files) {
             try {
-                const response = await fetch(`${file}?cache=${Math.random()}`);
-                if (!response.ok) continue;
-                const data = await response.json();
-                student = data.find(s => s["رقم_مدني"].toString().trim() === civil);
-                if (student) break;
-            } catch (err) { console.error("Error fetching data"); }
+                const res = await fetch(file + "?v=" + Date.now());
+                const data = await res.json();
+                student = data.find(s => s["رقم_مدني"].toString() === civil);
+                if(student) {
+                    classMates = data.filter(s => s["الصف"] === student["الصف"] && s["الشعبة"] === student["الشعبة"]);
+                    break;
+                }
+            } catch(e) {}
         }
 
-        if (student) {
-            renderGrades(student);
-            showSection('resultsView');
-        } else {
-            alert("عذراً، لم يتم العثور على طالب بهذا الرقم المدني");
-        }
+        if(!student) return alert("الطالب غير موجود");
+
+        renderDashboard(student, classMates);
+        showSection('resultView');
     }
 
-    function getStatus(grade) {
-        if (grade >= 90) return { label: 'ممتاز', color: '#2e7d32', bg: '#e8f5e9', note: 'مستوى استثنائي، استمر في التألق!' };
-        if (grade >= 80) return { label: 'جيد جداً', color: '#1565c0', bg: '#e3f2fd', note: 'أداء رائع، يمكنك الوصول للقمة.' };
-        if (grade >= 65) return { label: 'جيد', color: '#f57c00', bg: '#fff3e0', note: 'جهد طيب، حاول التركيز أكثر.' };
-        if (grade >= 50) return { label: 'مقبول', color: '#757575', bg: '#f5f5f5', note: 'تحتاج إلى بذل مجهود إضافي.' };
-        return { label: 'ضعيف', color: '#d32f2f', bg: '#ffebee', note: 'يرجى مراجعة إدارة المدرسة.' };
+    function renderDashboard(student, classMates) {
+        const subjects = Object.keys(student).filter(k => !["رقم_مدني", "الاسم", "الصف", "الشعبة"].includes(k));
+        
+        // 1. حساب المجموع والمعدل
+        const total = subjects.reduce((sum, sub) => sum + parseFloat(student[sub] || 0), 0);
+        const avg = (total / subjects.length).toFixed(1);
+
+        // 2. حساب الترتيب
+        const rankedList = classMates.map(s => ({
+            id: s["رقم_مدني"],
+            total: subjects.reduce((sum, sub) => sum + parseFloat(s[sub] || 0), 0)
+        })).sort((a, b) => b.total - a.total);
+        const rank = rankedList.findIndex(s => s.id.toString() === student["رقم_مدني"].toString()) + 1;
+
+        // 3. تحديث واجهة الإحصائيات
+        document.getElementById('studentInfoBanner').innerHTML = `<i class="fas fa-user"></i> الطالب: ${student["الاسم"]} | ${student["الصف"]} - ${student["الشعبة"]}`;
+        document.getElementById('statAvg').innerText = avg + "%";
+        document.getElementById('statTotal').innerText = total;
+        document.getElementById('statRank').innerText = `${rank} من ${classMates.length}`;
+
+        // 4. بناء الجدول
+        let tableHtml = '';
+        subjects.forEach(sub => {
+            const val = parseFloat(student[sub]);
+            const status = getGradeStatus(val);
+            tableHtml += `<tr>
+                <td>${sub}</td>
+                <td><span class="badge" style="background:${status.bg}; color:${status.color}">${val}</span></td>
+                <td style="color:${status.color}">${status.label}</td>
+            </tr>`;
+        });
+        document.getElementById('gradesBody').innerHTML = tableHtml;
+
+        // 5. رسم المخطط البياني (مقارنة الطالب بمتوسط الصف)
+        const avgScores = subjects.map(sub => {
+            const sum = classMates.reduce((s, st) => s + parseFloat(st[sub] || 0), 0);
+            return (sum / classMates.length).toFixed(1);
+        });
+
+        initChart(subjects, subjects.map(s => student[s]), avgScores);
     }
 
-    function renderGrades(student) {
-        const header = document.getElementById('studentCardHeader');
-        const body = document.getElementById('gradesBody');
+    function getGradeStatus(g) {
+        if(g >= 90) return { label: 'ممتاز', color: '#2e7d32', bg: '#e8f5e9' };
+        if(g >= 75) return { label: 'جيد جداً', color: '#1565c0', bg: '#e3f2fd' };
+        if(g >= 50) return { label: 'مقبول', color: '#f57c00', bg: '#fff3e0' };
+        return { label: 'ضعيف', color: '#c62828', bg: '#ffebee' };
+    }
 
-        header.innerHTML = `
-            <div><i class="fas fa-user"></i> <strong>اسم الطالب:</strong> ${student["الاسم"]}</div>
-            <div><i class="fas fa-graduation-cap"></i> <strong>الصف:</strong> ${student["الصف"]} / ${student["الشعبة"]}</div>
-            <div><i class="fas fa-fingerprint"></i> <strong>الرقم المدني:</strong> ${student["رقم_مدني"]}</div>
-        `;
+    function initChart(labels, studentData, classAverages) {
+        const ctx = document.getElementById('myChart').getContext('2d');
+        if(myChartInstance) myChartInstance.destroy();
 
-        let rows = '';
-        for (const key in student) {
-            if (!["رقم_مدني", "الاسم", "الصف", "الشعبة"].includes(key)) {
-                const val = parseFloat(student[key]);
-                const status = getStatus(val);
-                rows += `
-                    <tr>
-                        <td style="font-weight:bold">${key}</td>
-                        <td><span class="badge" style="background:${status.bg}; color:${status.color}">${val}</span></td>
-                        <td style="color:${status.color}">${status.label}</td>
-                        <td style="font-size:0.85rem; color:#666">${status.note}</td>
-                    </tr>
-                `;
+        myChartInstance = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'درجة الطالب',
+                    data: studentData,
+                    backgroundColor: 'rgba(0, 121, 107, 0.7)',
+                    borderRadius: 5
+                }, {
+                    label: 'متوسط الصف',
+                    data: classAverages,
+                    backgroundColor: 'rgba(255, 171, 0, 0.5)',
+                    borderRadius: 5
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { position: 'top', labels: { font: { family: 'Tajawal' } } } },
+                scales: { y: { beginAtZero: true, max: 100 } }
             }
-        }
-        body.innerHTML = rows;
+        });
     }
 
-    // الفايربيس وتأمين الصفحة
-    firebase.auth().onAuthStateChanged(user => {
-        if (!user) window.location = "index.html";
-    });
-
-    document.getElementById('logoutBtn').addEventListener('click', () => {
-        firebase.auth().signOut().then(() => window.location = "index.html");
-    });
+    // الفايربيس
+    firebase.auth().onAuthStateChanged(user => { if(!user) window.location="index.html"; });
+    document.getElementById('logoutBtn').addEventListener('click', () => firebase.auth().signOut().then(() => window.location="index.html"));
 </script>
 
 </body>
