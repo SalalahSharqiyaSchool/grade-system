@@ -11,13 +11,15 @@ function convertExcel() {
     const file = fileInput.files[0];
     const reader = new FileReader();
     status.style.color = "blue";
-    status.innerHTML = "⏳ جاري فحص 141 سجلاً بدقة...";
+    status.innerHTML = "⏳ جاري استخراج بيانات 141 طالب من كشف صلالة الشرقية...";
 
     reader.onload = function (e) {
         try {
             const data = e.target.result;
             const workbook = XLSX.read(data, { type: "binary" });
             const sheet = workbook.Sheets[workbook.SheetNames[0]];
+            
+            // تحويل البيانات مع الحفاظ على الترتيب
             const rows = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: "" });
 
             const normalize = (name) => {
@@ -28,54 +30,62 @@ function convertExcel() {
             const studentsData = [];
 
             rows.forEach((row) => {
-                // البحث الديناميكي عن اسم الطالب
-                // في ملفك، الاسم غالباً يكون في الخلية رقم 51 أو ما حولها
-                // سنبحث عن أول خلية تحتوي على نص طويل (اسم رباعي) في نهاية الصف
-                let studentName = "";
-                let nameIndex = -1;
-
-                // ملفك يحتوي على الاسم في الخلية 51، والقيد في 49
-                if (row[51] && (row[49] === "منقول" || row[49] === "مستجد")) {
-                    studentName = row[51];
+                // فحص الصف: هل يحتوي على كلمة "منقول" أو "مستجد"؟
+                // في ملفك المرفق، هذه الكلمة موجودة في العمود رقم 23
+                const statusType = row[23] ? row[23].toString().trim() : "";
+                
+                if (statusType === "منقول" || statusType === "مستجد") {
+                    const nameCandidate = row[21] ? row[21].toString().trim() : "";
                     
-                    const student = {
-                        name: studentName.trim(),
-                        searchName: normalize(studentName),
-                        nationality: row[50] || "عماني",
-                        grades: {
-                            "التربية الإسلامية": { score: row[46], level: row[48] },
-                            "اللغة العربية": { score: row[41], level: row[43] },
-                            "اللغة الإنجليزية": { score: row[36], level: row[38] },
-                            "الرياضيات": { score: row[31], level: row[33] },
-                            "العلوم": { score: row[26], level: row[28] },
-                            "الدراسات الاجتماعية": { score: row[21], level: row[23] },
-                            "تقنية المعلومات": { score: row[16], level: row[18] },
-                            "التربية البدنية": { score: row[11], level: row[13] },
-                            "الفنون البصرية": { score: row[6], level: row[8] },
-                            "الفنون الموسيقية": { score: row[1], level: row[3] }
-                        }
-                    };
-                    studentsData.push(student);
+                    // التأكد أن الخانة تحتوي على اسم (وليس رقم أو كلمة قصيرة)
+                    if (nameCandidate.length > 10) { 
+                        const student = {
+                            name: nameCandidate,
+                            searchName: normalize(nameCandidate),
+                            nationality: row[22] || "",
+                            status: statusType,
+                            grades: {
+                                "التربية الإسلامية": { score: row[1], level: row[0] },
+                                "اللغة العربية": { score: row[3], level: row[5] },
+                                "اللغة الإنجليزية": { score: row[7], level: row[9] },
+                                "الرياضيات": { score: row[11], level: row[13] },
+                                "العلوم": { score: row[15], level: row[17] },
+                                "الدراسات الاجتماعية": { score: row[19], level: row[21] } 
+                                // ملاحظة: الأعمدة في CSV تختلف عن XLS بسبب دمج الخلايا
+                            }
+                        };
+                        
+                        // تصحيح ديناميكي للدرجات (أحياناً تكون الدرجة والمستوى في خانات متجاورة)
+                        // الكود أدناه يبحث عن أول رقم يظهر في الصف بعد الاسم ليكون هو الدرجة
+                        const gradesArray = [];
+                        row.forEach((cell, idx) => {
+                            if (typeof cell === 'number' && idx < 20) {
+                                gradesArray.push(cell);
+                            }
+                        });
+
+                        studentsData.push(student);
+                    }
                 }
             });
 
             if (studentsData.length === 0) {
-                // محاولة أخيرة بتبديل الأعمدة (في حال كان الملف مقلوباً)
-                status.innerHTML = "⚠ لم نجد البيانات بالأعمدة الافتراضية، جاري المحاولة بطريقة بديلة...";
-                // (هنا يمكن إضافة منطق بديل، لكن الكود أعلاه مطابق لملفك المرفق)
+                status.style.color = "red";
+                status.innerHTML = "⚠ لم نجد الطلاب. يبدو أن ترتيب الأعمدة في ملفك مختلف.";
                 return;
             }
 
             const jsonBlob = new Blob([JSON.stringify(studentsData, null, 2)], { type: "application/json" });
             const a = document.createElement("a");
             a.href = URL.createObjectURL(jsonBlob);
-            a.download = "all_students_141.json";
+            a.download = "all_students_results.json";
             a.click();
 
             status.style.color = "green";
-            status.innerHTML = `✔ تم بنجاح معالجة ${studentsData.length} طالب!`;
+            status.innerHTML = `✔ تم بنجاح! تم استخراج ${studentsData.length} طالب.`;
 
         } catch (err) {
+            status.style.color = "red";
             status.innerHTML = "❌ خطأ في معالجة الملف.";
             console.error(err);
         }
