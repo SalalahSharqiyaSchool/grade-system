@@ -8,20 +8,10 @@ def convert_excel_to_json(file_path, output_path):
     
     students_data = []
     
-    # تعريف المواد ومواقعها النسبية بناءً على التحليل الدقيق:
-    # المادة: (عمود الدرجة، عمود المستوى)
-    # ملاحظة: الترتيب في الملف من اليمين لليسار (الأعمدة الأعلى رقماً للمواد الأولى)
-    # التربية الإسلامية: درجة 48، مستوى 46
-    # اللغة العربية: درجة 43، مستوى 41
-    # اللغة الإنجليزية: درجة 38، مستوى 36
-    # الرياضيات: درجة 33، مستوى 30 (أو 31)
-    # العلوم: درجة 28، مستوى 25 (أو 26)
-    # الدراسات الاجتماعية: درجة 23، مستوى 21
-    # تقنية المعلومات: درجة 19، مستوى 16
-    # التربية البدنية: درجة 13، مستوى 11
-    # الفنون البصرية: درجة 9، مستوى 6
-    # الفنون الموسيقية: درجة 3، مستوى 1
+    # الكلمات المستبعدة التي لا يمكن أن تكون اسماً للطالب
+    excluded_keywords = ["عماني", "ذكر", "أنثى", "الجنسية", "الاسم", "مستجد", "منقول"]
     
+    # تعريف المواد ومواقعها النسبية بناءً على التحليل الدقيق
     subjects_mapping = {
         "التربية الإسلامية": (48, 46),
         "اللغة العربية": (43, 41),
@@ -35,44 +25,53 @@ def convert_excel_to_json(file_path, output_path):
         "الفنون الموسيقية": (3, 1)
     }
     
-    # البحث عن الصفوف التي تحتوي على بيانات الطلاب
-    # عمود حالة القيد هو 50، وعمود الاسم هو 53
     for index, row in df.iterrows():
-        # تحويل الصف بالكامل لنصوص للبحث عن كلمة "منقول" أو "مستجد"
-        row_str = row.astype(str).tolist()
-        if "منقول" in row_str or "مستجد" in row_str:
-            status = "منقول" if "منقول" in row_str else "مستجد"
+        row_str_list = [str(cell).strip() for cell in row.tolist()]
+        
+        # التحقق من وجود حالة القيد في الصف
+        if "منقول" in row_str_list or "مستجد" in row_str_list:
+            status = "منقول" if "منقول" in row_str_list else "مستجد"
             
-            # الاسم موجود في العمود 53 بناءً على الفحص
-            student_name = str(row[53]).strip()
+            # استخراج الاسم من العمود 53
+            name_candidate = str(row[53]).strip()
             
-            # استخراج الدرجات والمستويات لكل مادة
-            results = {}
-            for subject, (score_col, level_col) in subjects_mapping.items():
-                score = row[score_col]
-                level = row[level_col]
+            # تطبيق شروط الأمان الإضافية
+            # 1. التأكد أن الاسم ليس من الكلمات المستبعدة
+            # 2. التأكد أن الاسم ليس فارغاً أو مجرد أرقام
+            # 3. التأكد من طول الاسم (الأسماء الحقيقية عادة أطول من 10 أحرف في هذا الملف)
+            if (name_candidate not in excluded_keywords and 
+                not name_candidate.isdigit() and 
+                len(name_candidate) > 5):
                 
-                # تنظيف البيانات
-                try:
-                    score_val = float(score) if pd.notnull(score) and str(score).replace('.','',1).isdigit() else (score if pd.notnull(score) else "")
-                    if isinstance(score_val, float) and score_val.is_integer():
-                        score_val = int(score_val)
-                except:
-                    score_val = str(score) if pd.notnull(score) else ""
+                student_name = name_candidate
+                
+                # استخراج الدرجات والمستويات لكل مادة
+                results = {}
+                for subject, (score_col, level_col) in subjects_mapping.items():
+                    score = row[score_col]
+                    level = row[level_col]
                     
-                level_val = str(level).strip() if pd.notnull(level) else ""
+                    # تنظيف البيانات
+                    try:
+                        score_val = float(score) if pd.notnull(score) and str(score).replace('.','',1).isdigit() else (score if pd.notnull(score) else "")
+                        if isinstance(score_val, float) and score_val.is_integer():
+                            score_val = int(score_val)
+                    except:
+                        score_val = str(score) if pd.notnull(score) else ""
+                        
+                    level_val = str(level).strip() if pd.notnull(level) else ""
+                    
+                    results[subject] = {
+                        "score": score_val,
+                        "level": level_val
+                    }
                 
-                results[subject] = {
-                    "score": score_val,
-                    "level": level_val
+                student_entry = {
+                    "name": student_name,
+                    "status": status,
+                    "results": results
                 }
-            
-            student_entry = {
-                "name": student_name,
-                "status": status,
-                "results": results
-            }
-            students_data.append(student_entry)
+                students_data.append(student_entry)
     
     # حفظ البيانات في ملف JSON
     with open(output_path, 'w', encoding='utf-8') as f:
@@ -86,7 +85,7 @@ if __name__ == "__main__":
     
     try:
         count = convert_excel_to_json(input_file, output_file)
-        print(f"Successfully processed {count} students.")
+        print(f"Successfully processed {count} students with enhanced security filters.")
     except Exception as e:
         import traceback
         print(f"Error: {e}")
