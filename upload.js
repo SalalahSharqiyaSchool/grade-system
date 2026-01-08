@@ -18,8 +18,6 @@ function convertExcel() {
             const data = e.target.result;
             const workbook = XLSX.read(data, { type: "binary" });
             const sheet = workbook.Sheets[workbook.SheetNames[0]];
-            
-            // تحويل البيانات مع الحفاظ على الترتيب
             const rows = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: "" });
 
             const normalize = (name) => {
@@ -29,60 +27,49 @@ function convertExcel() {
 
             const studentsData = [];
 
-            rows.forEach((row) => {
-                // فحص الصف: هل يحتوي على كلمة "منقول" أو "مستجد"؟
-                // في ملفك المرفق، هذه الكلمة موجودة في العمود رقم 23
-                const statusType = row[23] ? row[23].toString().trim() : "";
+            rows.forEach((row, index) => {
+                // في ملفك الفعلي (CSV): 
+                // العمود 58 هو الاسم، العمود 56 هو حالة القيد (منقول/مستجد)
+                const studentName = row[58]; 
+                const statusType = row[56] ? row[56].toString().trim() : "";
                 
-                if (statusType === "منقول" || statusType === "مستجد") {
-                    const nameCandidate = row[21] ? row[21].toString().trim() : "";
-                    
-                    // التأكد أن الخانة تحتوي على اسم (وليس رقم أو كلمة قصيرة)
-                    if (nameCandidate.length > 10) { 
-                        const student = {
-                            name: nameCandidate,
-                            searchName: normalize(nameCandidate),
-                            nationality: row[22] || "",
-                            status: statusType,
-                            grades: {
-                                "التربية الإسلامية": { score: row[1], level: row[0] },
-                                "اللغة العربية": { score: row[3], level: row[5] },
-                                "اللغة الإنجليزية": { score: row[7], level: row[9] },
-                                "الرياضيات": { score: row[11], level: row[13] },
-                                "العلوم": { score: row[15], level: row[17] },
-                                "الدراسات الاجتماعية": { score: row[19], level: row[21] } 
-                                // ملاحظة: الأعمدة في CSV تختلف عن XLS بسبب دمج الخلايا
-                            }
-                        };
-                        
-                        // تصحيح ديناميكي للدرجات (أحياناً تكون الدرجة والمستوى في خانات متجاورة)
-                        // الكود أدناه يبحث عن أول رقم يظهر في الصف بعد الاسم ليكون هو الدرجة
-                        const gradesArray = [];
-                        row.forEach((cell, idx) => {
-                            if (typeof cell === 'number' && idx < 20) {
-                                gradesArray.push(cell);
-                            }
-                        });
-
-                        studentsData.push(student);
-                    }
+                if (studentName && (statusType === "منقول" || statusType === "مستجد")) {
+                    const student = {
+                        name: studentName.trim(),
+                        searchName: normalize(studentName),
+                        nationality: row[57] || "",
+                        status: statusType,
+                        grades: {
+                            "التربية الإسلامية": { score: row[53], level: row[51] },
+                            "اللغة العربية": { score: row[48], level: row[46] },
+                            "اللغة الإنجليزية": { score: row[43], level: row[41] },
+                            "الرياضيات": { score: row[38], level: row[36] },
+                            "العلوم": { score: row[33], level: row[31] },
+                            "الدراسات الاجتماعية": { score: row[28], level: row[26] },
+                            "تقنية المعلومات": { score: row[23], level: row[21] },
+                            "التربية البدنية": { score: row[18], level: row[16] },
+                            "الفنون البصرية": { score: row[13], level: row[11] },
+                            "الفنون الموسيقية": { score: row[8], level: row[6] }
+                        }
+                    };
+                    studentsData.push(student);
                 }
             });
 
             if (studentsData.length === 0) {
                 status.style.color = "red";
-                status.innerHTML = "⚠ لم نجد الطلاب. يبدو أن ترتيب الأعمدة في ملفك مختلف.";
+                status.innerHTML = "❌ لم نجد بيانات. جرب رفع الملف بصيغة Excel الأصلية (.xls) وليس CSV.";
                 return;
             }
 
             const jsonBlob = new Blob([JSON.stringify(studentsData, null, 2)], { type: "application/json" });
             const a = document.createElement("a");
             a.href = URL.createObjectURL(jsonBlob);
-            a.download = "all_students_results.json";
+            a.download = "final_students_results.json";
             a.click();
 
             status.style.color = "green";
-            status.innerHTML = `✔ تم بنجاح! تم استخراج ${studentsData.length} طالب.`;
+            status.innerHTML = `✔ تم بنجاح! استخراج ${studentsData.length} طالب.`;
 
         } catch (err) {
             status.style.color = "red";
