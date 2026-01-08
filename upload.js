@@ -1,91 +1,93 @@
-function convertExcel() {
-    const fileInput = document.getElementById("excelFile");
-    const status = document.getElementById("status");
+import pandas as pd
+import json
+import os
 
-    status.innerHTML = "";
-    if (!fileInput.files.length) {
-        status.innerHTML = "⚠ الرجاء اختيار ملف Excel أولاً.";
-        return;
+def convert_excel_to_json(file_path, output_path):
+    # قراءة ملف الإكسل بدون ترويسة
+    df = pd.read_excel(file_path, header=None)
+    
+    students_data = []
+    
+    # تعريف المواد ومواقعها النسبية بناءً على التحليل الدقيق:
+    # المادة: (عمود الدرجة، عمود المستوى)
+    # ملاحظة: الترتيب في الملف من اليمين لليسار (الأعمدة الأعلى رقماً للمواد الأولى)
+    # التربية الإسلامية: درجة 48، مستوى 46
+    # اللغة العربية: درجة 43، مستوى 41
+    # اللغة الإنجليزية: درجة 38، مستوى 36
+    # الرياضيات: درجة 33، مستوى 30 (أو 31)
+    # العلوم: درجة 28، مستوى 25 (أو 26)
+    # الدراسات الاجتماعية: درجة 23، مستوى 21
+    # تقنية المعلومات: درجة 19، مستوى 16
+    # التربية البدنية: درجة 13، مستوى 11
+    # الفنون البصرية: درجة 9، مستوى 6
+    # الفنون الموسيقية: درجة 3، مستوى 1
+    
+    subjects_mapping = {
+        "التربية الإسلامية": (48, 46),
+        "اللغة العربية": (43, 41),
+        "اللغة الإنجليزية": (38, 36),
+        "الرياضيات": (33, 30),
+        "العلوم": (28, 25),
+        "الدراسات الاجتماعية": (23, 21),
+        "تقنية المعلومات": (19, 16),
+        "التربية البدنية": (13, 11),
+        "الفنون البصرية": (9, 6),
+        "الفنون الموسيقية": (3, 1)
     }
-
-    const file = fileInput.files[0];
-    const reader = new FileReader();
-    status.style.color = "blue";
-    status.innerHTML = "⏳ جاري استخراج الأسماء والدرجات بدقة...";
-
-    reader.onload = function (e) {
-        try {
-            const data = e.target.result;
-            const workbook = XLSX.read(data, { type: "binary" });
-            const sheet = workbook.Sheets[workbook.SheetNames[0]];
-            const rows = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: "" });
-
-            const normalize = (name) => {
-                if (!name) return "";
-                return name.toString().replace(/[أإآ]/g, 'ا').replace(/ة/g, 'ه').replace(/ى/g, 'ي').trim();
-            };
-
-            const studentsData = [];
-
-            rows.forEach((row) => {
-                // البحث عن كلمة "منقول" أو "مستجد" لتحديد صف الطالب
-                const statusIndex = row.findIndex(cell => 
-                    cell.toString().trim() === "منقول" || cell.toString().trim() === "مستجد"
-                );
-
-                if (statusIndex !== -1) {
-                    // تصحيح: اسم الطالب عادة يكون في العمود رقم 51 في الأصل 
-                    // في المصفوفة، سنبحث عن النص الطويل (الاسم الرباعي) بجانب عمود الجنسية
-                    // الجنسية غالباً في statusIndex + 1، والاسم في statusIndex + 2
+    
+    # البحث عن الصفوف التي تحتوي على بيانات الطلاب
+    # عمود حالة القيد هو 50، وعمود الاسم هو 53
+    for index, row in df.iterrows():
+        # تحويل الصف بالكامل لنصوص للبحث عن كلمة "منقول" أو "مستجد"
+        row_str = row.astype(str).tolist()
+        if "منقول" in row_str or "مستجد" in row_str:
+            status = "منقول" if "منقول" in row_str else "مستجد"
+            
+            # الاسم موجود في العمود 53 بناءً على الفحص
+            student_name = str(row[53]).strip()
+            
+            # استخراج الدرجات والمستويات لكل مادة
+            results = {}
+            for subject, (score_col, level_col) in subjects_mapping.items():
+                score = row[score_col]
+                level = row[level_col]
+                
+                # تنظيف البيانات
+                try:
+                    score_val = float(score) if pd.notnull(score) and str(score).replace('.','',1).isdigit() else (score if pd.notnull(score) else "")
+                    if isinstance(score_val, float) and score_val.is_integer():
+                        score_val = int(score_val)
+                except:
+                    score_val = str(score) if pd.notnull(score) else ""
                     
-                    let nameCandidate = "";
-                    // نفحص الخلايا المجاورة للحالة، ونختار الخلية التي تحتوي على أكثر من اسمين (طولها > 12 حرف)
-                    [row[statusIndex + 2], row[statusIndex + 1], row[statusIndex + 3]].forEach(cell => {
-                        if (cell && cell.toString().trim().length > 12) {
-                            nameCandidate = cell.toString().trim();
-                        }
-                    });
-
-                    if (nameCandidate && nameCandidate !== "عماني") {
-                        const student = {
-                            name: nameCandidate,
-                            searchName: normalize(nameCandidate),
-                            grades: {
-                                "التربية الإسلامية": { score: row[46], level: row[48] },
-                                "اللغة العربية": { score: row[41], level: row[43] },
-                                "اللغة الإنجليزية": { score: row[36], level: row[38] },
-                                "الرياضيات": { score: row[31], level: row[33] },
-                                "العلوم": { score: row[26], level: row[28] },
-                                "الدراسات الاجتماعية": { score: row[21], level: row[23] },
-                                "تقنية المعلومات": { score: row[16], level: row[18] },
-                                "التربية البدنية": { score: row[11], level: row[13] },
-                                "الفنون البصرية": { score: row[6], level: row[8] },
-                                "الفنون الموسيقية": { score: row[1], level: row[3] }
-                            }
-                        };
-                        studentsData.push(student);
-                    }
+                level_val = str(level).strip() if pd.notnull(level) else ""
+                
+                results[subject] = {
+                    "score": score_val,
+                    "level": level_val
                 }
-            });
-
-            if (studentsData.length === 0) {
-                status.innerHTML = "❌ لم نجد أسماء طلاب (فقط وجدنا الجنسية). تأكد من تنسيق الملف.";
-                return;
+            
+            student_entry = {
+                "name": student_name,
+                "status": status,
+                "results": results
             }
+            students_data.append(student_entry)
+    
+    # حفظ البيانات في ملف JSON
+    with open(output_path, 'w', encoding='utf-8') as f:
+        json.dump(students_data, f, ensure_ascii=False, indent=4)
+    
+    return len(students_data)
 
-            const jsonBlob = new Blob([JSON.stringify(studentsData, null, 2)], { type: "application/json" });
-            const a = document.createElement("a");
-            a.href = URL.createObjectURL(jsonBlob);
-            a.download = "students_final_results.json";
-            a.click();
-
-            status.style.color = "green";
-            status.innerHTML = `✔ تم استخراج ${studentsData.length} طالب بنجاح مع أسمائهم الصحيحة!`;
-
-        } catch (err) {
-            console.error(err);
-            status.innerHTML = "❌ خطأ في المعالجة.";
-        }
-    };
-    reader.readAsBinaryString(file);
-}
+if __name__ == "__main__":
+    input_file = "/home/ubuntu/upload/report-grade5.xls"
+    output_file = "/home/ubuntu/students_data.json"
+    
+    try:
+        count = convert_excel_to_json(input_file, output_file)
+        print(f"Successfully processed {count} students.")
+    except Exception as e:
+        import traceback
+        print(f"Error: {e}")
+        traceback.print_exc()
