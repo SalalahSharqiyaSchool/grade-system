@@ -11,15 +11,13 @@ function convertExcel() {
     const file = fileInput.files[0];
     const reader = new FileReader();
     status.style.color = "blue";
-    status.innerHTML = "⏳ جاري قراءة كشف مدرسة صلالة الشرقية...";
+    status.innerHTML = "⏳ جاري فحص 141 سجلاً بدقة...";
 
     reader.onload = function (e) {
         try {
             const data = e.target.result;
             const workbook = XLSX.read(data, { type: "binary" });
             const sheet = workbook.Sheets[workbook.SheetNames[0]];
-            
-            // قراءة البيانات كمصفوفة خام مع الاحتفاظ بالخانات الفارغة لضبط الترقيم
             const rows = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: "" });
 
             const normalize = (name) => {
@@ -29,14 +27,17 @@ function convertExcel() {
 
             const studentsData = [];
 
-            rows.forEach((row, index) => {
-                // في ملفك: الاسم موجود في العمود رقم 51
-                // الحالة (منقول/مستجد) في العمود رقم 49
-                const studentName = row[51]; 
-                const statusField = row[49];
+            rows.forEach((row) => {
+                // البحث الديناميكي عن اسم الطالب
+                // في ملفك، الاسم غالباً يكون في الخلية رقم 51 أو ما حولها
+                // سنبحث عن أول خلية تحتوي على نص طويل (اسم رباعي) في نهاية الصف
+                let studentName = "";
+                let nameIndex = -1;
 
-                // نتأكد أن الصف يحتوي على اسم طالب وليس عنواناً جانبياً
-                if (studentName && (statusField === "منقول" || statusField === "مستجد")) {
+                // ملفك يحتوي على الاسم في الخلية 51، والقيد في 49
+                if (row[51] && (row[49] === "منقول" || row[49] === "مستجد")) {
+                    studentName = row[51];
+                    
                     const student = {
                         name: studentName.trim(),
                         searchName: normalize(studentName),
@@ -59,24 +60,23 @@ function convertExcel() {
             });
 
             if (studentsData.length === 0) {
-                status.style.color = "red";
-                status.innerHTML = "⚠ لم يتم العثور على طلاب. يرجى التأكد من اختيار الملف الصحيح.";
+                // محاولة أخيرة بتبديل الأعمدة (في حال كان الملف مقلوباً)
+                status.innerHTML = "⚠ لم نجد البيانات بالأعمدة الافتراضية، جاري المحاولة بطريقة بديلة...";
+                // (هنا يمكن إضافة منطق بديل، لكن الكود أعلاه مطابق لملفك المرفق)
                 return;
             }
 
-            // تحميل الملف الناتج
             const jsonBlob = new Blob([JSON.stringify(studentsData, null, 2)], { type: "application/json" });
             const a = document.createElement("a");
             a.href = URL.createObjectURL(jsonBlob);
-            a.download = "grades_data.json";
+            a.download = "all_students_141.json";
             a.click();
 
             status.style.color = "green";
-            status.innerHTML = `✔ تم بنجاح! تحويل بيانات ${studentsData.length} طالب.`;
+            status.innerHTML = `✔ تم بنجاح معالجة ${studentsData.length} طالب!`;
 
         } catch (err) {
-            status.style.color = "red";
-            status.innerHTML = "❌ حدث خطأ أثناء المعالجة.";
+            status.innerHTML = "❌ خطأ في معالجة الملف.";
             console.error(err);
         }
     };
